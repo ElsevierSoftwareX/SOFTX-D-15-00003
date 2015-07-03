@@ -1,0 +1,62 @@
+.TH gmx-nmens 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-nmens - Generate an ensemble of structures from the normal modes
+
+.SH SYNOPSIS
+gmx nmens [-v [<.trr/.cpt/...>]] [-e [<.xvg>]]
+          [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]] [-o [<.xtc/.trr/...>]]
+          [-nice <int>] [-xvg <enum>] [-temp <real>] [-seed <int>]
+          [-num <int>] [-first <int>] [-last <int>]
+
+.SH DESCRIPTION
+\fBgmx nmens\fR generates an ensemble around an average structure in a subspace that is defined by a set of normal modes (eigenvectors). The eigenvectors are assumed to be mass\-weighted. The position along each eigenvector is randomly taken from a Gaussian distribution with variance kT/eigenvalue.
+
+By default the starting eigenvector is set to 7, since the first six normal modes are the translational and rotational degrees of freedom.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-v" " [<.trr/.cpt/...>] (eigenvec.trr) (Input)"
+    Full precision trajectory: trr cpt trj tng
+
+.BI "\-e" " [<.xvg>] (eigenval.xvg) (Input)"
+    xvgr/xmgr file
+
+.BI "\-s" " [<.tpr/.tpb/...>] (topol.tpr) (Input)"
+    Structure+mass(db): tpr tpb tpa gro g96 pdb brk ent
+
+.BI "\-n" " [<.ndx>] (index.ndx) (Input, Optional)"
+    Index file
+
+.BI "\-o" " [<.xtc/.trr/...>] (ensemble.xtc) (Output)"
+    Trajectory: xtc trr trj gro g96 pdb tng
+
+
+Other options:
+
+.BI "\-nice" " <int> (19)"
+    Set the nicelevel
+
+.BI "\-xvg" " <enum> (xmgrace)"
+    xvg plot formatting: xmgrace, xmgr, none
+
+.BI "\-temp" " <real> (300)"
+    Temperature in Kelvin
+
+.BI "\-seed" " <int> (-1)"
+    Random seed, \-1 generates a seed from time and pid
+
+.BI "\-num" " <int> (100)"
+    Number of structures to generate
+
+.BI "\-first" " <int> (7)"
+    First eigenvector to use (\-1 is select)
+
+.BI "\-last" " <int> (-1)"
+    Last eigenvector to use (\-1 is till the last)
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

@@ -1,0 +1,110 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx convert-tpr</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx convert-tpr</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx convert-tpr [-s [<.tpr/.tpb/...>]] [-f [<.trr/.cpt/...>]] [-e [<.edr>]]
+             [-n [<.ndx>]] [-o [<.tpr/.tpb/...>]] [-nice <int>]
+             [-extend <real>] [-until <real>] [-nsteps <int>] [-time <real>]
+             [-[no]zeroq] [-[no]vel] [-[no]cont] [-init_fep_state <int>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx convert-tpr</tt> can edit run input files in four ways.<p> <b>1.</b> by modifying the number of steps in a run input file with options <tt>-extend</tt>, <tt>-until</tt> or <tt>-nsteps</tt> (nsteps=-1 means unlimited number of steps)<p> <b>2.</b> (OBSOLETE) by creating a run input file for a continuation run when your simulation has crashed due to e.g. a full disk, or by making a continuation run input file. This option is obsolete, since mdrun now writes and reads checkpoint files. <b>Note</b> that a frame with coordinates and velocities is needed. When pressure and/or Nose-Hoover temperature coupling is used an energy file can be supplied to get an exact continuation of the original run.<p> <b>3.</b> by creating a <tt>.tpx</tt> file for a subset of your original tpx file, which is useful when you want to remove the solvent from your <tt>.tpx</tt> file, or when you want to make e.g. a pure C&alpha; <tt>.tpx</tt> file. Note that you may need to use <tt>-nsteps -1</tt> (or similar) to get this to work. <b>WARNING: this <tt>.tpx</tt> file is not fully functional</b>.<p> <b>4.</b> by setting the charges of a specified group to zero. This is useful when doing free energy estimates using the LIE (Linear Interaction Energy) method.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Run input file: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/trr.html">trr</a>/.<a href="../online/cpt.html">cpt</a>/...&gt;] (traj.<a href="../online/trr.html">trr</a>) (Input, Optional)</dt>
+<dd>
+Full precision trajectory: <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-e</tt></b> [&lt;.<a href="../online/edr.html">edr</a>&gt;] (ener.<a href="../online/edr.html">edr</a>) (Input, Optional)</dt>
+<dd>
+Energy file
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (tpxout.<a href="../online/tpr.html">tpr</a>) (Output)</dt>
+<dd>
+Run input file: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-extend</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Extend runtime by this amount (ps)
+</dd>
+<dt><b><tt>-until</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Extend runtime until this ending time (ps)
+</dd>
+<dt><b><tt>-nsteps</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Change the number of steps
+</dd>
+<dt><b><tt>-time</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+Continue from frame at this time (ps) instead of the last frame
+</dd>
+<dt><b><tt>-[no]zeroq</tt></b> (no)</dt>
+<dd>
+Set the charges of a group (from the index) to zero
+</dd>
+<dt><b><tt>-[no]vel</tt></b> (yes)</dt>
+<dd>
+Require velocities from trajectory
+</dd>
+<dt><b><tt>-[no]cont</tt></b> (yes)</dt>
+<dd>
+For exact continuation, the constraints should not be applied before the first step
+</dd>
+<dt><b><tt>-init_fep_state</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+fep state to initialize from
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

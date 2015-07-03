@@ -1,0 +1,43 @@
+.TH gmx-wheel 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-wheel - Plot helical wheels
+
+.SH SYNOPSIS
+gmx wheel [-f [<.dat>]] [-o [<.eps>]] [-nice <int>] [-r0 <int>]
+          [-rot0 <real>] [-T <string>] [-[no]nn]
+
+.SH DESCRIPTION
+\fBgmx wheel\fR plots a helical wheel representation of your sequence. The input sequence is in the \fB.dat\fR file where the first line contains the number of residues and each consecutive line contains a residue name.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.dat>] (nnnice.dat) (Input)"
+    Generic data file
+
+.BI "\-o" " [<.eps>] (plot.eps) (Output)"
+    Encapsulated PostScript (tm) file
+
+
+Other options:
+
+.BI "\-nice" " <int> (19)"
+    Set the nicelevel
+
+.BI "\-r0" " <int> (1)"
+    The first residue number in the sequence
+
+.BI "\-rot0" " <real> (0)"
+    Rotate around an angle initially (90 degrees makes sense)
+
+.BI "\-T" " <string>"
+    Plot a title in the center of the wheel (must be shorter than 10 characters, or it will overwrite the wheel)
+
+.BI "\-[no]nn" "  (yes)"
+    Toggle numbers
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

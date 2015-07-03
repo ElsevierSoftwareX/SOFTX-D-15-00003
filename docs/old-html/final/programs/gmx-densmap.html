@@ -1,0 +1,148 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx densmap</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx densmap</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx densmap [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]]
+            [-od [<.dat>]] [-o [<.xpm>]] [-nice <int>] [-b <time>]
+            [-e <time>] [-dt <time>] [-[no]w] [-bin <real>] [-aver <enum>]
+            [-xmin <real>] [-xmax <real>] [-n1 <int>] [-n2 <int>]
+            [-amax <real>] [-rmax <real>] [-[no]mirror] [-[no]sums]
+            [-unit <enum>] [-dmin <real>] [-dmax <real>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx densmap</tt> computes 2D number-density maps. It can make planar and axial-radial density maps. The output <tt>.<a href="../online/xpm.html">xpm</a></tt> file can be visualized with for instance xv and can be converted to postscript with <tt>xpm2ps</tt>. Optionally, output can be in text form to a <tt>.<a href="../online/dat.html">dat</a></tt> file with <tt>-od</tt>, instead of the usual <tt>.<a href="../online/xpm.html">xpm</a></tt> file with <tt>-o</tt>. <p> The default analysis is a 2-D number-density <a href="../online/map.html">map</a> for a selected group of atoms in the x-y plane. The averaging direction can be changed with the option <tt>-aver</tt>. When <tt>-xmin</tt> and/or <tt>-xmax</tt> are set only atoms that are within the limit(s) in the averaging direction are taken into account. The grid spacing is set with the option <tt>-bin</tt>. When <tt>-n1</tt> or <tt>-n2</tt> is non-zero, the grid size is set by this option. Box size fluctuations are properly taken into account. <p> When options <tt>-amax</tt> and <tt>-rmax</tt> are set, an axial-radial number-density <a href="../online/map.html">map</a> is made. Three groups should be supplied, the centers of mass of the first two groups define the axis, the third defines the analysis group. The axial direction goes from -amax to +amax, where the center is defined as the midpoint between the centers of mass and the positive direction goes from the first to the second center of mass. The radial direction goes from 0 to rmax or from -rmax to +rmax when the <tt>-mirror</tt> option has been set. <p> The normalization of the output is set with the <tt>-unit</tt> option. The default produces a true number density. Unit <tt>nm-2</tt> leaves out the normalization for the averaging or the angular direction. Option <tt>count</tt> produces the count for each grid cell. When you do not want the scale in the output to go from zero to the maximum density, you can set the maximum with the option <tt>-dmax</tt>.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input, Optional)</dt>
+<dd>
+Structure+mass(db): <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-od</tt></b> [&lt;.<a href="../online/dat.html">dat</a>&gt;] (densmap.<a href="../online/dat.html">dat</a>) (Output, Optional)</dt>
+<dd>
+Generic data file
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/xpm.html">xpm</a>&gt;] (densmap.<a href="../online/xpm.html">xpm</a>) (Output)</dt>
+<dd>
+X PixMap compatible matrix file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-bin</tt></b> &lt;real&gt; (0.02)</dt>
+<dd>
+Grid size (nm)
+</dd>
+<dt><b><tt>-aver</tt></b> &lt;enum&gt; (z)</dt>
+<dd>
+The direction to average over: z, y, x
+</dd>
+<dt><b><tt>-xmin</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+Minimum coordinate for averaging
+</dd>
+<dt><b><tt>-xmax</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+Maximum coordinate for averaging
+</dd>
+<dt><b><tt>-n1</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Number of grid cells in the first direction
+</dd>
+<dt><b><tt>-n2</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Number of grid cells in the second direction
+</dd>
+<dt><b><tt>-amax</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Maximum axial distance from the center
+</dd>
+<dt><b><tt>-rmax</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Maximum radial distance
+</dd>
+<dt><b><tt>-[no]mirror</tt></b> (no)</dt>
+<dd>
+Add the mirror image below the axial axis
+</dd>
+<dt><b><tt>-[no]sums</tt></b> (no)</dt>
+<dd>
+Print density sums (1D <a href="../online/map.html">map</a>) to stdout
+</dd>
+<dt><b><tt>-unit</tt></b> &lt;enum&gt; (nm-3)</dt>
+<dd>
+Unit for the output: nm-3, nm-2, count
+</dd>
+<dt><b><tt>-dmin</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Minimum density in output
+</dd>
+<dt><b><tt>-dmax</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Maximum density in output (0 means calculate it)
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

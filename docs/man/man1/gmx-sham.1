@@ -1,0 +1,135 @@
+.TH gmx-sham 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-sham - Compute free energies or other histograms from histograms
+
+.SH SYNOPSIS
+gmx sham [-f [<.xvg>]] [-ge [<.xvg>]] [-ene [<.xvg>]]
+         [-dist [<.xvg>]] [-histo [<.xvg>]] [-bin [<.ndx>]]
+         [-lp [<.xpm>]] [-ls [<.xpm>]] [-lsh [<.xpm>]]
+         [-lss [<.xpm>]] [-ls3 [<.pdb>]] [-g [<.log>]] [-nice <int>]
+         [-[no]w] [-xvg <enum>] [-[no]time] [-b <real>] [-e <real>]
+         [-ttol <real>] [-n <int>] [-[no]d] [-[no]sham]
+         [-tsham <real>] [-pmin <real>] [-dim <vector>]
+         [-ngrid <vector>] [-xmin <vector>] [-xmax <vector>]
+         [-pmax <real>] [-gmax <real>] [-emin <real>] [-emax <real>]
+         [-nlevels <int>]
+
+.SH DESCRIPTION
+\fBgmx sham\fR makes multi\-dimensional free\-energy, enthalpy and entropy plots. \fBgmx sham\fR reads one or more \fB.xvg\fR files and analyzes data sets. The basic purpose of \fBgmx sham\fR is to plot Gibbs free energy landscapes (option \fB\-ls\fR) by Bolzmann inverting multi\-dimensional histograms (option \fB\-lp\fR), but it can also make enthalpy (option \fB\-lsh\fR) and entropy (option \fB\-lss\fR) plots. The histograms can be made for any quantities the user supplies. A line in the input file may start with a time (see option \fB\-time\fR) and any number of \fIy\fR\-values may follow. Multiple sets can also be read when they are separated by & (option \fB\-n\fR), in this case only one \fIy\fR\-value is read from each line. All lines starting with  and @ are skipped.
+
+Option \fB\-ge\fR can be used to supply a file with free energies when the ensemble is not a Boltzmann ensemble, but needs to be biased by this free energy. One free energy value is required for each (multi\-dimensional) data point in the \fB\-f\fR input.
+
+Option \fB\-ene\fR can be used to supply a file with energies. These energies are used as a weighting function in the single histogram analysis method by Kumar et al. When temperatures are supplied (as a second column in the file), an experimental weighting scheme is applied. In addition the vales are used for making enthalpy and entropy plots.
+
+With option \fB\-dim\fR, dimensions can be gives for distances. When a distance is 2\- or 3\-dimensional, the circumference or surface sampled by two particles increases with increasing distance. Depending on what one would like to show, one can choose to correct the histogram and free\-energy for this volume effect. The probability is normalized by r and r2 for dimensions of 2 and 3, respectively. A value of \-1 is used to indicate an angle in degrees between two vectors: a sin(angle) normalization will be applied. \fBNote\fR that for angles between vectors the inner\-product or cosine is the natural quantity to use, as it will produce bins of the same volume.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.xvg>] (graph.xvg) (Input)"
+    xvgr/xmgr file
+
+.BI "\-ge" " [<.xvg>] (gibbs.xvg) (Input, Optional)"
+    xvgr/xmgr file
+
+.BI "\-ene" " [<.xvg>] (esham.xvg) (Input, Optional)"
+    xvgr/xmgr file
+
+.BI "\-dist" " [<.xvg>] (ener.xvg) (Output, Optional)"
+    xvgr/xmgr file
+
+.BI "\-histo" " [<.xvg>] (edist.xvg) (Output, Optional)"
+    xvgr/xmgr file
+
+.BI "\-bin" " [<.ndx>] (bindex.ndx) (Output, Optional)"
+    Index file
+
+.BI "\-lp" " [<.xpm>] (prob.xpm) (Output, Optional)"
+    X PixMap compatible matrix file
+
+.BI "\-ls" " [<.xpm>] (gibbs.xpm) (Output, Optional)"
+    X PixMap compatible matrix file
+
+.BI "\-lsh" " [<.xpm>] (enthalpy.xpm) (Output, Optional)"
+    X PixMap compatible matrix file
+
+.BI "\-lss" " [<.xpm>] (entropy.xpm) (Output, Optional)"
+    X PixMap compatible matrix file
+
+.BI "\-ls3" " [<.pdb>] (gibbs3.pdb) (Output, Optional)"
+    Protein data bank file
+
+.BI "\-g" " [<.log>] (shamlog.log) (Output, Optional)"
+    Log file
+
+
+Other options:
+
+.BI "\-nice" " <int> (19)"
+    Set the nicelevel
+
+.BI "\-[no]w" "  (no)"
+    View output \fB.xvg\fR, \fB.xpm\fR, \fB.eps\fR and \fB.pdb\fR files
+
+.BI "\-xvg" " <enum> (xmgrace)"
+    xvg plot formatting: xmgrace, xmgr, none
+
+.BI "\-[no]time" "  (yes)"
+    Expect a time in the input
+
+.BI "\-b" " <real> (-1)"
+    First time to read from set
+
+.BI "\-e" " <real> (-1)"
+    Last time to read from set
+
+.BI "\-ttol" " <real> (0)"
+    Tolerance on time in appropriate units (usually ps)
+
+.BI "\-n" " <int> (1)"
+    Read this number of sets separated by lines containing only an ampersand
+
+.BI "\-[no]d" "  (no)"
+    Use the derivative
+
+.BI "\-[no]sham" "  (yes)"
+    Turn off energy weighting even if energies are given
+
+.BI "\-tsham" " <real> (298.15)"
+    Temperature for single histogram analysis
+
+.BI "\-pmin" " <real> (0)"
+    Minimum probability. Anything lower than this will be set to zero
+
+.BI "\-dim" " <vector> (1 1 1)"
+    Dimensions for distances, used for volume correction (max 3 values, dimensions  3 will get the same value as the last)
+
+.BI "\-ngrid" " <vector> (32 32 32)"
+    Number of bins for energy landscapes (max 3 values, dimensions  3 will get the same value as the last)
+
+.BI "\-xmin" " <vector> (0 0 0)"
+    Minimum for the axes in energy landscape (see above for  3 dimensions)
+
+.BI "\-xmax" " <vector> (1 1 1)"
+    Maximum for the axes in energy landscape (see above for  3 dimensions)
+
+.BI "\-pmax" " <real> (0)"
+    Maximum probability in output, default is calculate
+
+.BI "\-gmax" " <real> (0)"
+    Maximum free energy in output, default is calculate
+
+.BI "\-emin" " <real> (0)"
+    Minimum enthalpy in output, default is calculate
+
+.BI "\-emax" " <real> (0)"
+    Maximum enthalpy in output, default is calculate
+
+.BI "\-nlevels" " <int> (25)"
+    Number of levels for energy landscape
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

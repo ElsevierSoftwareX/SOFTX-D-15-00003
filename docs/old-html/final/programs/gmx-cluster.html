@@ -1,0 +1,229 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx cluster</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx cluster</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx cluster [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]]
+            [-dm [<.xpm>]] [-om [<.xpm>]] [-o [<.xpm>]] [-g [<.log>]]
+            [-dist [<.xvg>]] [-ev [<.xvg>]] [-conv [<.xvg>]] [-sz [<.xvg>]]
+            [-tr [<.xpm>]] [-ntr [<.xvg>]] [-clid [<.xvg>]]
+            [-cl [<.xtc/.trr/...>]] [-nice <int>] [-b <time>] [-e <time>]
+            [-dt <time>] [-tu <enum>] [-[no]w] [-xvg <enum>] [-[no]dista]
+            [-nlevels <int>] [-cutoff <real>] [-[no]fit] [-max <real>]
+            [-skip <int>] [-[no]av] [-wcl <int>] [-nst <int>]
+            [-rmsmin <real>] [-method <enum>] [-minstruct <int>]
+            [-[no]binary] [-M <int>] [-P <int>] [-seed <int>] [-niter <int>]
+            [-nrandom <int>] [-kT <real>] [-[no]pbc]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx cluster</tt> can cluster structures using several different methods. Distances between structures can be determined from a trajectory or read from an <tt>.<a href="../online/xpm.html">xpm</a></tt> matrix file with the <tt>-dm</tt> option. RMS deviation after fitting or RMS deviation of atom-pair distances can be used to define the distance between structures.<p> single linkage: add a structure to a cluster when its distance to any element of the cluster is less than <tt>cutoff</tt>.<p> Jarvis Patrick: add a structure to a cluster when this structure and a structure in the cluster have each other as neighbors and they have a least <tt>P</tt> neighbors in common. The neighbors of a structure are the M closest structures or all structures within <tt>cutoff</tt>.<p> Monte Carlo: reorder the RMSD matrix using Monte Carlo such that the order of the frames is using the smallest possible increments. With this it is possible to make a smooth animation going from one structure to another with the largest possible (e.g.) RMSD between them, however the intermediate steps should be as small as possible. Applications could be to visualize a potential of mean force ensemble of simulations or a pulling simulation. Obviously the user has to prepare the trajectory well (e.g. by not superimposing frames). The final result can be inspect visually by looking at the matrix <tt>.<a href="../online/xpm.html">xpm</a></tt> file, which should vary smoothly from bottom to <a href="../online/top.html">top</a>.<p> diagonalization: diagonalize the RMSD matrix.<p> gromos: use algorithm as described in Daura <it>et al.</it> (<it>Angew. Chem. Int. Ed.</it> <b>1999</b>, <it>38</it>, pp 236-240). Count number of neighbors using cut-off, take structure with largest number of neighbors with all its neighbors as cluster and eliminate it from the pool of clusters. Repeat for remaining structures in pool.<p> When the clustering algorithm assigns each structure to exactly one cluster (single linkage, Jarvis Patrick and gromos) and a trajectory file is supplied, the structure with the smallest average distance to the others or the average structure or all structures for each cluster will be written to a trajectory file. When writing all structures, separate numbered files are made for each cluster.<p> Two output files are always written:<br> <tt>-o</tt> writes the RMSD values in the upper left half of the matrix and a graphical depiction of the clusters in the lower right half When <tt>-minstruct</tt> = 1 the graphical depiction is black when two structures are in the same cluster. When <tt>-minstruct</tt> &gt; 1 different colors will be used for each cluster.<br> <tt>-g</tt> writes information on the options used and a detailed list of all clusters and their members.<p> Additionally, a number of optional output files can be written:<br> <tt>-dist</tt> writes the RMSD distribution.<br> <tt>-ev</tt> writes the eigenvectors of the RMSD matrix diagonalization.<br> <tt>-sz</tt> writes the cluster sizes.<br> <tt>-tr</tt> writes a matrix of the number transitions between cluster pairs.<br> <tt>-ntr</tt> writes the total number of transitions to or from each cluster.<br> <tt>-clid</tt> writes the cluster number as a function of time.<br> <tt>-cl</tt> writes average (with option <tt>-av</tt>) or central structure of each cluster or writes numbered files with cluster members for a selected set of clusters (with option <tt>-wcl</tt>, depends on <tt>-nst</tt> and <tt>-rmsmin</tt>). The center of a cluster is the structure with the smallest average RMSD from all other structures of the cluster.<br>
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input, Optional)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input, Optional)</dt>
+<dd>
+Structure+mass(db): <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-dm</tt></b> [&lt;.<a href="../online/xpm.html">xpm</a>&gt;] (rmsd.<a href="../online/xpm.html">xpm</a>) (Input, Optional)</dt>
+<dd>
+X PixMap compatible matrix file
+</dd>
+<dt><b><tt>-om</tt></b> [&lt;.<a href="../online/xpm.html">xpm</a>&gt;] (rmsd-raw.<a href="../online/xpm.html">xpm</a>) (Output)</dt>
+<dd>
+X PixMap compatible matrix file
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/xpm.html">xpm</a>&gt;] (rmsd-clust.<a href="../online/xpm.html">xpm</a>) (Output)</dt>
+<dd>
+X PixMap compatible matrix file
+</dd>
+<dt><b><tt>-g</tt></b> [&lt;.<a href="../online/log.html">log</a>&gt;] (cluster.<a href="../online/log.html">log</a>) (Output)</dt>
+<dd>
+Log file
+</dd>
+<dt><b><tt>-dist</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (rmsd-dist.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-ev</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (rmsd-eig.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-conv</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (mc-conv.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-sz</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (clust-size.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-tr</tt></b> [&lt;.<a href="../online/xpm.html">xpm</a>&gt;] (clust-trans.<a href="../online/xpm.html">xpm</a>) (Output, Optional)</dt>
+<dd>
+X PixMap compatible matrix file
+</dd>
+<dt><b><tt>-ntr</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (clust-trans.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-clid</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (clust-id.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-cl</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (clusters.<a href="../online/pdb.html">pdb</a>) (Output, Optional)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-tu</tt></b> &lt;enum&gt; (ps)</dt>
+<dd>
+Time unit: fs, ps, ns, us, ms, s
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-[no]dista</tt></b> (no)</dt>
+<dd>
+Use RMSD of distances instead of RMS deviation
+</dd>
+<dt><b><tt>-nlevels</tt></b> &lt;int&gt; (40)</dt>
+<dd>
+Discretize RMSD matrix in this number of levels
+</dd>
+<dt><b><tt>-cutoff</tt></b> &lt;real&gt; (0.1)</dt>
+<dd>
+RMSD cut-off (nm) for two structures to be neighbor
+</dd>
+<dt><b><tt>-[no]fit</tt></b> (yes)</dt>
+<dd>
+Use least squares fitting before RMSD calculation
+</dd>
+<dt><b><tt>-max</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+Maximum level in RMSD matrix
+</dd>
+<dt><b><tt>-skip</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+Only analyze every nr-th frame
+</dd>
+<dt><b><tt>-[no]av</tt></b> (no)</dt>
+<dd>
+Write average iso middle structure for each cluster
+</dd>
+<dt><b><tt>-wcl</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Write the structures for this number of clusters to numbered files
+</dd>
+<dt><b><tt>-nst</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+Only write all structures if more than this number of structures per cluster
+</dd>
+<dt><b><tt>-rmsmin</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+minimum rms difference with rest of cluster for writing structures
+</dd>
+<dt><b><tt>-method</tt></b> &lt;enum&gt; (linkage)</dt>
+<dd>
+Method for cluster determination: linkage, jarvis-patrick, monte-carlo, diagonalization, gromos
+</dd>
+<dt><b><tt>-minstruct</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+Minimum number of structures in cluster for coloring in the <tt>.<a href="../online/xpm.html">xpm</a></tt> file
+</dd>
+<dt><b><tt>-[no]binary</tt></b> (no)</dt>
+<dd>
+Treat the RMSD matrix as consisting of 0 and 1, where the cut-off is given by <tt>-cutoff</tt>
+</dd>
+<dt><b><tt>-M</tt></b> &lt;int&gt; (10)</dt>
+<dd>
+Number of nearest neighbors considered for Jarvis-Patrick algorithm, 0 is use cutoff
+</dd>
+<dt><b><tt>-P</tt></b> &lt;int&gt; (3)</dt>
+<dd>
+Number of identical nearest neighbors required to form a cluster
+</dd>
+<dt><b><tt>-seed</tt></b> &lt;int&gt; (1993)</dt>
+<dd>
+Random number seed for Monte Carlo clustering algorithm: &lt;= 0 means generate
+</dd>
+<dt><b><tt>-niter</tt></b> &lt;int&gt; (10000)</dt>
+<dd>
+Number of iterations for MC
+</dd>
+<dt><b><tt>-nrandom</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+The first iterations for MC may be done complete random, to shuffle the frames
+</dd>
+<dt><b><tt>-kT</tt></b> &lt;real&gt; (0.001)</dt>
+<dd>
+Boltzmann weighting factor for Monte Carlo optimization (zero turns off uphill steps)
+</dd>
+<dt><b><tt>-[no]pbc</tt></b> (yes)</dt>
+<dd>
+PBC check
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

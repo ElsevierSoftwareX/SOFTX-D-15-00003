@@ -1,0 +1,144 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx densorder</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx densorder</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx densorder [-s [<.tpr/.tpb/...>]] [-f [<.xtc/.trr/...>]] [-n [<.ndx>]]
+             [-o [<.dat>]] [-or [<.out> [...]]] [-og [<.xpm> [...]]]
+             [-Spect [<.out> [...]]] [-nice <int>] [-b <time>] [-e <time>]
+             [-dt <time>] [-[no]w] [-[no]1d] [-bw <real>] [-bwn <real>]
+             [-order <int>] [-axis <string>] [-method <enum>] [-d1 <real>]
+             [-d2 <real>] [-tblock <int>] [-nlevel <int>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx densorder</tt> reduces a two-phase density distribution along an axis, computed over a MD trajectory, to 2D surfaces fluctuating in time, by a fit to a functional profile for interfacial densities. A time-averaged spatial representation of the interfaces can be output with the option <tt>-tavg</tt>.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Run input file: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/dat.html">dat</a>&gt;] (Density4D.<a href="../online/dat.html">dat</a>) (Output, Optional)</dt>
+<dd>
+Generic data file
+</dd>
+<dt><b><tt>-or</tt></b> [&lt;.out&gt; [...]] (hello.out) (Output, Optional)</dt>
+<dd>
+Generic output file
+</dd>
+<dt><b><tt>-og</tt></b> [&lt;.<a href="../online/xpm.html">xpm</a>&gt; [...]] (interface.<a href="../online/xpm.html">xpm</a>) (Output, Optional)</dt>
+<dd>
+X PixMap compatible matrix file
+</dd>
+<dt><b><tt>-Spect</tt></b> [&lt;.out&gt; [...]] (intfspect.out) (Output, Optional)</dt>
+<dd>
+Generic output file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-[no]1d</tt></b> (no)</dt>
+<dd>
+Pseudo-1d interface geometry
+</dd>
+<dt><b><tt>-bw</tt></b> &lt;real&gt; (0.2)</dt>
+<dd>
+Binwidth of density distribution tangential to interface
+</dd>
+<dt><b><tt>-bwn</tt></b> &lt;real&gt; (0.05)</dt>
+<dd>
+Binwidth of density distribution normal to interface
+</dd>
+<dt><b><tt>-order</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Order of Gaussian filter, order 0 equates to NO filtering
+</dd>
+<dt><b><tt>-axis</tt></b> &lt;string&gt; (Z)</dt>
+<dd>
+Axis Direction - X, Y or Z
+</dd>
+<dt><b><tt>-method</tt></b> &lt;enum&gt; (bisect)</dt>
+<dd>
+Interface location method: bisect, functional
+</dd>
+<dt><b><tt>-d1</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Bulk density phase 1 (at small z)
+</dd>
+<dt><b><tt>-d2</tt></b> &lt;real&gt; (1000)</dt>
+<dd>
+Bulk density phase 2 (at large z)
+</dd>
+<dt><b><tt>-tblock</tt></b> &lt;int&gt; (100)</dt>
+<dd>
+Number of frames in one time-block average
+</dd>
+<dt><b><tt>-nlevel</tt></b> &lt;int&gt; (100)</dt>
+<dd>
+Number of Height levels in 2D - XPixMaps
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

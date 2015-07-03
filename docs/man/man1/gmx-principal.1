@@ -1,0 +1,70 @@
+.TH gmx-principal 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-principal - Calculate principal axes of inertia for a group of atoms
+
+.SH SYNOPSIS
+gmx principal [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]]
+             [-n [<.ndx>]] [-a1 [<.xvg>]] [-a2 [<.xvg>]]
+             [-a3 [<.xvg>]] [-om [<.xvg>]] [-nice <int>] [-b <time>]
+             [-e <time>] [-dt <time>] [-tu <enum>] [-[no]w]
+             [-xvg <enum>] [-[no]foo]
+
+.SH DESCRIPTION
+\fBgmx principal\fR calculates the three principal axes of inertia for a group of atoms. NOTE: Old versions of Gromacs wrote the output data in a strange transposed way. As of Gromacs\-5.0, the output file paxis1.dat contains the x/y/z components of the first (major) principal axis for each frame, and similarly for the middle and minor axes in paxis2.dat and paxis3.dat.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.xtc/.trr/...>] (traj.xtc) (Input)"
+    Trajectory: xtc trr cpt trj gro g96 pdb tng
+
+.BI "\-s" " [<.tpr/.tpb/...>] (topol.tpr) (Input)"
+    Structure+mass(db): tpr tpb tpa gro g96 pdb brk ent
+
+.BI "\-n" " [<.ndx>] (index.ndx) (Input, Optional)"
+    Index file
+
+.BI "\-a1" " [<.xvg>] (paxis1.xvg) (Output)"
+    xvgr/xmgr file
+
+.BI "\-a2" " [<.xvg>] (paxis2.xvg) (Output)"
+    xvgr/xmgr file
+
+.BI "\-a3" " [<.xvg>] (paxis3.xvg) (Output)"
+    xvgr/xmgr file
+
+.BI "\-om" " [<.xvg>] (moi.xvg) (Output)"
+    xvgr/xmgr file
+
+
+Other options:
+
+.BI "\-nice" " <int> (19)"
+    Set the nicelevel
+
+.BI "\-b" " <time> (0)"
+    First frame (ps) to read from trajectory
+
+.BI "\-e" " <time> (0)"
+    Last frame (ps) to read from trajectory
+
+.BI "\-dt" " <time> (0)"
+    Only use frame when t MOD dt = first time (ps)
+
+.BI "\-tu" " <enum> (ps)"
+    Time unit: fs, ps, ns, us, ms, s
+
+.BI "\-[no]w" "  (no)"
+    View output \fB.xvg\fR, \fB.xpm\fR, \fB.eps\fR and \fB.pdb\fR files
+
+.BI "\-xvg" " <enum> (xmgrace)"
+    xvg plot formatting: xmgrace, xmgr, none
+
+.BI "\-[no]foo" "  (no)"
+    Dummy option to avoid empty array
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

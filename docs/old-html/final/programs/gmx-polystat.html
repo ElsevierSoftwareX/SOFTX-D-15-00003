@@ -1,0 +1,118 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx polystat</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx polystat</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx polystat [-s [<.tpr/.tpb/...>]] [-f [<.xtc/.trr/...>]] [-n [<.ndx>]]
+             [-o [<.xvg>]] [-v [<.xvg>]] [-p [<.xvg>]] [-i [<.xvg>]]
+             [-nice <int>] [-b <time>] [-e <time>] [-dt <time>] [-tu <enum>]
+             [-[no]w] [-xvg <enum>] [-[no]mw] [-[no]pc]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx polystat</tt> plots static properties of polymers as a function of time and prints the average.<p> By default it determines the average end-to-end distance and radii of gyration of polymers. It asks for an index group and split this into molecules. The end-to-end distance is then determined using the first and the last atom in the index group for each molecules. For the radius of gyration the total and the three principal components for the average gyration tensor are written. With option <tt>-v</tt> the eigenvectors are written. With option <tt>-pc</tt> also the average eigenvalues of the individual gyration tensors are written. With option <tt>-i</tt> the mean square internal distances are written.<p> With option <tt>-p</tt> the persistence length is determined. The chosen index group should consist of atoms that are consecutively bonded in the polymer mainchains. The persistence length is then determined from the cosine of the angles between bonds with an index difference that is even, the odd pairs are not used, because straight polymer backbones are usually all trans and therefore only every second bond aligns. The persistence length is defined as number of bonds where the average cos reaches a value of 1/e. This point is determined by a linear interpolation of <a href="../online/log.html">log</a>(&lt;cos&gt;).
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Run input file: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (polystat.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-v</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (polyvec.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-p</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (persist.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-i</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (intdist.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-tu</tt></b> &lt;enum&gt; (ps)</dt>
+<dd>
+Time unit: fs, ps, ns, us, ms, s
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-[no]mw</tt></b> (yes)</dt>
+<dd>
+Use the mass weighting for radii of gyration
+</dd>
+<dt><b><tt>-[no]pc</tt></b> (no)</dt>
+<dd>
+Plot average eigenvalues
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

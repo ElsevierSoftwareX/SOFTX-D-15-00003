@@ -1,0 +1,90 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx nmtraj</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx nmtraj</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx nmtraj [-s [<.tpr/.tpb/...>]] [-v [<.trr/.cpt/...>]]
+           [-o [<.xtc/.trr/...>]] [-nice <int>] [-eignr <string>]
+           [-phases <string>] [-temp <real>] [-amplitude <real>]
+           [-nframes <int>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx nmtraj</tt> generates an virtual trajectory from an eigenvector, corresponding to a harmonic Cartesian oscillation around the average structure. The eigenvectors should normally be mass-weighted, but you can use non-weighted eigenvectors to generate orthogonal motions. The output frames are written as a trajectory file covering an entire period, and the first frame is the average structure. If you write the trajectory in (or convert to) PDB format you can view it directly in PyMol and also render a photorealistic movie. Motion amplitudes are calculated from the eigenvalues and a preset temperature, assuming equipartition of the energy over all modes. To make the motion clearly visible in PyMol you might want to amplify it by setting an unrealistically high temperature. However, be aware that both the linear Cartesian displacements and mass weighting will lead to serious structure deformation for high amplitudes - this is is simply a limitation of the Cartesian normal mode model. By default the selected eigenvector is set to 7, since  the first six normal modes are the translational and rotational degrees of freedom.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Structure+mass(db): <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent
+</dd>
+<dt><b><tt>-v</tt></b> [&lt;.<a href="../online/trr.html">trr</a>/.<a href="../online/cpt.html">cpt</a>/...&gt;] (eigenvec.<a href="../online/trr.html">trr</a>) (Input)</dt>
+<dd>
+Full precision trajectory: <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (nmtraj.<a href="../online/xtc.html">xtc</a>) (Output)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-eignr</tt></b> &lt;string&gt; (7)</dt>
+<dd>
+String of eigenvectors to use (first is 1)
+</dd>
+<dt><b><tt>-phases</tt></b> &lt;string&gt; (0.0)</dt>
+<dd>
+String of phases (default is 0.0)
+</dd>
+<dt><b><tt>-temp</tt></b> &lt;real&gt; (300)</dt>
+<dd>
+Temperature (K)
+</dd>
+<dt><b><tt>-amplitude</tt></b> &lt;real&gt; (0.25)</dt>
+<dd>
+Amplitude for modes with eigenvalue&lt;=0
+</dd>
+<dt><b><tt>-nframes</tt></b> &lt;int&gt; (30)</dt>
+<dd>
+Number of frames to generate
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

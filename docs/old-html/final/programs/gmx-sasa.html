@@ -1,0 +1,152 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx sasa</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx sasa</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx sasa [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]]
+         [-o [<.xvg>]] [-odg [<.xvg>]] [-or [<.xvg>]] [-oa [<.xvg>]]
+         [-tv [<.xvg>]] [-q [<.pdb>]] [-b <time>] [-e <time>] [-dt <time>]
+         [-tu <enum>] [-xvg <enum>] [-[no]rmpbc] [-[no]pbc] [-sf <file>]
+         [-selrpos <enum>] [-probe <real>] [-ndots <int>] [-[no]prot]
+         [-dgs <real>] [-surface <selection>] [-output <selection>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx sasa</tt> computes solvent accessible surface areas. See Eisenhaber F, Lijnzaad P, Argos P, Sander C, & Scharf M (1995) J. Comput. Chem. 16, 273-284 for the algorithm used. With <tt>-q</tt>, the Connolly surface can be generated as well in a <tt>.<a href="../online/pdb.html">pdb</a></tt> file where the nodes are represented as atoms and the edges connecting the nearest nodes as CONECT records. <tt>-odg</tt> allows for estimation of solvation free energies from per-atom solvation energies per exposed surface area.<p> The program requires a selection for the surface calculation to be specified with <tt>-surface</tt>. This should always consist of all non-solvent atoms in the system. The area of this group is always calculated. Optionally, <tt>-output</tt> can specify additional selections, which should be subsets of the calculation group. The solvent-accessible areas for these groups are also extracted from the full surface.<p> The average and standard deviation of the area over the trajectory can be calculated per residue and atom (options <tt>-or</tt> and <tt>-oa</tt>).<p> With the <tt>-tv</tt> option the total volume and density of the molecule can be computed. Please consider whether the normal probe radius is appropriate in this case or whether you would rather use, e.g., 0. It is good to keep in mind that the results for volume and density are very approximate. For example, in ice Ih, one can easily fit water molecules in the pores which would yield a volume that is too low, and surface area and density that are both too high.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input, Optional)</dt>
+<dd>
+Input trajectory or single configuration: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input, Optional)</dt>
+<dd>
+Input structure: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Extra index groups
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (area.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+Total area as a function of time
+</dd>
+<dt><b><tt>-odg</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (dgsolv.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+Estimated solvation free energy as a function of time
+</dd>
+<dt><b><tt>-or</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (resarea.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+Average area per residue
+</dd>
+<dt><b><tt>-oa</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (atomarea.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+Average area per atom
+</dd>
+<dt><b><tt>-tv</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (volume.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+Total volume and density as a function of time
+</dd>
+<dt><b><tt>-q</tt></b> [&lt;.<a href="../online/pdb.html">pdb</a>&gt;] (connolly.<a href="../online/pdb.html">pdb</a>) (Output, Optional)</dt>
+<dd>
+PDB file for Connolly surface
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame if t MOD dt == first time (ps)
+</dd>
+<dt><b><tt>-tu</tt></b> &lt;enum&gt; (ps)</dt>
+<dd>
+Unit for time values: fs, ps, ns, us, ms, s
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+Plot formatting: none, xmgrace, xmgr
+</dd>
+<dt><b><tt>-[no]rmpbc</tt></b> (yes)</dt>
+<dd>
+Make molecules whole for each frame
+</dd>
+<dt><b><tt>-[no]pbc</tt></b> (yes)</dt>
+<dd>
+Use periodic boundary conditions for distance calculation
+</dd>
+<dt><b><tt>-sf</tt></b> &lt;file&gt;</dt>
+<dd>
+Provide selections from files
+</dd>
+<dt><b><tt>-selrpos</tt></b> &lt;enum&gt; (atom)</dt>
+<dd>
+Selection reference positions: atom, res_com, res_cog, mol_com, mol_cog, whole_res_com, whole_res_cog, whole_mol_com, whole_mol_cog, part_res_com, part_res_cog, part_mol_com, part_mol_cog, dyn_res_com, dyn_res_cog, dyn_mol_com, dyn_mol_cog
+</dd>
+<dt><b><tt>-probe</tt></b> &lt;real&gt; (0.14)</dt>
+<dd>
+Radius of the solvent probe (nm)
+</dd>
+<dt><b><tt>-ndots</tt></b> &lt;int&gt; (24)</dt>
+<dd>
+Number of dots per sphere, more dots means more accuracy
+</dd>
+<dt><b><tt>-[no]prot</tt></b> (yes)</dt>
+<dd>
+Output the protein to the Connolly <tt>.<a href="../online/pdb.html">pdb</a></tt> file too
+</dd>
+<dt><b><tt>-dgs</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Default value for solvation free energy per area (kJ/mol/nm^2)
+</dd>
+<dt><b><tt>-surface</tt></b> &lt;selection&gt;</dt>
+<dd>
+Surface calculation selection
+</dd>
+<dt><b><tt>-output</tt></b> &lt;selection&gt;</dt>
+<dd>
+Output selection(s)
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

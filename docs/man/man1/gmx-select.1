@@ -1,0 +1,126 @@
+.TH gmx-select 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-select - Print general information about selections
+
+.SH SYNOPSIS
+gmx select [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]]
+           [-n [<.ndx>]] [-os [<.xvg>]] [-oc [<.xvg>]] [-oi [<.dat>]]
+           [-on [<.ndx>]] [-om [<.xvg>]] [-of [<.xvg>]]
+           [-ofpdb [<.pdb>]] [-olt [<.xvg>]] [-b <time>] [-e <time>]
+           [-dt <time>] [-tu <enum>] [-xvg <enum>] [-[no]rmpbc]
+           [-[no]pbc] [-sf <file>] [-selrpos <enum>]
+           [-select <selection>] [-[no]norm] [-[no]cfnorm]
+           [-resnr <enum>] [-pdbatoms <enum>] [-[no]cumlt]
+
+.SH DESCRIPTION
+\fBgmx select\fR writes out basic data about dynamic selections. It can be used for some simple analyses, or the output can be combined with output from other programs and/or external analysis programs to calculate more complex things. Any combination of the output options is possible, but note that \fB\-om\fR only operates on the first selection. Also note that if you provide no output options, no output is produced.
+
+With \fB\-os\fR, calculates the number of positions in each selection for each frame. With \fB\-norm\fR, the output is between 0 and 1 and describes the fraction from the maximum number of positions (e.g., for selection 'resname RA and x  5' the maximum number of positions is the number of atoms in RA residues). With \fB\-cfnorm\fR, the output is divided by the fraction covered by the selection. \fB\-norm\fR and \fB\-cfnorm\fR can be specified independently of one another.
+
+With \fB\-oc\fR, the fraction covered by each selection is written out as a function of time.
+
+With \fB\-oi\fR, the selected atoms/residues/molecules are written out as a function of time. In the output, the first column contains the frame time, the second contains the number of positions, followed by the atom/residue/molecule numbers. If more than one selection is specified, the size of the second group immediately follows the last number of the first group and so on.
+
+With \fB\-on\fR, the selected atoms are written as a index file compatible with \fBmake_ndx\fR and the analyzing tools. Each selection is written as a selection group and for dynamic selections a group is written for each frame.
+
+For residue numbers, the output of \fB\-oi\fR can be controlled with \fB\-resnr\fR: \fBnumber\fR (default) prints the residue numbers as they appear in the input file, while \fBindex\fR prints unique numbers assigned to the residues in the order they appear in the input file, starting with 1. The former is more intuitive, but if the input contains multiple residues with the same number, the output can be less useful.
+
+With \fB\-om\fR, a mask is printed for the first selection as a function of time. Each line in the output corresponds to one frame, and contains either 0/1 for each atom/residue/molecule possibly selected. 1 stands for the atom/residue/molecule being selected for the current frame, 0 for not selected.
+
+With \fB\-of\fR, the occupancy fraction of each position (i.e., the fraction of frames where the position is selected) is printed.
+
+With \fB\-ofpdb\fR, a PDB file is written out where the occupancy column is filled with the occupancy fraction of each atom in the selection. The coordinates in the PDB file will be those from the input topology. \fB\-pdbatoms\fR can be used to control which atoms appear in the output PDB file: with \fBall\fR all atoms are present, with \fBmaxsel\fR all atoms possibly selected by the selection are present, and with \fBselected\fR only atoms that are selected at least in one frame are present.
+
+With \fB\-olt\fR, a histogram is produced that shows the number of selected positions as a function of the time the position was continuously selected. \fB\-cumlt\fR can be used to control whether subintervals of longer intervals are included in the histogram.
+
+\fB\-om\fR, \fB\-of\fR, and \fB\-olt\fR only make sense with dynamic selections.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.xtc/.trr/...>] (traj.xtc) (Input, Optional)"
+    Input trajectory or single configuration: xtc trr cpt trj gro g96 pdb tng
+
+.BI "\-s" " [<.tpr/.tpb/...>] (topol.tpr) (Input, Optional)"
+    Input structure: tpr tpb tpa gro g96 pdb brk ent
+
+.BI "\-n" " [<.ndx>] (index.ndx) (Input, Optional)"
+    Extra index groups
+
+.BI "\-os" " [<.xvg>] (size.xvg) (Output, Optional)"
+    Number of positions in each selection
+
+.BI "\-oc" " [<.xvg>] (cfrac.xvg) (Output, Optional)"
+    Covered fraction for each selection
+
+.BI "\-oi" " [<.dat>] (index.dat) (Output, Optional)"
+    Indices selected by each selection
+
+.BI "\-on" " [<.ndx>] (index.ndx) (Output, Optional)"
+    Index file from the selection
+
+.BI "\-om" " [<.xvg>] (mask.xvg) (Output, Optional)"
+    Mask for selected positions
+
+.BI "\-of" " [<.xvg>] (occupancy.xvg) (Output, Optional)"
+    Occupied fraction for selected positions
+
+.BI "\-ofpdb" " [<.pdb>] (occupancy.pdb) (Output, Optional)"
+    PDB file with occupied fraction for selected positions
+
+.BI "\-olt" " [<.xvg>] (lifetime.xvg) (Output, Optional)"
+    Lifetime histogram
+
+
+Other options:
+
+.BI "\-b" " <time> (0)"
+    First frame (ps) to read from trajectory
+
+.BI "\-e" " <time> (0)"
+    Last frame (ps) to read from trajectory
+
+.BI "\-dt" " <time> (0)"
+    Only use frame if t MOD dt == first time (ps)
+
+.BI "\-tu" " <enum> (ps)"
+    Unit for time values: fs, ps, ns, us, ms, s
+
+.BI "\-xvg" " <enum> (xmgrace)"
+    Plot formatting: none, xmgrace, xmgr
+
+.BI "\-[no]rmpbc" "  (yes)"
+    Make molecules whole for each frame
+
+.BI "\-[no]pbc" "  (yes)"
+    Use periodic boundary conditions for distance calculation
+
+.BI "\-sf" " <file>"
+    Provide selections from files
+
+.BI "\-selrpos" " <enum> (atom)"
+    Selection reference positions: atom, res_com, res_cog, mol_com, mol_cog, whole_res_com, whole_res_cog, whole_mol_com, whole_mol_cog, part_res_com, part_res_cog, part_mol_com, part_mol_cog, dyn_res_com, dyn_res_cog, dyn_mol_com, dyn_mol_cog
+
+.BI "\-select" " <selection>"
+    Selections to analyze
+
+.BI "\-[no]norm" "  (no)"
+    Normalize by total number of positions with \-os
+
+.BI "\-[no]cfnorm" "  (no)"
+    Normalize by covered fraction with \-os
+
+.BI "\-resnr" " <enum> (number)"
+    Residue number output type with \-oi and \-on: number, index
+
+.BI "\-pdbatoms" " <enum> (all)"
+    Atoms to write with \-ofpdb: all, maxsel, selected
+
+.BI "\-[no]cumlt" "  (yes)"
+    Cumulate subintervals of longer intervals in \-olt
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

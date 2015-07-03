@@ -1,0 +1,104 @@
+.TH gmx-sorient 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-sorient - Analyze solvent orientation around solutes
+
+.SH SYNOPSIS
+gmx sorient [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]]
+            [-n [<.ndx>]] [-o [<.xvg>]] [-no [<.xvg>]] [-ro [<.xvg>]]
+            [-co [<.xvg>]] [-rc [<.xvg>]] [-nice <int>] [-b <time>]
+            [-e <time>] [-dt <time>] [-[no]w] [-xvg <enum>]
+            [-[no]com] [-[no]v23] [-rmin <real>] [-rmax <real>]
+            [-cbin <real>] [-rbin <real>] [-[no]pbc]
+
+.SH DESCRIPTION
+\fBgmx sorient\fR analyzes solvent orientation around solutes. It calculates two angles between the vector from one or more reference positions to the first atom of each solvent molecule:
+
+theta_1: the angle with the vector from the first atom of the solvent molecule to the midpoint between atoms 2 and 3.
+theta_2: the angle with the normal of the solvent plane, defined by the same three atoms, or, when the option \fB\-v23\fR is set, the angle with the vector between atoms 2 and 3.
+
+The reference can be a set of atoms or the center of mass of a set of atoms. The group of solvent atoms should consist of 3 atoms per solvent molecule. Only solvent molecules between \fB\-rmin\fR and \fB\-rmax\fR are considered for \fB\-o\fR and \fB\-no\fR each frame.
+
+\fB\-o\fR: distribtion of cos(theta_1) for rmin=r=rmax.
+
+\fB\-no\fR: distribution of cos(theta_2) for rmin=r=rmax.
+
+\fB\-ro\fR: cos(theta_1) and 3cos(2theta_2)\-1 as a function of the distance.
+
+\fB\-co\fR: the sum over all solvent molecules within distance r of cos(theta_1) and 3cos(2(theta_2)\-1) as a function of r.
+
+\fB\-rc\fR: the distribution of the solvent molecules as a function of r
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.xtc/.trr/...>] (traj.xtc) (Input)"
+    Trajectory: xtc trr cpt trj gro g96 pdb tng
+
+.BI "\-s" " [<.tpr/.tpb/...>] (topol.tpr) (Input)"
+    Structure+mass(db): tpr tpb tpa gro g96 pdb brk ent
+
+.BI "\-n" " [<.ndx>] (index.ndx) (Input, Optional)"
+    Index file
+
+.BI "\-o" " [<.xvg>] (sori.xvg) (Output)"
+    xvgr/xmgr file
+
+.BI "\-no" " [<.xvg>] (snor.xvg) (Output)"
+    xvgr/xmgr file
+
+.BI "\-ro" " [<.xvg>] (sord.xvg) (Output)"
+    xvgr/xmgr file
+
+.BI "\-co" " [<.xvg>] (scum.xvg) (Output)"
+    xvgr/xmgr file
+
+.BI "\-rc" " [<.xvg>] (scount.xvg) (Output)"
+    xvgr/xmgr file
+
+
+Other options:
+
+.BI "\-nice" " <int> (19)"
+    Set the nicelevel
+
+.BI "\-b" " <time> (0)"
+    First frame (ps) to read from trajectory
+
+.BI "\-e" " <time> (0)"
+    Last frame (ps) to read from trajectory
+
+.BI "\-dt" " <time> (0)"
+    Only use frame when t MOD dt = first time (ps)
+
+.BI "\-[no]w" "  (no)"
+    View output \fB.xvg\fR, \fB.xpm\fR, \fB.eps\fR and \fB.pdb\fR files
+
+.BI "\-xvg" " <enum> (xmgrace)"
+    xvg plot formatting: xmgrace, xmgr, none
+
+.BI "\-[no]com" "  (no)"
+    Use the center of mass as the reference postion
+
+.BI "\-[no]v23" "  (no)"
+    Use the vector between atoms 2 and 3
+
+.BI "\-rmin" " <real> (0)"
+    Minimum distance (nm)
+
+.BI "\-rmax" " <real> (0.5)"
+    Maximum distance (nm)
+
+.BI "\-cbin" " <real> (0.02)"
+    Binwidth for the cosine
+
+.BI "\-rbin" " <real> (0.02)"
+    Binwidth for r (nm)
+
+.BI "\-[no]pbc" "  (no)"
+    Check PBC for the center of mass calculation. Only necessary when your reference group consists of several molecules.
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

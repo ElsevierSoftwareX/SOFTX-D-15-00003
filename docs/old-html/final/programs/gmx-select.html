@@ -1,0 +1,161 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx select</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx select</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx select [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]]
+           [-os [<.xvg>]] [-oc [<.xvg>]] [-oi [<.dat>]] [-on [<.ndx>]]
+           [-om [<.xvg>]] [-of [<.xvg>]] [-ofpdb [<.pdb>]] [-olt [<.xvg>]]
+           [-b <time>] [-e <time>] [-dt <time>] [-tu <enum>] [-xvg <enum>]
+           [-[no]rmpbc] [-[no]pbc] [-sf <file>] [-selrpos <enum>]
+           [-select <selection>] [-[no]norm] [-[no]cfnorm] [-resnr <enum>]
+           [-pdbatoms <enum>] [-[no]cumlt]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx select</tt> writes out basic data about dynamic selections. It can be used for some simple analyses, or the output can be combined with output from other programs and/or external analysis programs to calculate more complex things. Any combination of the output options is possible, but note that <tt>-om</tt> only operates on the first selection. Also note that if you provide no output options, no output is produced.<p> With <tt>-os</tt>, calculates the number of positions in each selection for each frame. With <tt>-norm</tt>, the output is between 0 and 1 and describes the fraction from the maximum number of positions (e.g., for selection 'resname RA and x &lt; 5' the maximum number of positions is the number of atoms in RA residues). With <tt>-cfnorm</tt>, the output is divided by the fraction covered by the selection. <tt>-norm</tt> and <tt>-cfnorm</tt> can be specified independently of one another.<p> With <tt>-oc</tt>, the fraction covered by each selection is written out as a function of time.<p> With <tt>-oi</tt>, the selected atoms/residues/molecules are written out as a function of time. In the output, the first column contains the frame time, the second contains the number of positions, followed by the atom/residue/molecule numbers. If more than one selection is specified, the size of the second group immediately follows the last number of the first group and so on.<p> With <tt>-on</tt>, the selected atoms are written as a index file compatible with <tt>make_ndx</tt> and the analyzing tools. Each selection is written as a selection group and for dynamic selections a group is written for each frame.<p> For residue numbers, the output of <tt>-oi</tt> can be controlled with <tt>-resnr</tt>: <tt>number</tt> (default) prints the residue numbers as they appear in the input file, while <tt>index</tt> prints unique numbers assigned to the residues in the order they appear in the input file, starting with 1. The former is more intuitive, but if the input contains multiple residues with the same number, the output can be less useful.<p> With <tt>-om</tt>, a mask is printed for the first selection as a function of time. Each line in the output corresponds to one frame, and contains either 0/1 for each atom/residue/molecule possibly selected. 1 stands for the atom/residue/molecule being selected for the current frame, 0 for not selected.<p> With <tt>-of</tt>, the occupancy fraction of each position (i.e., the fraction of frames where the position is selected) is printed.<p> With <tt>-ofpdb</tt>, a PDB file is written out where the occupancy column is filled with the occupancy fraction of each atom in the selection. The coordinates in the PDB file will be those from the input topology. <tt>-pdbatoms</tt> can be used to control which atoms appear in the output PDB file: with <tt>all</tt> all atoms are present, with <tt>maxsel</tt> all atoms possibly selected by the selection are present, and with <tt>selected</tt> only atoms that are selected at least in one frame are present.<p> With <tt>-olt</tt>, a histogram is produced that shows the number of selected positions as a function of the time the position was continuously selected. <tt>-cumlt</tt> can be used to control whether subintervals of longer intervals are included in the histogram.<p> <tt>-om</tt>, <tt>-of</tt>, and <tt>-olt</tt> only make sense with dynamic selections.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input, Optional)</dt>
+<dd>
+Input trajectory or single configuration: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input, Optional)</dt>
+<dd>
+Input structure: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Extra index groups
+</dd>
+<dt><b><tt>-os</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (size.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+Number of positions in each selection
+</dd>
+<dt><b><tt>-oc</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (cfrac.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+Covered fraction for each selection
+</dd>
+<dt><b><tt>-oi</tt></b> [&lt;.<a href="../online/dat.html">dat</a>&gt;] (index.<a href="../online/dat.html">dat</a>) (Output, Optional)</dt>
+<dd>
+Indices selected by each selection
+</dd>
+<dt><b><tt>-on</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Output, Optional)</dt>
+<dd>
+Index file from the selection
+</dd>
+<dt><b><tt>-om</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (mask.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+Mask for selected positions
+</dd>
+<dt><b><tt>-of</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (occupancy.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+Occupied fraction for selected positions
+</dd>
+<dt><b><tt>-ofpdb</tt></b> [&lt;.<a href="../online/pdb.html">pdb</a>&gt;] (occupancy.<a href="../online/pdb.html">pdb</a>) (Output, Optional)</dt>
+<dd>
+PDB file with occupied fraction for selected positions
+</dd>
+<dt><b><tt>-olt</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (lifetime.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+Lifetime histogram
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame if t MOD dt == first time (ps)
+</dd>
+<dt><b><tt>-tu</tt></b> &lt;enum&gt; (ps)</dt>
+<dd>
+Unit for time values: fs, ps, ns, us, ms, s
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+Plot formatting: none, xmgrace, xmgr
+</dd>
+<dt><b><tt>-[no]rmpbc</tt></b> (yes)</dt>
+<dd>
+Make molecules whole for each frame
+</dd>
+<dt><b><tt>-[no]pbc</tt></b> (yes)</dt>
+<dd>
+Use periodic boundary conditions for distance calculation
+</dd>
+<dt><b><tt>-sf</tt></b> &lt;file&gt;</dt>
+<dd>
+Provide selections from files
+</dd>
+<dt><b><tt>-selrpos</tt></b> &lt;enum&gt; (atom)</dt>
+<dd>
+Selection reference positions: atom, res_com, res_cog, mol_com, mol_cog, whole_res_com, whole_res_cog, whole_mol_com, whole_mol_cog, part_res_com, part_res_cog, part_mol_com, part_mol_cog, dyn_res_com, dyn_res_cog, dyn_mol_com, dyn_mol_cog
+</dd>
+<dt><b><tt>-select</tt></b> &lt;selection&gt;</dt>
+<dd>
+Selections to analyze
+</dd>
+<dt><b><tt>-[no]norm</tt></b> (no)</dt>
+<dd>
+Normalize by total number of positions with -os
+</dd>
+<dt><b><tt>-[no]cfnorm</tt></b> (no)</dt>
+<dd>
+Normalize by covered fraction with -os
+</dd>
+<dt><b><tt>-resnr</tt></b> &lt;enum&gt; (number)</dt>
+<dd>
+Residue number output type with -oi and -on: number, index
+</dd>
+<dt><b><tt>-pdbatoms</tt></b> &lt;enum&gt; (all)</dt>
+<dd>
+Atoms to write with -ofpdb: all, maxsel, selected
+</dd>
+<dt><b><tt>-[no]cumlt</tt></b> (yes)</dt>
+<dd>
+Cumulate subintervals of longer intervals in -olt
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

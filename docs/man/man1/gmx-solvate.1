@@ -1,0 +1,74 @@
+.TH gmx-solvate 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-solvate - Solvate a system
+
+.SH SYNOPSIS
+gmx solvate [-cp [<.gro/.g96/...>]] [-cs [<.gro/.g96/...>]]
+            [-o [<.gro/.g96/...>]] [-p [<.top>]] [-nice <int>]
+            [-box <vector>] [-radius <real>] [-scale <real>]
+            [-shell <real>] [-maxsol <int>] [-[no]vel]
+
+.SH DESCRIPTION
+\fBgmx solvate\fR can do one of 2 things:
+
+1) Generate a box of solvent. Specify \fB\-cs\fR and \fB\-box\fR. Or specify \fB\-cs\fR and \fB\-cp\fR with a structure file with a box, but without atoms.
+
+2) Solvate a solute configuration, e.g. a protein, in a bath of solvent molecules. Specify \fB\-cp\fR (solute) and \fB\-cs\fR (solvent). The box specified in the solute coordinate file (\fB\-cp\fR) is used, unless \fB\-box\fR is set. If you want the solute to be centered in the box, the program \fBgmx editconf\fR has sophisticated options to change the box dimensions and center the solute. Solvent molecules are removed from the box where the distance between any atom of the solute molecule(s) and any atom of the solvent molecule is less than the sum of the scaled van der Waals radii of both atoms. A database (\fBvdwradii.dat\fR) of van der Waals radii is read by the program, and the resulting radii scaled by \fB\-scale\fR. If radii are not found in the database, thoseatoms are assigned the (pre\-scaled) distance \fB\-radius\fR.
+
+The default solvent is Simple Point Charge water (SPC), with coordinates from \fB$GMXLIB/spc216.gro\fR. These coordinates can also be used for other 3\-site water models, since a short equibilibration will remove the small differences between the models. Other solvents are also supported, as well as mixed solvents. The only restriction to solvent types is that a solvent molecule consists of exactly one residue. The residue information in the coordinate files is used, and should therefore be more or less consistent. In practice this means that two subsequent solvent molecules in the solvent coordinate file should have different residue number. The box of solute is built by stacking the coordinates read from the coordinate file. This means that these coordinates should be equlibrated in periodic boundary conditions to ensure a good alignment of molecules on the stacking interfaces. The \fB\-maxsol\fR option simply adds only the first \fB\-maxsol\fR solvent molecules and leaves out the rest that would have fitted into the box. This can create a void that can cause problems later. Choose your volume wisely.
+
+The program can optionally rotate the solute molecule to align the longest molecule axis along a box edge. This way the amount of solvent molecules necessary is reduced. It should be kept in mind that this only works for short simulations, as e.g. an alpha\-helical peptide in solution can rotate over 90 degrees, within 500 ps. In general it is therefore better to make a more or less cubic box.
+
+Setting \fB\-shell\fR larger than zero will place a layer of water of the specified thickness (nm) around the solute. Hint: it is a good idea to put the protein in the center of a box first (using \fBgmx editconf\fR).
+
+Finally, \fBgmx solvate\fR will optionally remove lines from your topology file in which a number of solvent molecules is already added, and adds a line with the total number of solvent molecules in your coordinate file.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-cp" " [<.gro/.g96/...>] (protein.gro) (Input, Optional)"
+    Structure file: gro g96 pdb brk ent esp tpr tpb tpa
+
+.BI "\-cs" " [<.gro/.g96/...>] (spc216.gro) (Input, Library)"
+    Structure file: gro g96 pdb brk ent esp tpr tpb tpa
+
+.BI "\-o" " [<.gro/.g96/...>] (out.gro) (Output)"
+    Structure file: gro g96 pdb brk ent esp
+
+.BI "\-p" " [<.top>] (topol.top) (Input/Output, Optional)"
+    Topology file
+
+
+Other options:
+
+.BI "\-nice" " <int> (19)"
+    Set the nicelevel
+
+.BI "\-box" " <vector> (0 0 0)"
+    Box size (in nm)
+
+.BI "\-radius" " <real> (0.105)"
+    Default van der Waals distance
+
+.BI "\-scale" " <real> (0.57)"
+    Scale factor to multiply Van der Waals radii from the database in share/gromacs/top/vdwradii.dat. The default value of 0.57 yields density close to 1000 g/l for proteins in water.
+
+.BI "\-shell" " <real> (0)"
+    Thickness of optional water layer around solute
+
+.BI "\-maxsol" " <int> (0)"
+    Maximum number of solvent molecules to add if they fit in the box. If zero (default) this is ignored
+
+.BI "\-[no]vel" "  (no)"
+    Keep velocities from input solute and solvent
+
+
+.SH KNOWN ISSUES
+
+
+\- Molecules must be whole in the initial configurations.
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

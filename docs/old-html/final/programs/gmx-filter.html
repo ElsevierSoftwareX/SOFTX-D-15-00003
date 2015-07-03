@@ -1,0 +1,110 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx filter</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx filter</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx filter [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]]
+           [-ol [<.xtc/.trr/...>]] [-oh [<.xtc/.trr/...>]] [-nice <int>]
+           [-b <time>] [-e <time>] [-dt <time>] [-[no]w] [-nf <int>]
+           [-[no]all] [-[no]nojump] [-[no]fit]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx filter</tt> performs frequency filtering on a trajectory. The filter shape is cos(&pi; t/A) + 1 from -A to +A, where A is given by the option <tt>-nf</tt> times the time step in the input trajectory. This filter reduces fluctuations with period A by 85%, with period 2*A by 50% and with period 3*A by 17% for low-pass filtering. Both a low-pass and high-pass filtered trajectory can be written.<p> Option <tt>-ol</tt> writes a low-pass filtered trajectory. A frame is written every <tt>-nf</tt> input frames. This ratio of filter length and output interval ensures a good suppression of aliasing of high-frequency motion, which is useful for making smooth movies. Also averages of properties which are linear in the coordinates are preserved, since all input frames are weighted equally in the output. When all frames are needed, use the <tt>-all</tt> option.<p> Option <tt>-oh</tt> writes a high-pass filtered trajectory. The high-pass filtered coordinates are added to the coordinates from the structure file. When using high-pass filtering use <tt>-fit</tt> or make sure you use a trajectory that has been fitted on the coordinates in the structure file.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input, Optional)</dt>
+<dd>
+Structure+mass(db): <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-ol</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (lowpass.<a href="../online/xtc.html">xtc</a>) (Output, Optional)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-oh</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (highpass.<a href="../online/xtc.html">xtc</a>) (Output, Optional)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-nf</tt></b> &lt;int&gt; (10)</dt>
+<dd>
+Sets the filter length as well as the output interval for low-pass filtering
+</dd>
+<dt><b><tt>-[no]all</tt></b> (no)</dt>
+<dd>
+Write all low-pass filtered frames
+</dd>
+<dt><b><tt>-[no]nojump</tt></b> (yes)</dt>
+<dd>
+Remove jumps of atoms across the box
+</dd>
+<dt><b><tt>-[no]fit</tt></b> (no)</dt>
+<dd>
+Fit all frames to a reference structure
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

@@ -1,0 +1,69 @@
+.TH gmx-sigeps 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-sigeps - Convert c6/12 or c6/cn combinations to and from sigma/epsilon
+
+.SH SYNOPSIS
+gmx sigeps [-o [<.xvg>]] [-nice <int>] [-[no]w] [-xvg <enum>]
+           [-c6 <real>] [-cn <real>] [-pow <int>] [-sig <real>]
+           [-eps <real>] [-A <real>] [-B <real>] [-C <real>]
+           [-qi <real>] [-qj <real>] [-sigfac <real>]
+
+.SH DESCRIPTION
+\fBgmx sigeps\fR is a simple utility that converts C6/C12 or C6/Cn combinations to sigma and epsilon, or vice versa. It can also plot the potential in  file. In addition, it makes an approximation of a Buckingham potential to a Lennard\-Jones potential.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-o" " [<.xvg>] (potje.xvg) (Output)"
+    xvgr/xmgr file
+
+
+Other options:
+
+.BI "\-nice" " <int> (0)"
+    Set the nicelevel
+
+.BI "\-[no]w" "  (no)"
+    View output \fB.xvg\fR, \fB.xpm\fR, \fB.eps\fR and \fB.pdb\fR files
+
+.BI "\-xvg" " <enum> (xmgrace)"
+    xvg plot formatting: xmgrace, xmgr, none
+
+.BI "\-c6" " <real> (0.001)"
+    C6
+
+.BI "\-cn" " <real> (1e-06)"
+    Constant for repulsion
+
+.BI "\-pow" " <int> (12)"
+    Power of the repulsion term
+
+.BI "\-sig" " <real> (0.3)"
+    sigma
+
+.BI "\-eps" " <real> (1)"
+    epsilon
+
+.BI "\-A" " <real> (100000)"
+    Buckingham A
+
+.BI "\-B" " <real> (32)"
+    Buckingham B
+
+.BI "\-C" " <real> (0.001)"
+    Buckingham C
+
+.BI "\-qi" " <real> (0)"
+    qi
+
+.BI "\-qj" " <real> (0)"
+    qj
+
+.BI "\-sigfac" " <real> (0.7)"
+    Factor in front of sigma for starting the plot
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

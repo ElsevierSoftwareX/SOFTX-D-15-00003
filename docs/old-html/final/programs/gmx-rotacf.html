@@ -1,0 +1,127 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx rotacf</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx rotacf</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx rotacf [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]]
+           [-o [<.xvg>]] [-nice <int>] [-b <time>] [-e <time>] [-dt <time>]
+           [-[no]w] [-xvg <enum>] [-[no]d] [-[no]aver] [-acflen <int>]
+           [-[no]normalize] [-P <enum>] [-fitfn <enum>] [-beginfit <real>]
+           [-endfit <real>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx rotacf</tt> calculates the rotational correlation function for molecules. Atom triplets (i,j,k) must be given in the index file, defining two vectors ij and jk. The rotational ACF is calculated as the autocorrelation function of the vector n = ij x jk, i.e. the cross product of the two vectors. Since three atoms span a plane, the order of the three atoms does not matter. Optionally, by invoking the <tt>-d</tt> switch, you can calculate the rotational correlation function for linear molecules by specifying atom pairs (i,j) in the index file. <p> EXAMPLES<p> <tt>gmx rotacf -P 1 -nparm 2 -fft -n index -o rotacf-x-P1 -fa expfit-x-P1 -beginfit 2.5 -endfit 20.0</tt><p> This will calculate the rotational correlation function using a first order Legendre polynomial of the angle of a vector defined by the index file. The correlation function will be fitted from 2.5 ps until 20.0 ps to a two-parameter exponential.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Run input file: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (rotacf.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-[no]d</tt></b> (no)</dt>
+<dd>
+Use index doublets (vectors) for correlation function instead of triplets (planes)
+</dd>
+<dt><b><tt>-[no]aver</tt></b> (yes)</dt>
+<dd>
+Average over molecules
+</dd>
+<dt><b><tt>-acflen</tt></b> &lt;int&gt; (-1)</dt>
+<dd>
+Length of the ACF, default is half the number of frames
+</dd>
+<dt><b><tt>-[no]normalize</tt></b> (yes)</dt>
+<dd>
+Normalize ACF
+</dd>
+<dt><b><tt>-P</tt></b> &lt;enum&gt; (0)</dt>
+<dd>
+Order of Legendre polynomial for ACF (0 indicates none): 0, 1, 2, 3
+</dd>
+<dt><b><tt>-fitfn</tt></b> &lt;enum&gt; (none)</dt>
+<dd>
+Fit function: none, exp, aexp, exp_exp, vac, exp5, exp7, exp9, erffit
+</dd>
+<dt><b><tt>-beginfit</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Time where to begin the exponential fit of the correlation function
+</dd>
+<dt><b><tt>-endfit</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+Time where to end the exponential fit of the correlation function, -1 is until the end
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

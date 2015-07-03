@@ -1,0 +1,106 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx genrestr</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx genrestr</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx genrestr [-f [<.gro/.g96/...>]] [-n [<.ndx>]] [-o [<.itp>]]
+             [-of [<.ndx>]] [-nice <int>] [-fc <vector>] [-freeze <real>]
+             [-[no]disre] [-disre_dist <real>] [-disre_frac <real>]
+             [-disre_up2 <real>] [-cutoff <real>] [-[no]constr]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx genrestr</tt> produces an #include file for a topology containing a list of atom numbers and three force constants for the <it>x</it>-, <it>y</it>-, and <it>z</it>-direction based on the contents of the <tt>-f</tt> file. A single isotropic force constant may be given on the command line instead of three components.<p> WARNING: Position restraints are interactions within molecules, therefore they must be included within the correct <tt>[ moleculetype ]</tt> block in the topology. The atom indices within the <tt>[ position_restraints ]</tt> block must be within the range of the atom indices for that molecule type. Since the atom numbers in every moleculetype in the topology start at 1 and the numbers in the input file for <tt>gmx genrestr</tt> number consecutively from 1, <tt>gmx genrestr</tt> will only produce a useful file for the first molecule. You may wish to edit the resulting index file to remove the lines for later atoms, or construct a suitable index group to provide as input to <tt>gmx genrestr</tt>.<p> The <tt>-of</tt> option produces an index file that can be used for freezing atoms. In this case, the input file must be a <tt>.<a href="../online/pdb.html">pdb</a></tt> file.<p> With the <tt>-disre</tt> option, half a matrix of distance restraints is generated instead of position restraints. With this matrix, that one typically would apply to C&alpha; atoms in a protein, one can maintain the overall conformation of a protein without tieing it to a specific position (as with position restraints).
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/gro.html">gro</a>/.<a href="../online/g96.html">g96</a>/...&gt;] (conf.<a href="../online/gro.html">gro</a>) (Input)</dt>
+<dd>
+Structure file: <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent esp <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/itp.html">itp</a>&gt;] (posre.<a href="../online/itp.html">itp</a>) (Output)</dt>
+<dd>
+Include file for topology
+</dd>
+<dt><b><tt>-of</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (freeze.<a href="../online/ndx.html">ndx</a>) (Output, Optional)</dt>
+<dd>
+Index file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-fc</tt></b> &lt;vector&gt; (1000 1000 1000)</dt>
+<dd>
+Force constants (kJ/mol nm^2)
+</dd>
+<dt><b><tt>-freeze</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+If the <tt>-of</tt> option or this one is given an index file will be written containing atom numbers of all atoms that have a B-factor less than the level given here
+</dd>
+<dt><b><tt>-[no]disre</tt></b> (no)</dt>
+<dd>
+Generate a distance restraint matrix for all the atoms in index
+</dd>
+<dt><b><tt>-disre_dist</tt></b> &lt;real&gt; (0.1)</dt>
+<dd>
+Distance range around the actual distance for generating distance restraints
+</dd>
+<dt><b><tt>-disre_frac</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Fraction of distance to be used as interval rather than a fixed distance. If the fraction of the distance that you specify here is less than the distance given in the previous option, that one is used instead.
+</dd>
+<dt><b><tt>-disre_up2</tt></b> &lt;real&gt; (1)</dt>
+<dd>
+Distance between upper bound for distance restraints, and the distance at which the force becomes constant (see manual)
+</dd>
+<dt><b><tt>-cutoff</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+Only generate distance restraints for atoms pairs within cutoff (nm)
+</dd>
+<dt><b><tt>-[no]constr</tt></b> (no)</dt>
+<dd>
+Generate a constraint matrix rather than distance restraints. Constraints of type 2 will be generated that do generate exclusions.
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

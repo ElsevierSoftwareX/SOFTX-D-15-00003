@@ -1,0 +1,60 @@
+.TH gmx-dump 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-dump - Make binary files human readable
+
+.SH SYNOPSIS
+gmx dump [-s [<.tpr/.tpb/...>]] [-f [<.xtc/.trr/...>]] [-e [<.edr>]]
+         [-cp [<.cpt>]] [-p [<.top>]] [-mtx [<.mtx>]] [-om [<.mdp>]]
+         [-nice <int>] [-[no]nr] [-[no]sys]
+
+.SH DESCRIPTION
+\fBgmx dump\fR reads a run input file (\fB.tpa\fR/\fB.tpr\fR/\fB.tpb\fR), a trajectory (\fB.trj\fR/\fB.trr\fR/\fB.xtc\fR), an energy file (\fB.ene\fR/\fB.edr\fR), or a checkpoint file (\fB.cpt\fR) and prints that to standard output in a readable format. This program is essential for checking your run input file in case of problems.
+
+The program can also preprocess a topology to help finding problems. Note that currently setting \fBGMXLIB\fR is the only way to customize directories used for searching include files.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-s" " [<.tpr/.tpb/...>] (topol.tpr) (Input, Optional)"
+    Run input file: tpr tpb tpa
+
+.BI "\-f" " [<.xtc/.trr/...>] (traj.xtc) (Input, Optional)"
+    Trajectory: xtc trr cpt trj gro g96 pdb tng
+
+.BI "\-e" " [<.edr>] (ener.edr) (Input, Optional)"
+    Energy file
+
+.BI "\-cp" " [<.cpt>] (state.cpt) (Input, Optional)"
+    Checkpoint file
+
+.BI "\-p" " [<.top>] (topol.top) (Input, Optional)"
+    Topology file
+
+.BI "\-mtx" " [<.mtx>] (hessian.mtx) (Input, Optional)"
+    Hessian matrix
+
+.BI "\-om" " [<.mdp>] (grompp.mdp) (Output, Optional)"
+    grompp input file with MD parameters
+
+
+Other options:
+
+.BI "\-nice" " <int> (0)"
+    Set the nicelevel
+
+.BI "\-[no]nr" "  (yes)"
+    Show index numbers in output (leaving them out makes comparison easier, but creates a useless topology)
+
+.BI "\-[no]sys" "  (no)"
+    List the atoms and bonded interactions for the whole system instead of for each molecule type
+
+
+.SH KNOWN ISSUES
+
+
+\- Position restraint output from \-sys \-s is broken
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

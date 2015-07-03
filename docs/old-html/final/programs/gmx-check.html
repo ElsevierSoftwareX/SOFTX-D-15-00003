@@ -1,0 +1,128 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx check</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx check</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx check [-f [<.xtc/.trr/...>]] [-f2 [<.xtc/.trr/...>]]
+          [-s1 [<.tpr/.tpb/...>]] [-s2 [<.tpr/.tpb/...>]]
+          [-c [<.tpr/.tpb/...>]] [-e [<.edr>]] [-e2 [<.edr>]] [-n [<.ndx>]]
+          [-m [<.tex>]] [-nice <int>] [-vdwfac <real>] [-bonlo <real>]
+          [-bonhi <real>] [-[no]rmsd] [-tol <real>] [-abstol <real>]
+          [-[no]ab] [-lastener <string>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx check</tt> reads a trajectory (<tt>.<a href="../online/trj.html">trj</a></tt>, <tt>.<a href="../online/trr.html">trr</a></tt> or <tt>.<a href="../online/xtc.html">xtc</a></tt>), an energy file (<tt>.<a href="../online/ene.html">ene</a></tt> or <tt>.<a href="../online/edr.html">edr</a></tt>) or an index file (<tt>.<a href="../online/ndx.html">ndx</a></tt>) and prints out useful information about them.<p> Option <tt>-c</tt> checks for presence of coordinates, velocities and box in the file, for close contacts (smaller than <tt>-vdwfac</tt> and not bonded, i.e. not between <tt>-bonlo</tt> and <tt>-bonhi</tt>, all relative to the sum of both Van der Waals radii) and atoms outside the box (these may occur often and are no problem). If velocities are present, an estimated temperature will be calculated from them.<p> If an index file, is given its contents will be summarized.<p> If both a trajectory and a <tt>.<a href="../online/tpr.html">tpr</a></tt> file are given (with <tt>-s1</tt>) the program will check whether the bond lengths defined in the <a href="../online/tpr.html">tpr</a> file are indeed correct in the trajectory. If not you may have non-matching files due to e.g. deshuffling or due to problems with virtual sites. With these flags, <tt>gmx check</tt> provides a quick check for such problems.<p> The program can compare two run input (<tt>.<a href="../online/tpr.html">tpr</a></tt>, <tt>.<a href="../online/tpb.html">tpb</a></tt> or <tt>.<a href="../online/tpa.html">tpa</a></tt>) files when both <tt>-s1</tt> and <tt>-s2</tt> are supplied. Similarly a pair of trajectory files can be compared (using the <tt>-f2</tt> option), or a pair of energy files (using the <tt>-e2</tt> option).<p> For free energy simulations the A and B state topology from one run input file can be compared with options <tt>-s1</tt> and <tt>-ab</tt>.<p> In case the <tt>-m</tt> flag is given a LaTeX file will be written consisting of a rough outline for a methods section for a paper.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input, Optional)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-f2</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input, Optional)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-s1</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (top1.<a href="../online/tpr.html">tpr</a>) (Input, Optional)</dt>
+<dd>
+Run input file: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-s2</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (top2.<a href="../online/tpr.html">tpr</a>) (Input, Optional)</dt>
+<dd>
+Run input file: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-c</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input, Optional)</dt>
+<dd>
+Structure+mass(db): <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent
+</dd>
+<dt><b><tt>-e</tt></b> [&lt;.<a href="../online/edr.html">edr</a>&gt;] (ener.<a href="../online/edr.html">edr</a>) (Input, Optional)</dt>
+<dd>
+Energy file
+</dd>
+<dt><b><tt>-e2</tt></b> [&lt;.<a href="../online/edr.html">edr</a>&gt;] (ener2.<a href="../online/edr.html">edr</a>) (Input, Optional)</dt>
+<dd>
+Energy file
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-m</tt></b> [&lt;.<a href="../online/tex.html">tex</a>&gt;] (doc.<a href="../online/tex.html">tex</a>) (Output, Optional)</dt>
+<dd>
+LaTeX file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-vdwfac</tt></b> &lt;real&gt; (0.8)</dt>
+<dd>
+Fraction of sum of VdW radii used as warning cutoff
+</dd>
+<dt><b><tt>-bonlo</tt></b> &lt;real&gt; (0.4)</dt>
+<dd>
+Min. fract. of sum of VdW radii for bonded atoms
+</dd>
+<dt><b><tt>-bonhi</tt></b> &lt;real&gt; (0.7)</dt>
+<dd>
+Max. fract. of sum of VdW radii for bonded atoms
+</dd>
+<dt><b><tt>-[no]rmsd</tt></b> (no)</dt>
+<dd>
+Print RMSD for x, v and f
+</dd>
+<dt><b><tt>-tol</tt></b> &lt;real&gt; (0.001)</dt>
+<dd>
+Relative tolerance for comparing real values defined as 2*(a-b)/(|a|+|b|)
+</dd>
+<dt><b><tt>-abstol</tt></b> &lt;real&gt; (0.001)</dt>
+<dd>
+Absolute tolerance, useful when sums are close to zero.
+</dd>
+<dt><b><tt>-[no]ab</tt></b> (no)</dt>
+<dd>
+Compare the A and B topology from one file
+</dd>
+<dt><b><tt>-lastener</tt></b> &lt;string&gt;</dt>
+<dd>
+Last energy term to compare (if not given all are tested). It makes sense to go up until the Pressure.
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

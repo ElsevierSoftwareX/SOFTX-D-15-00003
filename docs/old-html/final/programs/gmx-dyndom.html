@@ -1,0 +1,98 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx dyndom</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx dyndom</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx dyndom [-f [<.pdb>]] [-o [<.xtc/.trr/...>]] [-n [<.ndx>]] [-nice <int>]
+           [-firstangle <real>] [-lastangle <real>] [-nframe <int>]
+           [-maxangle <real>] [-trans <real>] [-head <vector>]
+           [-tail <vector>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx dyndom</tt> reads a <tt>.<a href="../online/pdb.html">pdb</a></tt> file output from DynDom (http://www.cmp.uea.ac.uk/dyndom/). It reads the coordinates, the coordinates of the rotation axis, and an index file containing the domains. Furthermore, it takes the first and last atom of the arrow file as command line arguments (head and tail) and finally it takes the translation vector (given in DynDom info file) and the angle of rotation (also as command line arguments). If the angle determined by DynDom is given, one should be able to recover the second structure used for generating the DynDom output. Because of limited numerical accuracy this should be verified by computing an all-atom RMSD (using <a href="gmx-confrms.html"><tt>gmx confrms</tt></a>) rather than by file comparison (using diff).<p> The purpose of this program is to interpolate and extrapolate the rotation as found by DynDom. As a result unphysical structures with long or short bonds, or overlapping atoms may be produced. Visual inspection, and energy minimization may be necessary to validate the structure.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/pdb.html">pdb</a>&gt;] (dyndom.<a href="../online/pdb.html">pdb</a>) (Input)</dt>
+<dd>
+Protein data bank file
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (rotated.<a href="../online/xtc.html">xtc</a>) (Output)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (domains.<a href="../online/ndx.html">ndx</a>) (Input)</dt>
+<dd>
+Index file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-firstangle</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Angle of rotation about rotation vector
+</dd>
+<dt><b><tt>-lastangle</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Angle of rotation about rotation vector
+</dd>
+<dt><b><tt>-nframe</tt></b> &lt;int&gt; (11)</dt>
+<dd>
+Number of steps on the pathway
+</dd>
+<dt><b><tt>-maxangle</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+DymDom dtermined angle of rotation about rotation vector
+</dd>
+<dt><b><tt>-trans</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Translation (Angstrom) along rotation vector (see DynDom info file)
+</dd>
+<dt><b><tt>-head</tt></b> &lt;vector&gt; (0 0 0)</dt>
+<dd>
+First atom of the arrow vector
+</dd>
+<dt><b><tt>-tail</tt></b> &lt;vector&gt; (0 0 0)</dt>
+<dd>
+Last atom of the arrow vector
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

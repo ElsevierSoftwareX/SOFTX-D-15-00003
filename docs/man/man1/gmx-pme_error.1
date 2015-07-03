@@ -1,0 +1,51 @@
+.TH gmx-pme_error 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-pme_error - Estimate the error of using PME with a given input file
+
+.SH SYNOPSIS
+gmx pme_error [-s [<.tpr/.tpb/...>]] [-o [<.out>]]
+             [-so [<.tpr/.tpb/...>]] [-nice <int>] [-beta <real>]
+             [-[no]tune] [-self <real>] [-seed <int>] [-[no]v]
+
+.SH DESCRIPTION
+\fBgmx pme_error\fR estimates the error of the electrostatic forces if using the sPME algorithm. The flag \fB\-tune\fR will determine the splitting parameter such that the error is equally distributed over the real and reciprocal space part. The part of the error that stems from self interaction of the particles is computationally demanding. However, a good a approximation is to just use a fraction of the particles for this term which can be indicated by the flag \fB\-self\fR.
+
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-s" " [<.tpr/.tpb/...>] (topol.tpr) (Input)"
+    Run input file: tpr tpb tpa
+
+.BI "\-o" " [<.out>] (error.out) (Output)"
+    Generic output file
+
+.BI "\-so" " [<.tpr/.tpb/...>] (tuned.tpr) (Output, Optional)"
+    Run input file: tpr tpb tpa
+
+
+Other options:
+
+.BI "\-nice" " <int> (0)"
+    Set the nicelevel
+
+.BI "\-beta" " <real> (-1)"
+    If positive, overwrite ewald_beta from \fB.tpr\fR file with this value
+
+.BI "\-[no]tune" "  (no)"
+    Tune the splitting parameter such that the error is equally distributed between real and reciprocal space
+
+.BI "\-self" " <real> (1)"
+    If between 0.0 and 1.0, determine self interaction error from just this fraction of the charged particles
+
+.BI "\-seed" " <int> (0)"
+    Random number seed used for Monte Carlo algorithm when \fB\-self\fR is set to a value between 0.0 and 1.0
+
+.BI "\-[no]v" "  (no)"
+    Be loud and noisy
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

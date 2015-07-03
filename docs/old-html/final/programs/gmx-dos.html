@@ -1,0 +1,156 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx dos</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx dos</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx dos [-f [<.trr/.cpt/...>]] [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]]
+        [-vacf [<.xvg>]] [-mvacf [<.xvg>]] [-dos [<.xvg>]] [-g [<.log>]]
+        [-nice <int>] [-b <time>] [-e <time>] [-dt <time>] [-[no]w]
+        [-xvg <enum>] [-[no]v] [-[no]recip] [-[no]abs] [-[no]normdos]
+        [-T <real>] [-acflen <int>] [-[no]normalize] [-P <enum>]
+        [-fitfn <enum>] [-beginfit <real>] [-endfit <real>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx dos</tt> computes the Density of States from a simulations. In order for this to be meaningful the velocities must be saved in the trajecotry with sufficiently high frequency such as to cover all vibrations. For flexible systems that would be around a few fs between saving. Properties based on the DoS are printed on the standard output.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/trr.html">trr</a>/.<a href="../online/cpt.html">cpt</a>/...&gt;] (traj.<a href="../online/trr.html">trr</a>) (Input)</dt>
+<dd>
+Full precision trajectory: <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Run input file: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-vacf</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (vacf.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-mvacf</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (mvacf.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-dos</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (dos.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-g</tt></b> [&lt;.<a href="../online/log.html">log</a>&gt;] (dos.<a href="../online/log.html">log</a>) (Output)</dt>
+<dd>
+Log file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-[no]v</tt></b> (yes)</dt>
+<dd>
+Be loud and noisy.
+</dd>
+<dt><b><tt>-[no]recip</tt></b> (no)</dt>
+<dd>
+Use cm^-1 on X-axis instead of 1/ps for DoS plots.
+</dd>
+<dt><b><tt>-[no]abs</tt></b> (no)</dt>
+<dd>
+Use the absolute value of the Fourier transform of the VACF as the Density of States. Default is to use the real component only
+</dd>
+<dt><b><tt>-[no]normdos</tt></b> (no)</dt>
+<dd>
+Normalize the DoS such that it adds up to 3N. This is a hack that should not be necessary.
+</dd>
+<dt><b><tt>-T</tt></b> &lt;real&gt; (298.15)</dt>
+<dd>
+Temperature in the simulation
+</dd>
+<dt><b><tt>-acflen</tt></b> &lt;int&gt; (-1)</dt>
+<dd>
+Length of the ACF, default is half the number of frames
+</dd>
+<dt><b><tt>-[no]normalize</tt></b> (yes)</dt>
+<dd>
+Normalize ACF
+</dd>
+<dt><b><tt>-P</tt></b> &lt;enum&gt; (0)</dt>
+<dd>
+Order of Legendre polynomial for ACF (0 indicates none): 0, 1, 2, 3
+</dd>
+<dt><b><tt>-fitfn</tt></b> &lt;enum&gt; (none)</dt>
+<dd>
+Fit function: none, exp, aexp, exp_exp, vac, exp5, exp7, exp9, erffit
+</dd>
+<dt><b><tt>-beginfit</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Time where to begin the exponential fit of the correlation function
+</dd>
+<dt><b><tt>-endfit</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+Time where to end the exponential fit of the correlation function, -1 is until the end
+</dd>
+</dl>
+
+<H3>Known Issues</H3>
+<ul>
+<li>This program needs a lot of memory: total usage equals the number of atoms times 3 times number of frames times 4 (or 8 when run in double precision).
+</ul>
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

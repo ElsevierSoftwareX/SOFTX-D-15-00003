@@ -1,0 +1,190 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx sham</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx sham</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx sham [-f [<.xvg>]] [-ge [<.xvg>]] [-ene [<.xvg>]] [-dist [<.xvg>]]
+         [-histo [<.xvg>]] [-bin [<.ndx>]] [-lp [<.xpm>]] [-ls [<.xpm>]]
+         [-lsh [<.xpm>]] [-lss [<.xpm>]] [-ls3 [<.pdb>]] [-g [<.log>]]
+         [-nice <int>] [-[no]w] [-xvg <enum>] [-[no]time] [-b <real>]
+         [-e <real>] [-ttol <real>] [-n <int>] [-[no]d] [-[no]sham]
+         [-tsham <real>] [-pmin <real>] [-dim <vector>] [-ngrid <vector>]
+         [-xmin <vector>] [-xmax <vector>] [-pmax <real>] [-gmax <real>]
+         [-emin <real>] [-emax <real>] [-nlevels <int>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx sham</tt> makes multi-dimensional free-energy, enthalpy and entropy plots. <tt>gmx sham</tt> reads one or more <tt>.<a href="../online/xvg.html">xvg</a></tt> files and analyzes data sets. The basic purpose of <tt>gmx sham</tt> is to plot Gibbs free energy landscapes (option <tt>-ls</tt>) by Bolzmann inverting multi-dimensional histograms (option <tt>-lp</tt>), but it can also make enthalpy (option <tt>-lsh</tt>) and entropy (option <tt>-lss</tt>) plots. The histograms can be made for any quantities the user supplies. A line in the input file may start with a time (see option <tt>-time</tt>) and any number of <it>y</it>-values may follow. Multiple sets can also be read when they are separated by & (option <tt>-n</tt>), in this case only one <it>y</it>-value is read from each line. All lines starting with # and @ are skipped. <p> Option <tt>-ge</tt> can be used to supply a file with free energies when the ensemble is not a Boltzmann ensemble, but needs to be biased by this free energy. One free energy value is required for each (multi-dimensional) data point in the <tt>-f</tt> input. <p> Option <tt>-ene</tt> can be used to supply a file with energies. These energies are used as a weighting function in the single histogram analysis method by Kumar et al. When temperatures are supplied (as a second column in the file), an experimental weighting scheme is applied. In addition the vales are used for making enthalpy and entropy plots. <p> With option <tt>-dim</tt>, dimensions can be gives for distances. When a distance is 2- or 3-dimensional, the circumference or surface sampled by two particles increases with increasing distance. Depending on what one would like to show, one can choose to correct the histogram and free-energy for this volume effect. The probability is normalized by r and r^2 for dimensions of 2 and 3, respectively. A value of -1 is used to indicate an angle in degrees between two vectors: a sin(angle) normalization will be applied. <b>Note</b> that for angles between vectors the inner-product or cosine is the natural quantity to use, as it will produce bins of the same volume.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (graph.<a href="../online/xvg.html">xvg</a>) (Input)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-ge</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (gibbs.<a href="../online/xvg.html">xvg</a>) (Input, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-ene</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (esham.<a href="../online/xvg.html">xvg</a>) (Input, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-dist</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (ener.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-histo</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (edist.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-bin</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (bindex.<a href="../online/ndx.html">ndx</a>) (Output, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-lp</tt></b> [&lt;.<a href="../online/xpm.html">xpm</a>&gt;] (prob.<a href="../online/xpm.html">xpm</a>) (Output, Optional)</dt>
+<dd>
+X PixMap compatible matrix file
+</dd>
+<dt><b><tt>-ls</tt></b> [&lt;.<a href="../online/xpm.html">xpm</a>&gt;] (gibbs.<a href="../online/xpm.html">xpm</a>) (Output, Optional)</dt>
+<dd>
+X PixMap compatible matrix file
+</dd>
+<dt><b><tt>-lsh</tt></b> [&lt;.<a href="../online/xpm.html">xpm</a>&gt;] (enthalpy.<a href="../online/xpm.html">xpm</a>) (Output, Optional)</dt>
+<dd>
+X PixMap compatible matrix file
+</dd>
+<dt><b><tt>-lss</tt></b> [&lt;.<a href="../online/xpm.html">xpm</a>&gt;] (entropy.<a href="../online/xpm.html">xpm</a>) (Output, Optional)</dt>
+<dd>
+X PixMap compatible matrix file
+</dd>
+<dt><b><tt>-ls3</tt></b> [&lt;.<a href="../online/pdb.html">pdb</a>&gt;] (gibbs3.<a href="../online/pdb.html">pdb</a>) (Output, Optional)</dt>
+<dd>
+Protein data bank file
+</dd>
+<dt><b><tt>-g</tt></b> [&lt;.<a href="../online/log.html">log</a>&gt;] (shamlog.<a href="../online/log.html">log</a>) (Output, Optional)</dt>
+<dd>
+Log file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-[no]time</tt></b> (yes)</dt>
+<dd>
+Expect a time in the input
+</dd>
+<dt><b><tt>-b</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+First time to read from set
+</dd>
+<dt><b><tt>-e</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+Last time to read from set
+</dd>
+<dt><b><tt>-ttol</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Tolerance on time in appropriate units (usually ps)
+</dd>
+<dt><b><tt>-n</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+Read this number of sets separated by lines containing only an ampersand
+</dd>
+<dt><b><tt>-[no]d</tt></b> (no)</dt>
+<dd>
+Use the derivative
+</dd>
+<dt><b><tt>-[no]sham</tt></b> (yes)</dt>
+<dd>
+Turn off energy weighting even if energies are given
+</dd>
+<dt><b><tt>-tsham</tt></b> &lt;real&gt; (298.15)</dt>
+<dd>
+Temperature for single histogram analysis
+</dd>
+<dt><b><tt>-pmin</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Minimum probability. Anything lower than this will be set to zero
+</dd>
+<dt><b><tt>-dim</tt></b> &lt;vector&gt; (1 1 1)</dt>
+<dd>
+Dimensions for distances, used for volume correction (max 3 values, dimensions &gt; 3 will get the same value as the last)
+</dd>
+<dt><b><tt>-ngrid</tt></b> &lt;vector&gt; (32 32 32)</dt>
+<dd>
+Number of bins for energy landscapes (max 3 values, dimensions &gt; 3 will get the same value as the last)
+</dd>
+<dt><b><tt>-xmin</tt></b> &lt;vector&gt; (0 0 0)</dt>
+<dd>
+Minimum for the axes in energy landscape (see above for &gt; 3 dimensions)
+</dd>
+<dt><b><tt>-xmax</tt></b> &lt;vector&gt; (1 1 1)</dt>
+<dd>
+Maximum for the axes in energy landscape (see above for &gt; 3 dimensions)
+</dd>
+<dt><b><tt>-pmax</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Maximum probability in output, default is calculate
+</dd>
+<dt><b><tt>-gmax</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Maximum free energy in output, default is calculate
+</dd>
+<dt><b><tt>-emin</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Minimum enthalpy in output, default is calculate
+</dd>
+<dt><b><tt>-emax</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Maximum enthalpy in output, default is calculate
+</dd>
+<dt><b><tt>-nlevels</tt></b> &lt;int&gt; (25)</dt>
+<dd>
+Number of levels for energy landscape
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

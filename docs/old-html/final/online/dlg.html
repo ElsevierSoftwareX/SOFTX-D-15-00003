@@ -1,0 +1,62 @@
+<HTML>
+<HEAD>
+  <TITLE>dlg file format</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>dlg file format</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<h3>Description</h3>
+The dlg file format is used as input for the
+<a href="../programs/gmx-view.html">gmx view</a>
+trajectory viewer. These files are not meant to be altered bu the end user.
+<h3>Sample</h3>
+<pre>	
+grid 39 18 {
+
+group "Bond Options" 1 1 16 9 {
+  radiobuttons { " Thin Bonds"  " Fat Bonds" " Very Fat Bonds" " Spheres" }
+	"bonds" "Ok" " F" "help bonds"
+}	
+
+group "Other Options" 18 1 20 13 {
+  checkbox " Show Hydrogens"  ""   	"" "FALSE"	"help opts"
+  checkbox " Draw plus for atoms" ""    "" "TRUE"       "help opts"
+  checkbox " Show Box"		""	"" "TRUE"	"help opts"
+  checkbox " Remove PBC"	""	"" "FALSE"	"help opts"
+  checkbox " Depth Cueing"	""	"" "TRUE"	"help opts"
+  edittext "Skip frames: "	""	"" "0"		"help opts"
+}
+
+simple 1 15 37 2 {
+  defbutton "Ok" "Ok" "Ok" "Ok" "help bonds"
+}
+
+}
+</pre>
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

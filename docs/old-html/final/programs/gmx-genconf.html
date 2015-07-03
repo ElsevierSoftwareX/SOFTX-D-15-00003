@@ -1,0 +1,115 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx genconf</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx genconf</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx genconf [-f [<.gro/.g96/...>]] [-o [<.gro/.g96/...>]]
+            [-trj [<.xtc/.trr/...>]] [-nice <int>] [-nbox <vector>]
+            [-dist <vector>] [-seed <int>] [-[no]rot] [-[no]shuffle]
+            [-[no]sort] [-block <int>] [-nmolat <int>] [-maxrot <vector>]
+            [-[no]renumber]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx genconf</tt> multiplies a given coordinate file by simply stacking them on <a href="../online/top.html">top</a> of each other, like a small child playing with wooden blocks. The program makes a grid of <it>user-defined</it> proportions (<tt>-nbox</tt>), and interspaces the grid point with an extra space <tt>-dist</tt>.<p> When option <tt>-rot</tt> is used the program does not check for overlap between molecules on grid points. It is recommended to make the box in the input file at least as big as the coordinates + van der Waals radius.<p> If the optional trajectory file is given, conformations are not generated, but read from this file and translated appropriately to build the grid.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/gro.html">gro</a>/.<a href="../online/g96.html">g96</a>/...&gt;] (conf.<a href="../online/gro.html">gro</a>) (Input)</dt>
+<dd>
+Structure file: <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent esp <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/gro.html">gro</a>/.<a href="../online/g96.html">g96</a>/...&gt;] (out.<a href="../online/gro.html">gro</a>) (Output)</dt>
+<dd>
+Structure file: <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent esp
+</dd>
+<dt><b><tt>-trj</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input, Optional)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-nbox</tt></b> &lt;vector&gt; (1 1 1)</dt>
+<dd>
+Number of boxes
+</dd>
+<dt><b><tt>-dist</tt></b> &lt;vector&gt; (0 0 0)</dt>
+<dd>
+Distance between boxes
+</dd>
+<dt><b><tt>-seed</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Random generator seed, if 0 generated from the time
+</dd>
+<dt><b><tt>-[no]rot</tt></b> (no)</dt>
+<dd>
+Randomly rotate conformations
+</dd>
+<dt><b><tt>-[no]shuffle</tt></b> (no)</dt>
+<dd>
+Random shuffling of molecules
+</dd>
+<dt><b><tt>-[no]sort</tt></b> (no)</dt>
+<dd>
+Sort molecules on X coord
+</dd>
+<dt><b><tt>-block</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+Divide the box in blocks on this number of cpus
+</dd>
+<dt><b><tt>-nmolat</tt></b> &lt;int&gt; (3)</dt>
+<dd>
+Number of atoms per molecule, assumed to start from 0. If you set this wrong, it will screw up your system!
+</dd>
+<dt><b><tt>-maxrot</tt></b> &lt;vector&gt; (180 180 180)</dt>
+<dd>
+Maximum random rotation
+</dd>
+<dt><b><tt>-[no]renumber</tt></b> (yes)</dt>
+<dd>
+Renumber residues
+</dd>
+</dl>
+
+<H3>Known Issues</H3>
+<ul>
+<li>The program should allow for random displacement of lattice points.
+</ul>
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

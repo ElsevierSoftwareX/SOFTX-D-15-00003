@@ -1,0 +1,63 @@
+.TH gmx-mdmat 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-mdmat - Calculate residue contact maps
+
+.SH SYNOPSIS
+gmx mdmat [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]]
+          [-n [<.ndx>]] [-mean [<.xpm>]] [-frames [<.xpm>]]
+          [-no [<.xvg>]] [-nice <int>] [-b <time>] [-e <time>]
+          [-dt <time>] [-xvg <enum>] [-t <real>] [-nlevels <int>]
+
+.SH DESCRIPTION
+\fBgmx mdmat\fR makes distance matrices consisting of the smallest distance between residue pairs. With \fB\-frames\fR, these distance matrices can be stored in order to see differences in tertiary structure as a function of time. If you choose your options unwisely, this may generate a large output file. By default, only an averaged matrix over the whole trajectory is output. Also a count of the number of different atomic contacts between residues over the whole trajectory can be made. The output can be processed with \fBgmx xpm2ps\fR to make a PostScript (tm) plot.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.xtc/.trr/...>] (traj.xtc) (Input)"
+    Trajectory: xtc trr cpt trj gro g96 pdb tng
+
+.BI "\-s" " [<.tpr/.tpb/...>] (topol.tpr) (Input)"
+    Structure+mass(db): tpr tpb tpa gro g96 pdb brk ent
+
+.BI "\-n" " [<.ndx>] (index.ndx) (Input, Optional)"
+    Index file
+
+.BI "\-mean" " [<.xpm>] (dm.xpm) (Output)"
+    X PixMap compatible matrix file
+
+.BI "\-frames" " [<.xpm>] (dmf.xpm) (Output, Optional)"
+    X PixMap compatible matrix file
+
+.BI "\-no" " [<.xvg>] (num.xvg) (Output, Optional)"
+    xvgr/xmgr file
+
+
+Other options:
+
+.BI "\-nice" " <int> (19)"
+    Set the nicelevel
+
+.BI "\-b" " <time> (0)"
+    First frame (ps) to read from trajectory
+
+.BI "\-e" " <time> (0)"
+    Last frame (ps) to read from trajectory
+
+.BI "\-dt" " <time> (0)"
+    Only use frame when t MOD dt = first time (ps)
+
+.BI "\-xvg" " <enum> (xmgrace)"
+    xvg plot formatting: xmgrace, xmgr, none
+
+.BI "\-t" " <real> (1.5)"
+    trunc distance
+
+.BI "\-nlevels" " <int> (40)"
+    Discretize distance in this number of levels
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

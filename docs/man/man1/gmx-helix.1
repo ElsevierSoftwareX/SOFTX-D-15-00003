@@ -1,0 +1,84 @@
+.TH gmx-helix 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-helix - Calculate basic properties of alpha helices
+
+.SH SYNOPSIS
+gmx helix [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]]
+          [-f [<.xtc/.trr/...>]] [-cz [<.gro/.g96/...>]]
+          [-nice <int>] [-b <time>] [-e <time>] [-dt <time>] [-[no]w]
+          [-r0 <int>] [-[no]q] [-[no]F] [-[no]db] [-[no]ev]
+          [-ahxstart <int>] [-ahxend <int>]
+
+.SH DESCRIPTION
+\fBgmx helix\fR computes all kinds of helix properties. First, the peptide is checked to find the longest helical part, as determined by hydrogen bonds and phi/psi angles. That bit is fitted to an ideal helix around the \fIz\fR\-axis and centered around the origin. Then the following properties are computed:
+
+\fB1.\fR Helix radius (file \fBradius.xvg\fR). This is merely the RMS deviation in two dimensions for all Calpha atoms. it is calculated as sqrt((sum_i (x2(i)+y2(i)))/N) where N is the number of backbone atoms. For an ideal helix the radius is 0.23 nm
+\fB2.\fR Twist (file \fBtwist.xvg\fR). The average helical angle per residue is calculated. For an alpha\-helix it is 100 degrees, for 3\-10 helices it will be smaller, and for 5\-helices it will be larger.
+\fB3.\fR Rise per residue (file \fBrise.xvg\fR). The helical rise per residue is plotted as the difference in \fIz\fR\-coordinate between Calpha atoms. For an ideal helix, this is 0.15 nm
+\fB4.\fR Total helix length (file \fBlen\-ahx.xvg\fR). The total length of the helix in nm. This is simply the average rise (see above) times the number of helical residues (see below).
+\fB5.\fR Helix dipole, backbone only (file \fBdip\-ahx.xvg\fR).
+\fB6.\fR RMS deviation from ideal helix, calculated for the Calpha atoms only (file \fBrms\-ahx.xvg\fR).
+\fB7.\fR Average Calpha \- Calpha dihedral angle (file \fBphi\-ahx.xvg\fR).
+\fB8.\fR Average phi and psi angles (file \fBphipsi.xvg\fR).
+\fB9.\fR Ellipticity at 222 nm according to Hirst and Brooks.
+
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-s" " [<.tpr/.tpb/...>] (topol.tpr) (Input)"
+    Run input file: tpr tpb tpa
+
+.BI "\-n" " [<.ndx>] (index.ndx) (Input)"
+    Index file
+
+.BI "\-f" " [<.xtc/.trr/...>] (traj.xtc) (Input)"
+    Trajectory: xtc trr cpt trj gro g96 pdb tng
+
+.BI "\-cz" " [<.gro/.g96/...>] (zconf.gro) (Output)"
+    Structure file: gro g96 pdb brk ent esp
+
+
+Other options:
+
+.BI "\-nice" " <int> (19)"
+    Set the nicelevel
+
+.BI "\-b" " <time> (0)"
+    First frame (ps) to read from trajectory
+
+.BI "\-e" " <time> (0)"
+    Last frame (ps) to read from trajectory
+
+.BI "\-dt" " <time> (0)"
+    Only use frame when t MOD dt = first time (ps)
+
+.BI "\-[no]w" "  (no)"
+    View output \fB.xvg\fR, \fB.xpm\fR, \fB.eps\fR and \fB.pdb\fR files
+
+.BI "\-r0" " <int> (1)"
+    The first residue number in the sequence
+
+.BI "\-[no]q" "  (no)"
+    Check at every step which part of the sequence is helical
+
+.BI "\-[no]F" "  (yes)"
+    Toggle fit to a perfect helix
+
+.BI "\-[no]db" "  (no)"
+    Print debug info
+
+.BI "\-[no]ev" "  (no)"
+    Write a new 'trajectory' file for ED
+
+.BI "\-ahxstart" " <int> (0)"
+    First residue in helix
+
+.BI "\-ahxend" " <int> (0)"
+    Last residue in helix
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

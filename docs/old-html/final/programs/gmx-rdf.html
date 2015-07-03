@@ -1,0 +1,143 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx rdf</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx rdf</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx rdf [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]]
+        [-o [<.xvg>]] [-cn [<.xvg>]] [-hq [<.xvg>]] [-nice <int>] [-b <time>]
+        [-e <time>] [-dt <time>] [-[no]w] [-xvg <enum>] [-bin <real>]
+        [-[no]com] [-surf <enum>] [-rdf <enum>] [-[no]pbc] [-[no]norm]
+        [-[no]xy] [-cut <real>] [-ng <int>] [-fade <real>]
+</pre>
+
+<H3>Description</H3>
+The structure of liquids can be studied by either neutron or X-ray scattering. The most common way to describe liquid structure is by a radial distribution function. However, this is not easy to obtain from a scattering experiment.<p> <tt>gmx rdf</tt> calculates radial distribution functions in different ways. The normal method is around a (set of) particle(s), the other methods are around the center of mass of a set of particles (<tt>-com</tt>) or to the closest particle in a set (<tt>-surf</tt>). With all methods, the RDF can also be calculated around axes parallel to the <it>z</it>-axis with option <tt>-xy</tt>. With option <tt>-surf</tt> normalization can not be used.<p> The option <tt>-rdf</tt> sets the type of RDF to be computed. Default is for atoms or particles, but one can also select center of mass or geometry of molecules or residues. In all cases, only the atoms in the index groups are taken into account. For molecules and/or the center of mass option, a run input file is required. Weighting other than COM or COG can currently only be achieved by providing a run input file with different masses. Options <tt>-com</tt> and <tt>-surf</tt> also work in conjunction with <tt>-rdf</tt>.<p> If a run input file is supplied (<tt>-s</tt>) and <tt>-rdf</tt> is set to <tt>atom</tt>, exclusions defined in that file are taken into account when calculating the RDF. The option <tt>-cut</tt> is meant as an alternative way to avoid intramolecular peaks in the RDF plot. It is however better to supply a run input file with a higher number of exclusions. For e.g. benzene a topology, setting nrexcl to 5 would eliminate all intramolecular contributions to the RDF. Note that all atoms in the selected groups are used, also the ones that don't have Lennard-Jones interactions.<p> Option <tt>-cn</tt> produces the cumulative number RDF, i.e. the average number of particles within a distance r.<p>
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input, Optional)</dt>
+<dd>
+Structure+mass(db): <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (rdf.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-cn</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (rdf_cn.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-hq</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (hq.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-bin</tt></b> &lt;real&gt; (0.002)</dt>
+<dd>
+Binwidth (nm)
+</dd>
+<dt><b><tt>-[no]com</tt></b> (no)</dt>
+<dd>
+RDF with respect to the center of mass of first group
+</dd>
+<dt><b><tt>-surf</tt></b> &lt;enum&gt; (no)</dt>
+<dd>
+RDF with respect to the surface of the first group: no, mol, res
+</dd>
+<dt><b><tt>-rdf</tt></b> &lt;enum&gt; (atom)</dt>
+<dd>
+RDF type: atom, mol_com, mol_cog, res_com, res_cog
+</dd>
+<dt><b><tt>-[no]pbc</tt></b> (yes)</dt>
+<dd>
+Use periodic boundary conditions for computing distances. Without PBC the maximum range will be three times the largest box edge.
+</dd>
+<dt><b><tt>-[no]norm</tt></b> (yes)</dt>
+<dd>
+Normalize for volume and density
+</dd>
+<dt><b><tt>-[no]xy</tt></b> (no)</dt>
+<dd>
+Use only the x and y components of the distance
+</dd>
+<dt><b><tt>-cut</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Shortest distance (nm) to be considered
+</dd>
+<dt><b><tt>-ng</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+Number of secondary groups to compute RDFs around a central group
+</dd>
+<dt><b><tt>-fade</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+From this distance onwards the RDF is tranformed by g'(r) = 1 + [g(r)-1] exp(-(r/fade-1)^2 to make it go to 1 smoothly. If fade is 0.0 nothing is done.
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

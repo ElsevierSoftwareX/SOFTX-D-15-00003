@@ -1,0 +1,54 @@
+.TH gmx-view 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-view - View a trajectory on an X-Windows terminal
+
+.SH SYNOPSIS
+gmx view [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]]
+         [-nice <int>] [-b <time>] [-e <time>] [-dt <time>]
+
+.SH DESCRIPTION
+\fBgmx view\fR is the GROMACS trajectory viewer. This program reads a trajectory file, a run input file and an index file and plots a 3D structure of your molecule on your standard X Window screen. No need for a high end graphics workstation, it even works on Monochrome screens.
+
+The following features have been implemented: 3D view, rotation, translation and scaling of your molecule(s), labels on atoms, animation of trajectories, hardcopy in PostScript format, user defined atom\-filters runs on MIT\-X (real X), open windows and motif, user friendly menus, option to remove periodicity, option to show computational box.
+
+Some of the more common X command line options can be used: \fB\-bg\fR, \fB\-fg\fR change colors, \fB\-font fontname\fR changes the font.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.xtc/.trr/...>] (traj.xtc) (Input)"
+    Trajectory: xtc trr cpt trj gro g96 pdb tng
+
+.BI "\-s" " [<.tpr/.tpb/...>] (topol.tpr) (Input)"
+    Run input file: tpr tpb tpa
+
+.BI "\-n" " [<.ndx>] (index.ndx) (Input, Optional)"
+    Index file
+
+
+Other options:
+
+.BI "\-nice" " <int> (0)"
+    Set the nicelevel
+
+.BI "\-b" " <time> (0)"
+    First frame (ps) to read from trajectory
+
+.BI "\-e" " <time> (0)"
+    Last frame (ps) to read from trajectory
+
+.BI "\-dt" " <time> (0)"
+    Only use frame when t MOD dt = first time (ps)
+
+
+.SH KNOWN ISSUES
+
+
+\- Balls option does not work
+
+\- Some times dumps core without a good reason
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

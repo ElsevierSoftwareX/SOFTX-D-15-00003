@@ -1,0 +1,76 @@
+.TH gmx-dyecoupl 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-dyecoupl - Extract dye dynamics from trajectories
+
+.SH SYNOPSIS
+gmx dyecoupl [-f [<.xtc/.trr/...>]] [-n [<.ndx>]] [-ot [<.xvg>]]
+             [-oe [<.xvg>]] [-o [<.dat>]] [-rhist [<.xvg>]]
+             [-khist [<.xvg>]] [-nice <int>] [-b <time>] [-e <time>]
+             [-tu <enum>] [-[no]w] [-xvg <enum>] [-[no]pbcdist]
+             [-[no]norm] [-bins <int>] [-R0 <real>]
+
+.SH DESCRIPTION
+\fBgmx dyecoupl\fR extracts dye dynamics from trajectory files. Currently, R and kappa2 between dyes is extracted for (F)RET simulations with assumed dipolar coupling as in the Foerster equation. It further allows the calculation of R(t) and kappa2(t), R and kappa2 histograms and averages, as well as the instantaneous FRET efficiency E(t) for a specified Foerster radius R_0 (switch \fB\-R0\fR). The input dyes have to be whole (see res and mol pbc options in \fBtrjconv\fR). The dye transition dipole moment has to be defined by at least a single atom pair, however multiple atom pairs can be provided in the index file. The distance R is calculated on the basis of the COMs of the given atom pairs. The \fB\-pbcdist\fR option calculates distances to the nearest periodic image instead to the distance in the box. This works however only,for periodic boundaries in all 3 dimensions. The \fB\-norm\fR option (area\-) normalizes the histograms.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.xtc/.trr/...>] (traj.xtc) (Input)"
+    Trajectory: xtc trr cpt trj gro g96 pdb tng
+
+.BI "\-n" " [<.ndx>] (index.ndx) (Input)"
+    Index file
+
+.BI "\-ot" " [<.xvg>] (rkappa.xvg) (Output, Optional)"
+    xvgr/xmgr file
+
+.BI "\-oe" " [<.xvg>] (insteff.xvg) (Output, Optional)"
+    xvgr/xmgr file
+
+.BI "\-o" " [<.dat>] (rkappa.dat) (Output, Optional)"
+    Generic data file
+
+.BI "\-rhist" " [<.xvg>] (rhist.xvg) (Output, Optional)"
+    xvgr/xmgr file
+
+.BI "\-khist" " [<.xvg>] (khist.xvg) (Output, Optional)"
+    xvgr/xmgr file
+
+
+Other options:
+
+.BI "\-nice" " <int> (19)"
+    Set the nicelevel
+
+.BI "\-b" " <time> (0)"
+    First frame (ps) to read from trajectory
+
+.BI "\-e" " <time> (0)"
+    Last frame (ps) to read from trajectory
+
+.BI "\-tu" " <enum> (ps)"
+    Time unit: fs, ps, ns, us, ms, s
+
+.BI "\-[no]w" "  (no)"
+    View output \fB.xvg\fR, \fB.xpm\fR, \fB.eps\fR and \fB.pdb\fR files
+
+.BI "\-xvg" " <enum> (xmgrace)"
+    xvg plot formatting: xmgrace, xmgr, none
+
+.BI "\-[no]pbcdist" "  (no)"
+    Distance R based on PBC
+
+.BI "\-[no]norm" "  (no)"
+    Normalize histograms
+
+.BI "\-bins" " <int> (50)"
+    of histogram bins
+
+.BI "\-R0" " <real> (-1)"
+    Foerster radius including kappa2=2/3 in nm
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

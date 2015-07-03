@@ -1,0 +1,152 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx current</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx current</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx current [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]] [-f [<.xtc/.trr/...>]]
+            [-o [<.xvg>]] [-caf [<.xvg>]] [-dsp [<.xvg>]] [-md [<.xvg>]]
+            [-mj [<.xvg>]] [-mc [<.xvg>]] [-nice <int>] [-b <time>]
+            [-e <time>] [-dt <time>] [-[no]w] [-xvg <enum>] [-sh <int>]
+            [-[no]nojump] [-eps <real>] [-bfit <real>] [-efit <real>]
+            [-bvit <real>] [-evit <real>] [-tr <real>] [-temp <real>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx current</tt> is a tool for calculating the current autocorrelation function, the correlation of the rotational and translational dipole moment of the system, and the resulting static dielectric constant. To obtain a reasonable result, the index group has to be neutral. Furthermore, the routine is capable of extracting the static conductivity from the current autocorrelation function, if velocities are given. Additionally, an Einstein-Helfand fit can be used to obtain the static conductivity.<p> The flag <tt>-caf</tt> is for the output of the current autocorrelation function and <tt>-mc</tt> writes the correlation of the rotational and translational part of the dipole moment in the corresponding file. However, this option is only available for trajectories containing velocities. Options <tt>-sh</tt> and <tt>-tr</tt> are responsible for the averaging and integration of the autocorrelation functions. Since averaging proceeds by shifting the starting point through the trajectory, the shift can be modified with <tt>-sh</tt> to enable the choice of uncorrelated starting points. Towards the end, statistical inaccuracy grows and integrating the correlation function only yields reliable values until a certain point, depending on the number of frames. The option <tt>-tr</tt> controls the region of the integral taken into account for calculating the static dielectric constant. <p> Option <tt>-temp</tt> sets the temperature required for the computation of the static dielectric constant. <p> Option <tt>-eps</tt> controls the dielectric constant of the surrounding medium for simulations using a Reaction Field or dipole corrections of the Ewald summation (<tt>-eps</tt>=0 corresponds to tin-foil boundary conditions). <p> <tt>-[no]nojump</tt> unfolds the coordinates to allow free diffusion. This is required to get a continuous translational dipole moment, required for the Einstein-Helfand fit. The results from the fit allow the determination of the dielectric constant for system of charged molecules. However, it is also possible to extract the dielectric constant from the fluctuations of the total dipole moment in folded coordinates. But this option has to be used with care, since only very short time spans fulfill the approximation that the density of the molecules is approximately constant and the averages are already converged. To be on the safe side, the dielectric constant should be calculated with the help of the Einstein-Helfand method for the translational part of the dielectric constant.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Structure+mass(db): <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (current.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-caf</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (caf.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-dsp</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (dsp.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-md</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (md.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-mj</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (mj.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-mc</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (mc.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-sh</tt></b> &lt;int&gt; (1000)</dt>
+<dd>
+Shift of the frames for averaging the correlation functions and the mean-square displacement.
+</dd>
+<dt><b><tt>-[no]nojump</tt></b> (yes)</dt>
+<dd>
+Removes jumps of atoms across the box.
+</dd>
+<dt><b><tt>-eps</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Dielectric constant of the surrounding medium. The value zero corresponds to infinity (tin-foil boundary conditions).
+</dd>
+<dt><b><tt>-bfit</tt></b> &lt;real&gt; (100)</dt>
+<dd>
+Begin of the fit of the straight line to the MSD of the translational fraction of the dipole moment.
+</dd>
+<dt><b><tt>-efit</tt></b> &lt;real&gt; (400)</dt>
+<dd>
+End of the fit of the straight line to the MSD of the translational fraction of the dipole moment.
+</dd>
+<dt><b><tt>-bvit</tt></b> &lt;real&gt; (0.5)</dt>
+<dd>
+Begin of the fit of the current autocorrelation function to a*t^b.
+</dd>
+<dt><b><tt>-evit</tt></b> &lt;real&gt; (5)</dt>
+<dd>
+End of the fit of the current autocorrelation function to a*t^b.
+</dd>
+<dt><b><tt>-tr</tt></b> &lt;real&gt; (0.25)</dt>
+<dd>
+Fraction of the trajectory taken into account for the integral.
+</dd>
+<dt><b><tt>-temp</tt></b> &lt;real&gt; (300)</dt>
+<dd>
+Temperature for calculating epsilon.
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

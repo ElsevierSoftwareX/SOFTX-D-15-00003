@@ -1,0 +1,131 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx do_dssp</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx do_dssp</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx do_dssp [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]]
+            [-ssdump [<.dat>]] [-map [<.map>]] [-o [<.xpm>]] [-sc [<.xvg>]]
+            [-a [<.xpm>]] [-ta [<.xvg>]] [-aa [<.xvg>]] [-nice <int>]
+            [-b <time>] [-e <time>] [-dt <time>] [-tu <enum>] [-[no]w]
+            [-xvg <enum>] [-sss <string>] [-ver <int>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx do_dssp</tt> reads a trajectory file and computes the secondary structure for each time frame calling the dssp program. If you do not have the dssp program, get it from http://swift.cmbi.ru.nl/gv/dssp. <tt>gmx do_dssp</tt> assumes that the dssp executable is located in <tt>/usr/local/bin/dssp</tt>. If this is not the case, then you should set an environment variable <tt>DSSP</tt> pointing to the dssp executable, e.g.: <p> <tt>setenv DSSP /opt/dssp/bin/dssp</tt><p> Since version 2.0.0, dssp is invoked with a syntax that differs from earlier versions. If you have an older version of dssp, use the <tt>-ver</tt> option to direct do_dssp to use the older syntax. By default, do_dssp uses the syntax introduced with version 2.0.0. Even newer versions (which at the time of writing are not yet released) are assumed to have the same syntax as 2.0.0.<p> The structure assignment for each residue and time is written to an <tt>.<a href="../online/xpm.html">xpm</a></tt> matrix file. This file can be visualized with for instance <tt>xv</tt> and can be converted to postscript with <tt>xpm2ps</tt>. Individual chains are separated by light grey lines in the <tt>.<a href="../online/xpm.html">xpm</a></tt> and postscript files. The number of residues with each secondary structure type and the total secondary structure (<tt>-sss</tt>) count as a function of time are also written to file (<tt>-sc</tt>).<p> Solvent accessible surface (SAS) per residue can be calculated, both in absolute values (A^2) and in fractions of the maximal accessible surface of a residue. The maximal accessible surface is defined as the accessible surface of a residue in a chain of glycines. <b>Note</b> that the program [gmx-sas] can also compute SAS and that is more efficient.<p> Finally, this program can dump the secondary structure in a special file <tt>ssdump.<a href="../online/dat.html">dat</a></tt> for usage in the program <a href="gmx-chi.html"><tt>gmx chi</tt></a>. Together these two programs can be used to analyze dihedral properties as a function of secondary structure type.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Structure+mass(db): <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-ssdump</tt></b> [&lt;.<a href="../online/dat.html">dat</a>&gt;] (ssdump.<a href="../online/dat.html">dat</a>) (Output, Optional)</dt>
+<dd>
+Generic data file
+</dd>
+<dt><b><tt>-map</tt></b> [&lt;.<a href="../online/map.html">map</a>&gt;] (ss.<a href="../online/map.html">map</a>) (Input, Library)</dt>
+<dd>
+File that maps matrix data to colors
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/xpm.html">xpm</a>&gt;] (ss.<a href="../online/xpm.html">xpm</a>) (Output)</dt>
+<dd>
+X PixMap compatible matrix file
+</dd>
+<dt><b><tt>-sc</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (scount.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-a</tt></b> [&lt;.<a href="../online/xpm.html">xpm</a>&gt;] (area.<a href="../online/xpm.html">xpm</a>) (Output, Optional)</dt>
+<dd>
+X PixMap compatible matrix file
+</dd>
+<dt><b><tt>-ta</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (totarea.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-aa</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (averarea.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-tu</tt></b> &lt;enum&gt; (ps)</dt>
+<dd>
+Time unit: fs, ps, ns, us, ms, s
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-sss</tt></b> &lt;string&gt; (HEBT)</dt>
+<dd>
+Secondary structures for structure count
+</dd>
+<dt><b><tt>-ver</tt></b> &lt;int&gt; (2)</dt>
+<dd>
+DSSP major version. Syntax changed with version 2
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

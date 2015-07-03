@@ -1,0 +1,140 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx distance</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx distance</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx distance [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]]
+             [-oav [<.xvg>]] [-oall [<.xvg>]] [-oxyz [<.xvg>]] [-oh [<.xvg>]]
+             [-oallstat [<.xvg>]] [-b <time>] [-e <time>] [-dt <time>]
+             [-tu <enum>] [-xvg <enum>] [-[no]rmpbc] [-[no]pbc] [-sf <file>]
+             [-selrpos <enum>] [-select <selection>] [-len <real>]
+             [-tol <real>] [-binw <real>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx distance</tt> calculates distances between pairs of positions as a function of time. Each selection specifies an independent set of distances to calculate. Each selection should consist of pairs of positions, and the distances are computed between positions 1-2, 3-4, etc.<p> <tt>-oav</tt> writes the average distance as a function of time for each selection. <tt>-oall</tt> writes all the individual distances. <tt>-oxyz</tt> does the same, but the x, y, and z components of the distance are written instead of the norm. <tt>-oh</tt> writes a histogram of the distances for each selection. The location of the histogram is set with <tt>-len</tt> and <tt>-tol</tt>. Bin width is set with <tt>-binw</tt>. <tt>-oallstat</tt> writes out the average and standard deviation for each individual distance, calculated over the frames.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input, Optional)</dt>
+<dd>
+Input trajectory or single configuration: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input, Optional)</dt>
+<dd>
+Input structure: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Extra index groups
+</dd>
+<dt><b><tt>-oav</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (distave.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+Average distances as function of time
+</dd>
+<dt><b><tt>-oall</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (dist.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+All distances as function of time
+</dd>
+<dt><b><tt>-oxyz</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (distxyz.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+Distance components as function of time
+</dd>
+<dt><b><tt>-oh</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (disthist.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+Histogram of the distances
+</dd>
+<dt><b><tt>-oallstat</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (diststat.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+Statistics for individual distances
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame if t MOD dt == first time (ps)
+</dd>
+<dt><b><tt>-tu</tt></b> &lt;enum&gt; (ps)</dt>
+<dd>
+Unit for time values: fs, ps, ns, us, ms, s
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+Plot formatting: none, xmgrace, xmgr
+</dd>
+<dt><b><tt>-[no]rmpbc</tt></b> (yes)</dt>
+<dd>
+Make molecules whole for each frame
+</dd>
+<dt><b><tt>-[no]pbc</tt></b> (yes)</dt>
+<dd>
+Use periodic boundary conditions for distance calculation
+</dd>
+<dt><b><tt>-sf</tt></b> &lt;file&gt;</dt>
+<dd>
+Provide selections from files
+</dd>
+<dt><b><tt>-selrpos</tt></b> &lt;enum&gt; (atom)</dt>
+<dd>
+Selection reference positions: atom, res_com, res_cog, mol_com, mol_cog, whole_res_com, whole_res_cog, whole_mol_com, whole_mol_cog, part_res_com, part_res_cog, part_mol_com, part_mol_cog, dyn_res_com, dyn_res_cog, dyn_mol_com, dyn_mol_cog
+</dd>
+<dt><b><tt>-select</tt></b> &lt;selection&gt;</dt>
+<dd>
+Position pairs to calculate distances for
+</dd>
+<dt><b><tt>-len</tt></b> &lt;real&gt; (0.1)</dt>
+<dd>
+Mean distance for histogramming
+</dd>
+<dt><b><tt>-tol</tt></b> &lt;real&gt; (1)</dt>
+<dd>
+Width of full distribution as fraction of <tt>-len</tt>
+</dd>
+<dt><b><tt>-binw</tt></b> &lt;real&gt; (0.001)</dt>
+<dd>
+Bin width for histogramming
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

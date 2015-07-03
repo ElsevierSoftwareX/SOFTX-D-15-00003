@@ -1,0 +1,143 @@
+.TH gmx-rms 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-rms - Calculate RMSDs with a reference structure and RMSD matrices
+
+.SH SYNOPSIS
+gmx rms [-s [<.tpr/.tpb/...>]] [-f [<.xtc/.trr/...>]]
+        [-f2 [<.xtc/.trr/...>]] [-n [<.ndx>]] [-o [<.xvg>]]
+        [-mir [<.xvg>]] [-a [<.xvg>]] [-dist [<.xvg>]] [-m [<.xpm>]]
+        [-bin [<.dat>]] [-bm [<.xpm>]] [-nice <int>] [-b <time>]
+        [-e <time>] [-dt <time>] [-tu <enum>] [-[no]w] [-xvg <enum>]
+        [-what <enum>] [-[no]pbc] [-fit <enum>] [-prev <int>]
+        [-[no]split] [-skip <int>] [-skip2 <int>] [-max <real>]
+        [-min <real>] [-bmax <real>] [-bmin <real>] [-[no]mw]
+        [-nlevels <int>] [-ng <int>]
+
+.SH DESCRIPTION
+\fBgmx rms\fR compares two structures by computing the root mean square deviation (RMSD), the size\-independent rho similarity parameter (\fBrho\fR) or the scaled rho (\fBrhosc\fR), see Maiorov & Crippen, Proteins \fB22\fR, 273 (1995). This is selected by \fB\-what\fR.
+
+Each structure from a trajectory (\fB\-f\fR) is compared to a reference structure. The reference structure is taken from the structure file (\fB\-s\fR).
+
+With option \fB\-mir\fR also a comparison with the mirror image of the reference structure is calculated. This is useful as a reference for 'significant' values, see Maiorov & Crippen, Proteins \fB22\fR, 273 (1995).
+
+Option \fB\-prev\fR produces the comparison with a previous frame the specified number of frames ago.
+
+Option \fB\-m\fR produces a matrix in \fB.xpm\fR format of comparison values of each structure in the trajectory with respect to each other structure. This file can be visualized with for instance \fBxv\fR and can be converted to postscript with \fBgmx xpm2ps\fR.
+
+Option \fB\-fit\fR controls the least\-squares fitting of the structures on top of each other: complete fit (rotation and translation), translation only, or no fitting at all.
+
+Option \fB\-mw\fR controls whether mass weighting is done or not. If you select the option (default) and supply a valid \fB.tpr\fR file masses will be taken from there, otherwise the masses will be deduced from the \fBatommass.dat\fR file in \fBGMXLIB\fR. This is fine for proteins, but not necessarily for other molecules. A default mass of 12.011 amu (carbon) is assigned to unknown atoms. You can check whether this happend by turning on the \fB\-debug\fR flag and inspecting the log file.
+
+With \fB\-f2\fR, the 'other structures' are taken from a second trajectory, this generates a comparison matrix of one trajectory versus the other.
+
+Option \fB\-bin\fR does a binary dump of the comparison matrix.
+
+Option \fB\-bm\fR produces a matrix of average bond angle deviations analogously to the \fB\-m\fR option. Only bonds between atoms in the comparison group are considered.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-s" " [<.tpr/.tpb/...>] (topol.tpr) (Input)"
+    Structure+mass(db): tpr tpb tpa gro g96 pdb brk ent
+
+.BI "\-f" " [<.xtc/.trr/...>] (traj.xtc) (Input)"
+    Trajectory: xtc trr cpt trj gro g96 pdb tng
+
+.BI "\-f2" " [<.xtc/.trr/...>] (traj.xtc) (Input, Optional)"
+    Trajectory: xtc trr cpt trj gro g96 pdb tng
+
+.BI "\-n" " [<.ndx>] (index.ndx) (Input, Optional)"
+    Index file
+
+.BI "\-o" " [<.xvg>] (rmsd.xvg) (Output)"
+    xvgr/xmgr file
+
+.BI "\-mir" " [<.xvg>] (rmsdmir.xvg) (Output, Optional)"
+    xvgr/xmgr file
+
+.BI "\-a" " [<.xvg>] (avgrp.xvg) (Output, Optional)"
+    xvgr/xmgr file
+
+.BI "\-dist" " [<.xvg>] (rmsd-dist.xvg) (Output, Optional)"
+    xvgr/xmgr file
+
+.BI "\-m" " [<.xpm>] (rmsd.xpm) (Output, Optional)"
+    X PixMap compatible matrix file
+
+.BI "\-bin" " [<.dat>] (rmsd.dat) (Output, Optional)"
+    Generic data file
+
+.BI "\-bm" " [<.xpm>] (bond.xpm) (Output, Optional)"
+    X PixMap compatible matrix file
+
+
+Other options:
+
+.BI "\-nice" " <int> (19)"
+    Set the nicelevel
+
+.BI "\-b" " <time> (0)"
+    First frame (ps) to read from trajectory
+
+.BI "\-e" " <time> (0)"
+    Last frame (ps) to read from trajectory
+
+.BI "\-dt" " <time> (0)"
+    Only use frame when t MOD dt = first time (ps)
+
+.BI "\-tu" " <enum> (ps)"
+    Time unit: fs, ps, ns, us, ms, s
+
+.BI "\-[no]w" "  (no)"
+    View output \fB.xvg\fR, \fB.xpm\fR, \fB.eps\fR and \fB.pdb\fR files
+
+.BI "\-xvg" " <enum> (xmgrace)"
+    xvg plot formatting: xmgrace, xmgr, none
+
+.BI "\-what" " <enum> (rmsd)"
+    Structural difference measure: rmsd, rho, rhosc
+
+.BI "\-[no]pbc" "  (yes)"
+    PBC check
+
+.BI "\-fit" " <enum> (rot+trans)"
+    Fit to reference structure: rot+trans, translation, none
+
+.BI "\-prev" " <int> (0)"
+    Compare with previous frame
+
+.BI "\-[no]split" "  (no)"
+    Split graph where time is zero
+
+.BI "\-skip" " <int> (1)"
+    Only write every nr\-th frame to matrix
+
+.BI "\-skip2" " <int> (1)"
+    Only write every nr\-th frame to matrix
+
+.BI "\-max" " <real> (-1)"
+    Maximum level in comparison matrix
+
+.BI "\-min" " <real> (-1)"
+    Minimum level in comparison matrix
+
+.BI "\-bmax" " <real> (-1)"
+    Maximum level in bond angle matrix
+
+.BI "\-bmin" " <real> (-1)"
+    Minimum level in bond angle matrix
+
+.BI "\-[no]mw" "  (yes)"
+    Use mass weighting for superposition
+
+.BI "\-nlevels" " <int> (80)"
+    Number of levels in the matrices
+
+.BI "\-ng" " <int> (1)"
+    Number of groups to compute RMS between
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

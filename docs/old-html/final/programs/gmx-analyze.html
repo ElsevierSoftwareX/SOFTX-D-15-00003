@@ -1,0 +1,212 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx analyze</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx analyze</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx analyze [-f [<.xvg>]] [-ac [<.xvg>]] [-msd [<.xvg>]] [-cc [<.xvg>]]
+            [-dist [<.xvg>]] [-av [<.xvg>]] [-ee [<.xvg>]] [-bal [<.xvg>]]
+            [-g [<.log>]] [-nice <int>] [-[no]w] [-xvg <enum>] [-[no]time]
+            [-b <real>] [-e <real>] [-n <int>] [-[no]d] [-bw <real>]
+            [-errbar <enum>] [-[no]integrate] [-aver_start <real>]
+            [-[no]xydy] [-[no]regression] [-[no]luzar] [-temp <real>]
+            [-fitstart <real>] [-fitend <real>] [-smooth <real>]
+            [-filter <real>] [-[no]power] [-[no]subav] [-[no]oneacf]
+            [-acflen <int>] [-[no]normalize] [-P <enum>] [-fitfn <enum>]
+            [-beginfit <real>] [-endfit <real>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx analyze</tt> reads an ASCII file and analyzes data sets. A line in the input file may start with a time (see option <tt>-time</tt>) and any number of <it>y</it>-values may follow. Multiple sets can also be read when they are separated by & (option <tt>-n</tt>); in this case only one <it>y</it>-value is read from each line. All lines starting with # and @ are skipped. All analyses can also be done for the derivative of a set (option <tt>-d</tt>).<p> All options, except for <tt>-av</tt> and <tt>-power</tt>, assume that the points are equidistant in time.<p> <tt>gmx analyze</tt> always shows the average and standard deviation of each set, as well as the relative deviation of the third and fourth cumulant from those of a Gaussian distribution with the same standard deviation.<p> Option <tt>-ac</tt> produces the autocorrelation function(s). Be sure that the time interval between data points is much shorter than the time scale of the autocorrelation.<p> Option <tt>-cc</tt> plots the resemblance of set i with a cosine of i/2 periods. The formula is:<br>2 (integral from 0 to T of y(t) cos(i &pi; t) dt)^2 / integral from 0 to T of y^2(t) dt<br> This is useful for principal components obtained from covariance analysis, since the principal components of random diffusion are pure cosines.<p> Option <tt>-msd</tt> produces the mean square displacement(s).<p> Option <tt>-dist</tt> produces distribution plot(s).<p> Option <tt>-av</tt> produces the average over the sets. Error bars can be added with the option <tt>-errbar</tt>. The errorbars can represent the standard deviation, the error (assuming the points are independent) or the interval containing 90% of the points, by discarding 5% of the points at the <a href="../online/top.html">top</a> and the bottom.<p> Option <tt>-ee</tt> produces error estimates using block averaging. A set is divided in a number of blocks and averages are calculated for each block. The error for the total average is calculated from the variance between averages of the m blocks B_i as follows: error^2 = sum (B_i - &lt;B&gt;)^2 / (m*(m-1)). These errors are plotted as a function of the block size. Also an analytical block average curve is plotted, assuming that the autocorrelation is a sum of two exponentials. The analytical curve for the block average is:<br> f(t) = &sigma;<tt>*</tt>sqrt(2/T (  &alpha;   (&tau;_1 ((exp(-t/&tau;_1) - 1) &tau;_1/t + 1)) +<br>                        (1-&alpha;) (&tau;_2 ((exp(-t/&tau;_2) - 1) &tau;_2/t + 1)))),<br>where T is the total time. &alpha;, &tau;_1 and &tau;_2 are obtained by fitting f^2(t) to error^2. When the actual block average is very close to the analytical curve, the error is &sigma;<tt>*</tt>sqrt(2/T (a &tau;_1 + (1-a) &tau;_2)). The complete derivation is given in B. Hess, J. Chem. Phys. 116:209-217, 2002.<p> Option <tt>-bal</tt> finds and subtracts the ultrafast "ballistic" component from a hydrogen bond autocorrelation function by the fitting of a sum of exponentials, as described in e.g. O. Markovitch, J. Chem. Phys. 129:084505, 2008. The fastest term is the one with the most negative coefficient in the exponential, or with <tt>-d</tt>, the one with most negative time derivative at time 0. <tt>-nbalexp</tt> sets the number of exponentials to fit.<p> Option <tt>-gem</tt> fits bimolecular rate constants ka and kb (and optionally kD) to the hydrogen bond autocorrelation function according to the reversible geminate recombination model. Removal of the ballistic component first is strongly advised. The model is presented in O. Markovitch, J. Chem. Phys. 129:084505, 2008.<p> Option <tt>-filter</tt> prints the RMS high-frequency fluctuation of each set and over all sets with respect to a filtered average. The filter is proportional to cos(&pi; t/len) where t goes from -len/2 to len/2. len is supplied with the option <tt>-filter</tt>. This filter reduces oscillations with period len/2 and len by a factor of 0.79 and 0.33 respectively.<p> Option <tt>-g</tt> fits the data to the function given with option <tt>-fitfn</tt>.<p> Option <tt>-power</tt> fits the data to b t^a, which is accomplished by fitting to a t + b on log-log scale. All points after the first zero or with a negative value are ignored.<p>Option <tt>-luzar</tt> performs a Luzar & Chandler kinetics analysis on output from <a href="gmx-hbond.html"><tt>gmx hbond</tt></a>. The input file can be taken directly from <tt>gmx hbond -ac</tt>, and then the same result should be produced.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (graph.<a href="../online/xvg.html">xvg</a>) (Input)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-ac</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (autocorr.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-msd</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (msd.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-cc</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (coscont.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-dist</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (distr.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-av</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (average.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-ee</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (errest.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-bal</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (ballisitc.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-g</tt></b> [&lt;.<a href="../online/log.html">log</a>&gt;] (fitlog.<a href="../online/log.html">log</a>) (Output, Optional)</dt>
+<dd>
+Log file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-[no]time</tt></b> (yes)</dt>
+<dd>
+Expect a time in the input
+</dd>
+<dt><b><tt>-b</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+First time to read from set
+</dd>
+<dt><b><tt>-e</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+Last time to read from set
+</dd>
+<dt><b><tt>-n</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+Read this number of sets separated by &
+</dd>
+<dt><b><tt>-[no]d</tt></b> (no)</dt>
+<dd>
+Use the derivative
+</dd>
+<dt><b><tt>-bw</tt></b> &lt;real&gt; (0.1)</dt>
+<dd>
+Binwidth for the distribution
+</dd>
+<dt><b><tt>-errbar</tt></b> &lt;enum&gt; (none)</dt>
+<dd>
+Error bars for <tt>-av</tt>: none, stddev, error, 90
+</dd>
+<dt><b><tt>-[no]integrate</tt></b> (no)</dt>
+<dd>
+Integrate data function(s) numerically using trapezium rule
+</dd>
+<dt><b><tt>-aver_start</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Start averaging the integral from here
+</dd>
+<dt><b><tt>-[no]xydy</tt></b> (no)</dt>
+<dd>
+Interpret second data set as error in the y values for integrating
+</dd>
+<dt><b><tt>-[no]regression</tt></b> (no)</dt>
+<dd>
+Perform a linear regression analysis on the data. If <tt>-xydy</tt> is set a second set will be interpreted as the error bar in the Y value. Otherwise, if multiple data sets are present a multilinear regression will be performed yielding the constant A that minimize &chi;^2 = (y - A_0 x_0 - A_1 x_1 - ... - A_N x_N)^2 where now Y is the first data set in the input file and x_i the others. Do read the information at the option <tt>-time</tt>.
+</dd>
+<dt><b><tt>-[no]luzar</tt></b> (no)</dt>
+<dd>
+Do a Luzar and Chandler analysis on a correlation function and related as produced by <a href="gmx-hbond.html"><tt>gmx hbond</tt></a>. When in addition the <tt>-xydy</tt> flag is given the second and fourth column will be interpreted as errors in c(t) and n(t).
+</dd>
+<dt><b><tt>-temp</tt></b> &lt;real&gt; (298.15)</dt>
+<dd>
+Temperature for the Luzar hydrogen bonding kinetics analysis (K)
+</dd>
+<dt><b><tt>-fitstart</tt></b> &lt;real&gt; (1)</dt>
+<dd>
+Time (ps) from which to start fitting the correlation functions in order to obtain the forward and backward rate constants for HB breaking and formation
+</dd>
+<dt><b><tt>-fitend</tt></b> &lt;real&gt; (60)</dt>
+<dd>
+Time (ps) where to stop fitting the correlation functions in order to obtain the forward and backward rate constants for HB breaking and formation. Only with <tt>-gem</tt>
+</dd>
+<dt><b><tt>-smooth</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+If this value is &gt;= 0, the tail of the ACF will be smoothed by fitting it to an exponential function: y = A exp(-x/&tau;)
+</dd>
+<dt><b><tt>-filter</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Print the high-frequency fluctuation after filtering with a cosine filter of this length
+</dd>
+<dt><b><tt>-[no]power</tt></b> (no)</dt>
+<dd>
+Fit data to: b t^a
+</dd>
+<dt><b><tt>-[no]subav</tt></b> (yes)</dt>
+<dd>
+Subtract the average before autocorrelating
+</dd>
+<dt><b><tt>-[no]oneacf</tt></b> (no)</dt>
+<dd>
+Calculate one ACF over all sets
+</dd>
+<dt><b><tt>-acflen</tt></b> &lt;int&gt; (-1)</dt>
+<dd>
+Length of the ACF, default is half the number of frames
+</dd>
+<dt><b><tt>-[no]normalize</tt></b> (yes)</dt>
+<dd>
+Normalize ACF
+</dd>
+<dt><b><tt>-P</tt></b> &lt;enum&gt; (0)</dt>
+<dd>
+Order of Legendre polynomial for ACF (0 indicates none): 0, 1, 2, 3
+</dd>
+<dt><b><tt>-fitfn</tt></b> &lt;enum&gt; (none)</dt>
+<dd>
+Fit function: none, exp, aexp, exp_exp, vac, exp5, exp7, exp9, erffit
+</dd>
+<dt><b><tt>-beginfit</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Time where to begin the exponential fit of the correlation function
+</dd>
+<dt><b><tt>-endfit</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+Time where to end the exponential fit of the correlation function, -1 is until the end
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

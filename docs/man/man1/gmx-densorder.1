@@ -1,0 +1,94 @@
+.TH gmx-densorder 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-densorder - Calculate surface fluctuations
+
+.SH SYNOPSIS
+gmx densorder [-s [<.tpr/.tpb/...>]] [-f [<.xtc/.trr/...>]]
+             [-n [<.ndx>]] [-o [<.dat>]] [-or [<.out> [...]]]
+             [-og [<.xpm> [...]]] [-Spect [<.out> [...]]]
+             [-nice <int>] [-b <time>] [-e <time>] [-dt <time>]
+             [-[no]w] [-[no]1d] [-bw <real>] [-bwn <real>]
+             [-order <int>] [-axis <string>] [-method <enum>]
+             [-d1 <real>] [-d2 <real>] [-tblock <int>]
+             [-nlevel <int>]
+
+.SH DESCRIPTION
+\fBgmx densorder\fR reduces a two\-phase density distribution along an axis, computed over a MD trajectory, to 2D surfaces fluctuating in time, by a fit to a functional profile for interfacial densities. A time\-averaged spatial representation of the interfaces can be output with the option \fB\-tavg\fR.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-s" " [<.tpr/.tpb/...>] (topol.tpr) (Input)"
+    Run input file: tpr tpb tpa
+
+.BI "\-f" " [<.xtc/.trr/...>] (traj.xtc) (Input)"
+    Trajectory: xtc trr cpt trj gro g96 pdb tng
+
+.BI "\-n" " [<.ndx>] (index.ndx) (Input)"
+    Index file
+
+.BI "\-o" " [<.dat>] (Density4D.dat) (Output, Optional)"
+    Generic data file
+
+.BI "\-or" " [<.out> [...]] (hello.out) (Output, Optional)"
+    Generic output file
+
+.BI "\-og" " [<.xpm> [...]] (interface.xpm) (Output, Optional)"
+    X PixMap compatible matrix file
+
+.BI "\-Spect" " [<.out> [...]] (intfspect.out) (Output, Optional)"
+    Generic output file
+
+
+Other options:
+
+.BI "\-nice" " <int> (0)"
+    Set the nicelevel
+
+.BI "\-b" " <time> (0)"
+    First frame (ps) to read from trajectory
+
+.BI "\-e" " <time> (0)"
+    Last frame (ps) to read from trajectory
+
+.BI "\-dt" " <time> (0)"
+    Only use frame when t MOD dt = first time (ps)
+
+.BI "\-[no]w" "  (no)"
+    View output \fB.xvg\fR, \fB.xpm\fR, \fB.eps\fR and \fB.pdb\fR files
+
+.BI "\-[no]1d" "  (no)"
+    Pseudo\-1d interface geometry
+
+.BI "\-bw" " <real> (0.2)"
+    Binwidth of density distribution tangential to interface
+
+.BI "\-bwn" " <real> (0.05)"
+    Binwidth of density distribution normal to interface
+
+.BI "\-order" " <int> (0)"
+    Order of Gaussian filter, order 0 equates to NO filtering
+
+.BI "\-axis" " <string> (Z)"
+    Axis Direction \- X, Y or Z
+
+.BI "\-method" " <enum> (bisect)"
+    Interface location method: bisect, functional
+
+.BI "\-d1" " <real> (0)"
+    Bulk density phase 1 (at small z)
+
+.BI "\-d2" " <real> (1000)"
+    Bulk density phase 2 (at large z)
+
+.BI "\-tblock" " <int> (100)"
+    Number of frames in one time\-block average
+
+.BI "\-nlevel" " <int> (100)"
+    Number of Height levels in 2D \- XPixMaps
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

@@ -1,0 +1,123 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx dyecoupl</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx dyecoupl</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx dyecoupl [-f [<.xtc/.trr/...>]] [-n [<.ndx>]] [-ot [<.xvg>]]
+             [-oe [<.xvg>]] [-o [<.dat>]] [-rhist [<.xvg>]] [-khist [<.xvg>]]
+             [-nice <int>] [-b <time>] [-e <time>] [-tu <enum>] [-[no]w]
+             [-xvg <enum>] [-[no]pbcdist] [-[no]norm] [-bins <int>]
+             [-R0 <real>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx dyecoupl</tt> extracts dye dynamics from trajectory files. Currently, R and kappa^2 between dyes is extracted for (F)RET simulations with assumed dipolar coupling as in the Foerster equation. It further allows the calculation of R(t) and kappa^2(t), R and kappa^2 histograms and averages, as well as the instantaneous FRET efficiency E(t) for a specified Foerster radius R_0 (switch <tt>-R0</tt>). The input dyes have to be whole (see res and mol pbc options in <tt>trjconv</tt>). The dye transition dipole moment has to be defined by at least a single atom pair, however multiple atom pairs can be provided in the index file. The distance R is calculated on the basis of the COMs of the given atom pairs. The <tt>-pbcdist</tt> option calculates distances to the nearest periodic image instead to the distance in the box. This works however only,for periodic boundaries in all 3 dimensions. The <tt>-norm</tt> option (area-) normalizes the histograms.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-ot</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (rkappa.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-oe</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (insteff.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/dat.html">dat</a>&gt;] (rkappa.<a href="../online/dat.html">dat</a>) (Output, Optional)</dt>
+<dd>
+Generic data file
+</dd>
+<dt><b><tt>-rhist</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (rhist.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-khist</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (khist.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-tu</tt></b> &lt;enum&gt; (ps)</dt>
+<dd>
+Time unit: fs, ps, ns, us, ms, s
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-[no]pbcdist</tt></b> (no)</dt>
+<dd>
+Distance R based on PBC
+</dd>
+<dt><b><tt>-[no]norm</tt></b> (no)</dt>
+<dd>
+Normalize histograms
+</dd>
+<dt><b><tt>-bins</tt></b> &lt;int&gt; (50)</dt>
+<dd>
+# of histogram bins
+</dd>
+<dt><b><tt>-R0</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+Foerster radius including kappa^2=2/3 in nm
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

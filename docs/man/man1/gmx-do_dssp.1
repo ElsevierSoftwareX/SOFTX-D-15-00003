@@ -1,0 +1,93 @@
+.TH gmx-do_dssp 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-do_dssp - Assign secondary structure and calculate solvent accessible surface area
+
+.SH SYNOPSIS
+gmx do_dssp [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]]
+            [-n [<.ndx>]] [-ssdump [<.dat>]] [-map [<.map>]]
+            [-o [<.xpm>]] [-sc [<.xvg>]] [-a [<.xpm>]] [-ta [<.xvg>]]
+            [-aa [<.xvg>]] [-nice <int>] [-b <time>] [-e <time>]
+            [-dt <time>] [-tu <enum>] [-[no]w] [-xvg <enum>]
+            [-sss <string>] [-ver <int>]
+
+.SH DESCRIPTION
+\fBgmx do_dssp\fR reads a trajectory file and computes the secondary structure for each time frame calling the dssp program. If you do not have the dssp program, get it from http://swift.cmbi.ru.nl/gv/dssp. \fBgmx do_dssp\fR assumes that the dssp executable is located in \fB/usr/local/bin/dssp\fR. If this is not the case, then you should set an environment variable \fBDSSP\fR pointing to the dssp executable, e.g.:
+
+\fBsetenv DSSP /opt/dssp/bin/dssp\fR
+
+Since version 2.0.0, dssp is invoked with a syntax that differs from earlier versions. If you have an older version of dssp, use the \fB\-ver\fR option to direct do_dssp to use the older syntax. By default, do_dssp uses the syntax introduced with version 2.0.0. Even newer versions (which at the time of writing are not yet released) are assumed to have the same syntax as 2.0.0.
+
+The structure assignment for each residue and time is written to an \fB.xpm\fR matrix file. This file can be visualized with for instance \fBxv\fR and can be converted to postscript with \fBxpm2ps\fR. Individual chains are separated by light grey lines in the \fB.xpm\fR and postscript files. The number of residues with each secondary structure type and the total secondary structure (\fB\-sss\fR) count as a function of time are also written to file (\fB\-sc\fR).
+
+Solvent accessible surface (SAS) per residue can be calculated, both in absolute values (A2) and in fractions of the maximal accessible surface of a residue. The maximal accessible surface is defined as the accessible surface of a residue in a chain of glycines. \fBNote\fR that the program [gmx\-sas] can also compute SAS and that is more efficient.
+
+Finally, this program can dump the secondary structure in a special file \fBssdump.dat\fR for usage in the program \fBgmx chi\fR. Together these two programs can be used to analyze dihedral properties as a function of secondary structure type.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.xtc/.trr/...>] (traj.xtc) (Input)"
+    Trajectory: xtc trr cpt trj gro g96 pdb tng
+
+.BI "\-s" " [<.tpr/.tpb/...>] (topol.tpr) (Input)"
+    Structure+mass(db): tpr tpb tpa gro g96 pdb brk ent
+
+.BI "\-n" " [<.ndx>] (index.ndx) (Input, Optional)"
+    Index file
+
+.BI "\-ssdump" " [<.dat>] (ssdump.dat) (Output, Optional)"
+    Generic data file
+
+.BI "\-map" " [<.map>] (ss.map) (Input, Library)"
+    File that maps matrix data to colors
+
+.BI "\-o" " [<.xpm>] (ss.xpm) (Output)"
+    X PixMap compatible matrix file
+
+.BI "\-sc" " [<.xvg>] (scount.xvg) (Output)"
+    xvgr/xmgr file
+
+.BI "\-a" " [<.xpm>] (area.xpm) (Output, Optional)"
+    X PixMap compatible matrix file
+
+.BI "\-ta" " [<.xvg>] (totarea.xvg) (Output, Optional)"
+    xvgr/xmgr file
+
+.BI "\-aa" " [<.xvg>] (averarea.xvg) (Output, Optional)"
+    xvgr/xmgr file
+
+
+Other options:
+
+.BI "\-nice" " <int> (19)"
+    Set the nicelevel
+
+.BI "\-b" " <time> (0)"
+    First frame (ps) to read from trajectory
+
+.BI "\-e" " <time> (0)"
+    Last frame (ps) to read from trajectory
+
+.BI "\-dt" " <time> (0)"
+    Only use frame when t MOD dt = first time (ps)
+
+.BI "\-tu" " <enum> (ps)"
+    Time unit: fs, ps, ns, us, ms, s
+
+.BI "\-[no]w" "  (no)"
+    View output \fB.xvg\fR, \fB.xpm\fR, \fB.eps\fR and \fB.pdb\fR files
+
+.BI "\-xvg" " <enum> (xmgrace)"
+    xvg plot formatting: xmgrace, xmgr, none
+
+.BI "\-sss" " <string> (HEBT)"
+    Secondary structures for structure count
+
+.BI "\-ver" " <int> (2)"
+    DSSP major version. Syntax changed with version 2
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

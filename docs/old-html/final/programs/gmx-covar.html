@@ -1,0 +1,140 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx covar</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx covar</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx covar [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]]
+          [-o [<.xvg>]] [-v [<.trr/.cpt/...>]] [-av [<.gro/.g96/...>]]
+          [-l [<.log>]] [-ascii [<.dat>]] [-xpm [<.xpm>]] [-xpma [<.xpm>]]
+          [-nice <int>] [-b <time>] [-e <time>] [-dt <time>] [-tu <enum>]
+          [-xvg <enum>] [-[no]fit] [-[no]ref] [-[no]mwa] [-last <int>]
+          [-[no]pbc]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx covar</tt> calculates and diagonalizes the (mass-weighted) covariance matrix. All structures are fitted to the structure in the structure file. When this is not a run input file periodicity will not be taken into account. When the fit and analysis groups are identical and the analysis is non mass-weighted, the fit will also be non mass-weighted. <p> The eigenvectors are written to a trajectory file (<tt>-v</tt>). When the same atoms are used for the fit and the covariance analysis, the reference structure for the fit is written first with t=-1. The average (or reference when <tt>-ref</tt> is used) structure is written with t=0, the eigenvectors are written as frames with the eigenvector number as timestamp. <p> The eigenvectors can be analyzed with <a href="gmx-anaeig.html"><tt>gmx anaeig</tt></a>. <p> Option <tt>-ascii</tt> writes the whole covariance matrix to an ASCII file. The order of the elements is: x1x1, x1y1, x1z1, x1x2, ... <p> Option <tt>-xpm</tt> writes the whole covariance matrix to an <tt>.<a href="../online/xpm.html">xpm</a></tt> file. <p> Option <tt>-xpma</tt> writes the atomic covariance matrix to an <tt>.<a href="../online/xpm.html">xpm</a></tt> file, i.e. for each atom pair the sum of the xx, yy and zz covariances is written. <p> Note that the diagonalization of a matrix requires memory and time that will increase at least as fast as than the square of the number of atoms involved. It is easy to run out of memory, in which case this tool will probably exit with a 'Segmentation fault'. You should consider carefully whether a reduced set of atoms will meet your needs for lower costs.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Structure+mass(db): <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (eigenval.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-v</tt></b> [&lt;.<a href="../online/trr.html">trr</a>/.<a href="../online/cpt.html">cpt</a>/...&gt;] (eigenvec.<a href="../online/trr.html">trr</a>) (Output)</dt>
+<dd>
+Full precision trajectory: <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-av</tt></b> [&lt;.<a href="../online/gro.html">gro</a>/.<a href="../online/g96.html">g96</a>/...&gt;] (average.<a href="../online/pdb.html">pdb</a>) (Output)</dt>
+<dd>
+Structure file: <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent esp
+</dd>
+<dt><b><tt>-l</tt></b> [&lt;.<a href="../online/log.html">log</a>&gt;] (covar.<a href="../online/log.html">log</a>) (Output)</dt>
+<dd>
+Log file
+</dd>
+<dt><b><tt>-ascii</tt></b> [&lt;.<a href="../online/dat.html">dat</a>&gt;] (covar.<a href="../online/dat.html">dat</a>) (Output, Optional)</dt>
+<dd>
+Generic data file
+</dd>
+<dt><b><tt>-xpm</tt></b> [&lt;.<a href="../online/xpm.html">xpm</a>&gt;] (covar.<a href="../online/xpm.html">xpm</a>) (Output, Optional)</dt>
+<dd>
+X PixMap compatible matrix file
+</dd>
+<dt><b><tt>-xpma</tt></b> [&lt;.<a href="../online/xpm.html">xpm</a>&gt;] (covara.<a href="../online/xpm.html">xpm</a>) (Output, Optional)</dt>
+<dd>
+X PixMap compatible matrix file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-tu</tt></b> &lt;enum&gt; (ps)</dt>
+<dd>
+Time unit: fs, ps, ns, us, ms, s
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-[no]fit</tt></b> (yes)</dt>
+<dd>
+Fit to a reference structure
+</dd>
+<dt><b><tt>-[no]ref</tt></b> (no)</dt>
+<dd>
+Use the deviation from the conformation in the structure file instead of from the average
+</dd>
+<dt><b><tt>-[no]mwa</tt></b> (no)</dt>
+<dd>
+Mass-weighted covariance analysis
+</dd>
+<dt><b><tt>-last</tt></b> &lt;int&gt; (-1)</dt>
+<dd>
+Last eigenvector to write away (-1 is till the last)
+</dd>
+<dt><b><tt>-[no]pbc</tt></b> (yes)</dt>
+<dd>
+Apply corrections for periodic boundary conditions
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

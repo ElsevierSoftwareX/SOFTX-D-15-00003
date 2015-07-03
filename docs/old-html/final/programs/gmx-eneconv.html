@@ -1,0 +1,105 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx eneconv</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx eneconv</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx eneconv [-f [<.edr> [...]]] [-o [<.edr>]] [-nice <int>] [-b <real>]
+            [-e <real>] [-dt <real>] [-offset <real>] [-[no]settime]
+            [-[no]sort] [-[no]rmdh] [-scalefac <real>] [-[no]error]
+</pre>
+
+<H3>Description</H3>
+With <it>multiple files</it> specified for the <tt>-f</tt> option:<br> Concatenates several energy files in sorted order. In the case of double time frames, the one in the later file is used. By specifying <tt>-settime</tt> you will be asked for the start time of each file. The input files are taken from the command line, such that the command <tt>gmx eneconv -f *.<a href="../online/edr.html">edr</a> -o fixed.<a href="../online/edr.html">edr</a></tt> should do the trick. <p> With <it>one file</it> specified for <tt>-f</tt>:<br> Reads one energy file and writes another, applying the <tt>-dt</tt>, <tt>-offset</tt>, <tt>-t0</tt> and <tt>-settime</tt> options and converting to a different format if necessary (indicated by file extentions).<p> <tt>-settime</tt> is applied first, then <tt>-dt</tt>/<tt>-offset</tt> followed by <tt>-b</tt> and <tt>-e</tt> to select which frames to write.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/edr.html">edr</a>&gt; [...]] (ener.<a href="../online/edr.html">edr</a>) (Input)</dt>
+<dd>
+Energy file
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/edr.html">edr</a>&gt;] (fixed.<a href="../online/edr.html">edr</a>) (Output)</dt>
+<dd>
+Energy file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+First time to use
+</dd>
+<dt><b><tt>-e</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+Last time to use
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Only write out frame when t MOD dt = offset
+</dd>
+<dt><b><tt>-offset</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Time offset for <tt>-dt</tt> option
+</dd>
+<dt><b><tt>-[no]settime</tt></b> (no)</dt>
+<dd>
+Change starting time interactively
+</dd>
+<dt><b><tt>-[no]sort</tt></b> (yes)</dt>
+<dd>
+Sort energy files (not frames)
+</dd>
+<dt><b><tt>-[no]rmdh</tt></b> (no)</dt>
+<dd>
+Remove free energy block data
+</dd>
+<dt><b><tt>-scalefac</tt></b> &lt;real&gt; (1)</dt>
+<dd>
+Multiply energy component by this factor
+</dd>
+<dt><b><tt>-[no]error</tt></b> (yes)</dt>
+<dd>
+Stop on errors in the file
+</dd>
+</dl>
+
+<H3>Known Issues</H3>
+<ul>
+<li>When combining trajectories the sigma and E^2 (necessary for statistics) are not updated correctly. Only the actual energy is correct. One thus has to compute statistics in another way.
+</ul>
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

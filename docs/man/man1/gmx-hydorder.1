@@ -1,0 +1,79 @@
+.TH gmx-hydorder 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-hydorder - Compute tetrahedrality parameters around a given atom
+
+.SH SYNOPSIS
+gmx hydorder [-f [<.xtc/.trr/...>]] [-n [<.ndx>]]
+             [-s [<.tpr/.tpb/...>]] [-o [<.xpm> [...]]]
+             [-or [<.out> [...]]] [-Spect [<.out> [...]]]
+             [-nice <int>] [-b <time>] [-e <time>] [-dt <time>]
+             [-[no]w] [-d <enum>] [-bw <real>] [-sgang1 <real>]
+             [-sgang2 <real>] [-tblock <int>] [-nlevel <int>]
+
+.SH DESCRIPTION
+\fBgmx hydorder\fR computes the tetrahedrality order parameters around a given atom. Both angle an distance order parameters are calculated. See P.\-L. Chau and A.J. Hardwick, Mol. Phys., 93, (1998), 511\-518. for more details.
+
+\fBgmx hydorder\fR calculates the order parameter in a 3d\-mesh in the box, and with 2 phases in the box gives the user the option to define a 2D interface in time separating the faces by specifying parameters \fB\-sgang1\fR and \fB\-sgang2\fR (it is important to select these judiciously).
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.xtc/.trr/...>] (traj.xtc) (Input)"
+    Trajectory: xtc trr cpt trj gro g96 pdb tng
+
+.BI "\-n" " [<.ndx>] (index.ndx) (Input)"
+    Index file
+
+.BI "\-s" " [<.tpr/.tpb/...>] (topol.tpr) (Input)"
+    Run input file: tpr tpb tpa
+
+.BI "\-o" " [<.xpm> [...]] (intf.xpm) (Output)"
+    X PixMap compatible matrix file
+
+.BI "\-or" " [<.out> [...]] (raw.out) (Output, Optional)"
+    Generic output file
+
+.BI "\-Spect" " [<.out> [...]] (intfspect.out) (Output, Optional)"
+    Generic output file
+
+
+Other options:
+
+.BI "\-nice" " <int> (19)"
+    Set the nicelevel
+
+.BI "\-b" " <time> (0)"
+    First frame (ps) to read from trajectory
+
+.BI "\-e" " <time> (0)"
+    Last frame (ps) to read from trajectory
+
+.BI "\-dt" " <time> (0)"
+    Only use frame when t MOD dt = first time (ps)
+
+.BI "\-[no]w" "  (no)"
+    View output \fB.xvg\fR, \fB.xpm\fR, \fB.eps\fR and \fB.pdb\fR files
+
+.BI "\-d" " <enum> (z)"
+    Direction of the normal on the membrane: z, x, y
+
+.BI "\-bw" " <real> (1)"
+    Binwidth of box mesh
+
+.BI "\-sgang1" " <real> (1)"
+    tetrahedral angle parameter in Phase 1 (bulk)
+
+.BI "\-sgang2" " <real> (1)"
+    tetrahedral angle parameter in Phase 2 (bulk)
+
+.BI "\-tblock" " <int> (1)"
+    Number of frames in one time\-block average
+
+.BI "\-nlevel" " <int> (100)"
+    Number of Height levels in 2D \- XPixMaps
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

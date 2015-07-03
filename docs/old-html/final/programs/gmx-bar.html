@@ -1,0 +1,118 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx bar</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx bar</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx bar [-f [<.xvg> [...]]] [-g [<.edr> [...]]] [-o [<.xvg>]] [-oi [<.xvg>]]
+        [-oh [<.xvg>]] [-nice <int>] [-[no]w] [-xvg <enum>] [-b <real>]
+        [-e <real>] [-temp <real>] [-prec <int>] [-nbmin <int>]
+        [-nbmax <int>] [-nbin <int>] [-[no]extp]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx bar</tt> calculates free energy difference estimates through Bennett's acceptance ratio method (BAR). It also automatically adds series of individual free energies obtained with BAR into a combined free energy estimate.<p> Every individual BAR free energy difference relies on two simulations at different states: say state A and state B, as controlled by a parameter, &lambda; (see the <tt>.<a href="../online/mdp.html">mdp</a></tt> parameter <tt>init_lambda</tt>). The BAR method calculates a ratio of weighted average of the Hamiltonian difference of state B given state A and vice versa. The energy differences to the other state must be calculated explicitly during the simulation. This can be done with the <tt>.<a href="../online/mdp.html">mdp</a></tt> option <tt>foreign_lambda</tt>.<p> Input option <tt>-f</tt> expects multiple <tt>dhdl.<a href="../online/xvg.html">xvg</a></tt> files. Two types of input files are supported:<br> <tt>*</tt>  Files with more than one <it>y</it>-value. The files should have columns with dH/d&lambda; and &Delta;&lambda;. The &lambda; values are inferred from the legends: &lambda; of the simulation from the legend of dH/d&lambda; and the foreign &lambda; values from the legends of Delta H <br> <tt>*</tt>  Files with only one <it>y</it>-value. Using the <tt>-extp</tt> option for these files, it is assumed that the <it>y</it>-value is dH/d&lambda; and that the Hamiltonian depends linearly on &lambda;. The &lambda; value of the simulation is inferred from the subtitle (if present), otherwise from a number in the subdirectory in the file name.<p> The &lambda; of the simulation is parsed from <tt>dhdl.<a href="../online/xvg.html">xvg</a></tt> file's legend containing the string 'dH', the foreign &lambda; values from the legend containing the capitalized letters 'D' and 'H'. The temperature is parsed from the legend line containing 'T ='.<p> The input option <tt>-g</tt> expects multiple <tt>.<a href="../online/edr.html">edr</a></tt> files. These can contain either lists of energy differences (see the <tt>.<a href="../online/mdp.html">mdp</a></tt> option <tt>separate_dhdl_file</tt>), or a series of histograms (see the <tt>.<a href="../online/mdp.html">mdp</a></tt> options <tt>dh_hist_size</tt> and <tt>dh_hist_spacing</tt>). The temperature and &lambda; values are automatically deduced from the <tt>ener.<a href="../online/edr.html">edr</a></tt> file.<p> In addition to the <tt>.<a href="../online/mdp.html">mdp</a></tt> option <tt>foreign_lambda</tt>, the energy difference can also be extrapolated from the dH/d&lambda; values. This is done with the<tt>-extp</tt> option, which assumes that the system's Hamiltonian depends linearly on &lambda;, which is not normally the case.<p> The free energy estimates are determined using BAR with bisection, with the precision of the output set with <tt>-prec</tt>. An error estimate taking into account time correlations is made by splitting the data into blocks and determining the free energy differences over those blocks and assuming the blocks are independent. The final error estimate is determined from the average variance over 5 blocks. A range of block numbers for error estimation can be provided with the options <tt>-nbmin</tt> and <tt>-nbmax</tt>.<p> <tt>gmx bar</tt> tries to aggregate samples with the same 'native' and 'foreign' &lambda; values, but always assumes independent samples. <b>Note</b> that when aggregating energy differences/derivatives with different sampling intervals, this is almost certainly not correct. Usually subsequent energies are correlated and different time intervals mean different degrees of correlation between samples.<p> The results are split in two parts: the last part contains the final results in kJ/mol, together with the error estimate for each part and the total. The first part contains detailed free energy difference estimates and phase space overlap measures in units of kT (together with their computed error estimate). The printed values are:<br> <tt>*</tt>  lam_A: the &lambda; values for point A.<br> <tt>*</tt>  lam_B: the &lambda; values for point B.<br> <tt>*</tt>     DG: the free energy estimate.<br> <tt>*</tt>    s_A: an estimate of the relative entropy of B in A.<br> <tt>*</tt>    s_B: an estimate of the relative entropy of A in B.<br> <tt>*</tt>  stdev: an estimate expected per-sample standard deviation.<p> The relative entropy of both states in each other's ensemble can be interpreted as a measure of phase space overlap: the relative entropy s_A of the work samples of lambda_B in the ensemble of lambda_A (and vice versa for s_B), is a measure of the 'distance' between Boltzmann distributions of the two states, that goes to zero for identical distributions. See Wu & Kofke, J. Chem. Phys. 123 084109 (2005) for more information. <p> The estimate of the expected per-sample standard deviation, as given in Bennett's original BAR paper: Bennett, J. Comp. Phys. 22, p 245 (1976). Eq. 10 therein gives an estimate of the quality of sampling (not directly of the actual statistical error, because it assumes independent samples).<p> To get a visual estimate of the phase space overlap, use the <tt>-oh</tt> option to write series of histograms, together with the <tt>-nbin</tt> option.<p>
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt; [...]] (dhdl.<a href="../online/xvg.html">xvg</a>) (Input, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-g</tt></b> [&lt;.<a href="../online/edr.html">edr</a>&gt; [...]] (ener.<a href="../online/edr.html">edr</a>) (Input, Optional)</dt>
+<dd>
+Energy file
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (bar.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-oi</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (barint.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-oh</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (histogram.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-b</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Begin time for BAR
+</dd>
+<dt><b><tt>-e</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+End time for BAR
+</dd>
+<dt><b><tt>-temp</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+Temperature (K)
+</dd>
+<dt><b><tt>-prec</tt></b> &lt;int&gt; (2)</dt>
+<dd>
+The number of digits after the decimal point
+</dd>
+<dt><b><tt>-nbmin</tt></b> &lt;int&gt; (5)</dt>
+<dd>
+Minimum number of blocks for error estimation
+</dd>
+<dt><b><tt>-nbmax</tt></b> &lt;int&gt; (5)</dt>
+<dd>
+Maximum number of blocks for error estimation
+</dd>
+<dt><b><tt>-nbin</tt></b> &lt;int&gt; (100)</dt>
+<dd>
+Number of bins for histogram output
+</dd>
+<dt><b><tt>-[no]extp</tt></b> (no)</dt>
+<dd>
+Whether to linearly extrapolate dH/dl values to use as energies
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

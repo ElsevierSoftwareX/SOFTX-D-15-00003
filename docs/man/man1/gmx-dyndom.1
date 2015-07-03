@@ -1,0 +1,59 @@
+.TH gmx-dyndom 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-dyndom - Interpolate and extrapolate structure rotations
+
+.SH SYNOPSIS
+gmx dyndom [-f [<.pdb>]] [-o [<.xtc/.trr/...>]] [-n [<.ndx>]]
+           [-nice <int>] [-firstangle <real>] [-lastangle <real>]
+           [-nframe <int>] [-maxangle <real>] [-trans <real>]
+           [-head <vector>] [-tail <vector>]
+
+.SH DESCRIPTION
+\fBgmx dyndom\fR reads a \fB.pdb\fR file output from DynDom (http://www.cmp.uea.ac.uk/dyndom/). It reads the coordinates, the coordinates of the rotation axis, and an index file containing the domains. Furthermore, it takes the first and last atom of the arrow file as command line arguments (head and tail) and finally it takes the translation vector (given in DynDom info file) and the angle of rotation (also as command line arguments). If the angle determined by DynDom is given, one should be able to recover the second structure used for generating the DynDom output. Because of limited numerical accuracy this should be verified by computing an all\-atom RMSD (using \fBgmx confrms\fR) rather than by file comparison (using diff).
+
+The purpose of this program is to interpolate and extrapolate the rotation as found by DynDom. As a result unphysical structures with long or short bonds, or overlapping atoms may be produced. Visual inspection, and energy minimization may be necessary to validate the structure.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.pdb>] (dyndom.pdb) (Input)"
+    Protein data bank file
+
+.BI "\-o" " [<.xtc/.trr/...>] (rotated.xtc) (Output)"
+    Trajectory: xtc trr trj gro g96 pdb tng
+
+.BI "\-n" " [<.ndx>] (domains.ndx) (Input)"
+    Index file
+
+
+Other options:
+
+.BI "\-nice" " <int> (0)"
+    Set the nicelevel
+
+.BI "\-firstangle" " <real> (0)"
+    Angle of rotation about rotation vector
+
+.BI "\-lastangle" " <real> (0)"
+    Angle of rotation about rotation vector
+
+.BI "\-nframe" " <int> (11)"
+    Number of steps on the pathway
+
+.BI "\-maxangle" " <real> (0)"
+    DymDom dtermined angle of rotation about rotation vector
+
+.BI "\-trans" " <real> (0)"
+    Translation (Angstrom) along rotation vector (see DynDom info file)
+
+.BI "\-head" " <vector> (0 0 0)"
+    First atom of the arrow vector
+
+.BI "\-tail" " <vector> (0 0 0)"
+    Last atom of the arrow vector
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

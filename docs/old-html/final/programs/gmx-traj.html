@@ -1,0 +1,203 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx traj</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx traj</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx traj [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]]
+         [-ox [<.xvg>]] [-oxt [<.xtc/.trr/...>]] [-ov [<.xvg>]]
+         [-of [<.xvg>]] [-ob [<.xvg>]] [-ot [<.xvg>]] [-ekt [<.xvg>]]
+         [-ekr [<.xvg>]] [-vd [<.xvg>]] [-cv [<.pdb>]] [-cf [<.pdb>]]
+         [-av [<.xvg>]] [-af [<.xvg>]] [-nice <int>] [-b <time>] [-e <time>]
+         [-dt <time>] [-tu <enum>] [-[no]w] [-xvg <enum>] [-[no]com]
+         [-[no]pbc] [-[no]mol] [-[no]nojump] [-[no]x] [-[no]y] [-[no]z]
+         [-ng <int>] [-[no]len] [-[no]fp] [-bin <real>] [-ctime <real>]
+         [-scale <real>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx traj</tt> plots coordinates, velocities, forces and/or the box. With <tt>-com</tt> the coordinates, velocities and forces are calculated for the center of mass of each group. When <tt>-mol</tt> is set, the numbers in the index file are interpreted as molecule numbers and the same procedure as with <tt>-com</tt> is used for each molecule.<p> Option <tt>-ot</tt> plots the temperature of each group, provided velocities are present in the trajectory file. No corrections are made for constrained degrees of freedom! This implies <tt>-com</tt>.<p> Options <tt>-ekt</tt> and <tt>-ekr</tt> plot the translational and rotational kinetic energy of each group, provided velocities are present in the trajectory file. This implies <tt>-com</tt>.<p> Options <tt>-cv</tt> and <tt>-cf</tt> write the average velocities and average forces as temperature factors to a <tt>.<a href="../online/pdb.html">pdb</a></tt> file with the average coordinates or the coordinates at <tt>-ctime</tt>. The temperature factors are scaled such that the maximum is 10. The scaling can be changed with the option <tt>-scale</tt>. To get the velocities or forces of one frame set both <tt>-b</tt> and <tt>-e</tt> to the time of desired frame. When averaging over frames you might need to use the <tt>-nojump</tt> option to obtain the correct average coordinates. If you select either of these option the average force and velocity for each atom are written to an <tt>.<a href="../online/xvg.html">xvg</a></tt> file as well (specified with <tt>-av</tt> or <tt>-af</tt>).<p> Option <tt>-vd</tt> computes a velocity distribution, i.e. the norm of the vector is plotted. In addition in the same graph the kinetic energy distribution is given.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Structure+mass(db): <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-ox</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (coord.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-oxt</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (coord.<a href="../online/xtc.html">xtc</a>) (Output, Optional)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-ov</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (veloc.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-of</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (force.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-ob</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (box.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-ot</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (temp.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-ekt</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (ektrans.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-ekr</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (ekrot.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-vd</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (veldist.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-cv</tt></b> [&lt;.<a href="../online/pdb.html">pdb</a>&gt;] (veloc.<a href="../online/pdb.html">pdb</a>) (Output, Optional)</dt>
+<dd>
+Protein data bank file
+</dd>
+<dt><b><tt>-cf</tt></b> [&lt;.<a href="../online/pdb.html">pdb</a>&gt;] (force.<a href="../online/pdb.html">pdb</a>) (Output, Optional)</dt>
+<dd>
+Protein data bank file
+</dd>
+<dt><b><tt>-av</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (all_veloc.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-af</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (all_force.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-tu</tt></b> &lt;enum&gt; (ps)</dt>
+<dd>
+Time unit: fs, ps, ns, us, ms, s
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-[no]com</tt></b> (no)</dt>
+<dd>
+Plot data for the com of each group
+</dd>
+<dt><b><tt>-[no]pbc</tt></b> (yes)</dt>
+<dd>
+Make molecules whole for COM
+</dd>
+<dt><b><tt>-[no]mol</tt></b> (no)</dt>
+<dd>
+Index contains molecule numbers iso atom numbers
+</dd>
+<dt><b><tt>-[no]nojump</tt></b> (no)</dt>
+<dd>
+Remove jumps of atoms across the box
+</dd>
+<dt><b><tt>-[no]x</tt></b> (yes)</dt>
+<dd>
+Plot X-component
+</dd>
+<dt><b><tt>-[no]y</tt></b> (yes)</dt>
+<dd>
+Plot Y-component
+</dd>
+<dt><b><tt>-[no]z</tt></b> (yes)</dt>
+<dd>
+Plot Z-component
+</dd>
+<dt><b><tt>-ng</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+Number of groups to consider
+</dd>
+<dt><b><tt>-[no]len</tt></b> (no)</dt>
+<dd>
+Plot vector length
+</dd>
+<dt><b><tt>-[no]fp</tt></b> (no)</dt>
+<dd>
+Full precision output
+</dd>
+<dt><b><tt>-bin</tt></b> &lt;real&gt; (1)</dt>
+<dd>
+Binwidth for velocity histogram (nm/ps)
+</dd>
+<dt><b><tt>-ctime</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+Use frame at this time for x in <tt>-cv</tt> and <tt>-cf</tt> instead of the average x
+</dd>
+<dt><b><tt>-scale</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Scale factor for <tt>.<a href="../online/pdb.html">pdb</a></tt> output, 0 is autoscale
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

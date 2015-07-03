@@ -1,0 +1,52 @@
+.TH gmx-anadock 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-anadock - Cluster structures from Autodock runs
+
+.SH SYNOPSIS
+gmx anadock [-f [<.pdb>]] [-od [<.xvg>]] [-of [<.xvg>]]
+            [-g [<.log>]] [-nice <int>] [-xvg <enum>] [-[no]free]
+            [-[no]rms] [-cutoff <real>]
+
+.SH DESCRIPTION
+\fBgmx anadock\fR analyses the results of an Autodock run and clusters the structures together, based on distance or RMSD. The docked energy and free energy estimates are analysed, and for each cluster the energy statistics are printed.
+
+An alternative approach to this is to cluster the structures first using \fBgmx cluster\fR and then sort the clusters on either lowest energy or average energy.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.pdb>] (eiwit.pdb) (Input)"
+    Protein data bank file
+
+.BI "\-od" " [<.xvg>] (edocked.xvg) (Output)"
+    xvgr/xmgr file
+
+.BI "\-of" " [<.xvg>] (efree.xvg) (Output)"
+    xvgr/xmgr file
+
+.BI "\-g" " [<.log>] (anadock.log) (Output)"
+    Log file
+
+
+Other options:
+
+.BI "\-nice" " <int> (0)"
+    Set the nicelevel
+
+.BI "\-xvg" " <enum> (xmgrace)"
+    xvg plot formatting: xmgrace, xmgr, none
+
+.BI "\-[no]free" "  (no)"
+    Use Free energy estimate from autodock for sorting the classes
+
+.BI "\-[no]rms" "  (yes)"
+    Cluster on RMS or distance
+
+.BI "\-cutoff" " <real> (0.2)"
+    Maximum RMSD/distance for belonging to the same cluster
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

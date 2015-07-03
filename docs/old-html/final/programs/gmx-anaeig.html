@@ -1,0 +1,188 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx anaeig</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx anaeig</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx anaeig [-v [<.trr/.cpt/...>]] [-v2 [<.trr/.cpt/...>]]
+           [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]]
+           [-eig [<.xvg>]] [-eig2 [<.xvg>]] [-comp [<.xvg>]] [-rmsf [<.xvg>]]
+           [-proj [<.xvg>]] [-2d [<.xvg>]] [-3d [<.gro/.g96/...>]]
+           [-filt [<.xtc/.trr/...>]] [-extr [<.xtc/.trr/...>]]
+           [-over [<.xvg>]] [-inpr [<.xpm>]] [-nice <int>] [-b <time>]
+           [-e <time>] [-dt <time>] [-tu <enum>] [-[no]w] [-xvg <enum>]
+           [-first <int>] [-last <int>] [-skip <int>] [-max <real>]
+           [-nframes <int>] [-[no]split] [-[no]entropy] [-temp <real>]
+           [-nevskip <int>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx anaeig</tt> analyzes eigenvectors. The eigenvectors can be of a covariance matrix (<a href="gmx-covar.html"><tt>gmx covar</tt></a>) or of a Normal Modes analysis (<a href="gmx-nmeig.html"><tt>gmx nmeig</tt></a>).<p> When a trajectory is projected on eigenvectors, all structures are fitted to the structure in the eigenvector file, if present, otherwise to the structure in the structure file. When no run input file is supplied, periodicity will not be taken into account. Most analyses are performed on eigenvectors <tt>-first</tt> to <tt>-last</tt>, but when <tt>-first</tt> is set to -1 you will be prompted for a selection.<p> <tt>-comp</tt>: plot the vector components per atom of eigenvectors <tt>-first</tt> to <tt>-last</tt>.<p> <tt>-rmsf</tt>: plot the RMS fluctuation per atom of eigenvectors <tt>-first</tt> to <tt>-last</tt> (requires <tt>-eig</tt>).<p> <tt>-proj</tt>: calculate projections of a trajectory on eigenvectors <tt>-first</tt> to <tt>-last</tt>. The projections of a trajectory on the eigenvectors of its covariance matrix are called principal components (pc's). It is often useful to check the cosine content of the pc's, since the pc's of random diffusion are cosines with the number of periods equal to half the pc index. The cosine content of the pc's can be calculated with the program <a href="gmx-analyze.html"><tt>gmx analyze</tt></a>.<p> <tt>-2d</tt>: calculate a 2d projection of a trajectory on eigenvectors <tt>-first</tt> and <tt>-last</tt>.<p> <tt>-3d</tt>: calculate a 3d projection of a trajectory on the first three selected eigenvectors.<p> <tt>-filt</tt>: filter the trajectory to show only the motion along eigenvectors <tt>-first</tt> to <tt>-last</tt>.<p> <tt>-extr</tt>: calculate the two extreme projections along a trajectory on the average structure and interpolate <tt>-nframes</tt> frames between them, or set your own extremes with <tt>-max</tt>. The eigenvector <tt>-first</tt> will be written unless <tt>-first</tt> and <tt>-last</tt> have been set explicitly, in which case all eigenvectors will be written to separate files. Chain identifiers will be added when writing a <tt>.<a href="../online/pdb.html">pdb</a></tt> file with two or three structures (you can use <tt>rasmol -nmrpdb</tt> to view such a <tt>.<a href="../online/pdb.html">pdb</a></tt> file).<p>   Overlap calculations between covariance analysis:<br>   <b>Note:</b> the analysis should use the same fitting structure<p> <tt>-over</tt>: calculate the subspace overlap of the eigenvectors in file <tt>-v2</tt> with eigenvectors <tt>-first</tt> to <tt>-last</tt> in file <tt>-v</tt>.<p> <tt>-inpr</tt>: calculate a matrix of inner-products between eigenvectors in files <tt>-v</tt> and <tt>-v2</tt>. All eigenvectors of both files will be used unless <tt>-first</tt> and <tt>-last</tt> have been set explicitly.<p> When <tt>-v</tt>, <tt>-eig</tt>, <tt>-v2</tt> and <tt>-eig2</tt> are given, a single number for the overlap between the covariance matrices is generated. The formulas are:<br>         difference = sqrt(tr((sqrt(M1) - sqrt(M2))^2))<br> normalized overlap = 1 - difference/sqrt(tr(M1) + tr(M2))<br>      shape overlap = 1 - sqrt(tr((sqrt(M1/tr(M1)) - sqrt(M2/tr(M2)))^2))<br> where M1 and M2 are the two covariance matrices and tr is the trace of a matrix. The numbers are proportional to the overlap of the square root of the fluctuations. The normalized overlap is the most useful number, it is 1 for identical matrices and 0 when the sampled subspaces are orthogonal.<p> When the <tt>-entropy</tt> flag is given an entropy estimate will be computed based on the Quasiharmonic approach and based on Schlitter's formula.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-v</tt></b> [&lt;.<a href="../online/trr.html">trr</a>/.<a href="../online/cpt.html">cpt</a>/...&gt;] (eigenvec.<a href="../online/trr.html">trr</a>) (Input)</dt>
+<dd>
+Full precision trajectory: <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-v2</tt></b> [&lt;.<a href="../online/trr.html">trr</a>/.<a href="../online/cpt.html">cpt</a>/...&gt;] (eigenvec2.<a href="../online/trr.html">trr</a>) (Input, Optional)</dt>
+<dd>
+Full precision trajectory: <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input, Optional)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input, Optional)</dt>
+<dd>
+Structure+mass(db): <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-eig</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (eigenval.<a href="../online/xvg.html">xvg</a>) (Input, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-eig2</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (eigenval2.<a href="../online/xvg.html">xvg</a>) (Input, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-comp</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (eigcomp.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-rmsf</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (eigrmsf.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-proj</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (proj.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-2d</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (2dproj.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-3d</tt></b> [&lt;.<a href="../online/gro.html">gro</a>/.<a href="../online/g96.html">g96</a>/...&gt;] (3dproj.<a href="../online/pdb.html">pdb</a>) (Output, Optional)</dt>
+<dd>
+Structure file: <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent esp
+</dd>
+<dt><b><tt>-filt</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (filtered.<a href="../online/xtc.html">xtc</a>) (Output, Optional)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-extr</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (extreme.<a href="../online/pdb.html">pdb</a>) (Output, Optional)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-over</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (overlap.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-inpr</tt></b> [&lt;.<a href="../online/xpm.html">xpm</a>&gt;] (inprod.<a href="../online/xpm.html">xpm</a>) (Output, Optional)</dt>
+<dd>
+X PixMap compatible matrix file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-tu</tt></b> &lt;enum&gt; (ps)</dt>
+<dd>
+Time unit: fs, ps, ns, us, ms, s
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-first</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+First eigenvector for analysis (-1 is select)
+</dd>
+<dt><b><tt>-last</tt></b> &lt;int&gt; (-1)</dt>
+<dd>
+Last eigenvector for analysis (-1 is till the last)
+</dd>
+<dt><b><tt>-skip</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+Only analyse every nr-th frame
+</dd>
+<dt><b><tt>-max</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Maximum for projection of the eigenvector on the average structure, max=0 gives the extremes
+</dd>
+<dt><b><tt>-nframes</tt></b> &lt;int&gt; (2)</dt>
+<dd>
+Number of frames for the extremes output
+</dd>
+<dt><b><tt>-[no]split</tt></b> (no)</dt>
+<dd>
+Split eigenvector projections where time is zero
+</dd>
+<dt><b><tt>-[no]entropy</tt></b> (no)</dt>
+<dd>
+Compute entropy according to the Quasiharmonic formula or Schlitter's method.
+</dd>
+<dt><b><tt>-temp</tt></b> &lt;real&gt; (298.15)</dt>
+<dd>
+Temperature for entropy calculations
+</dd>
+<dt><b><tt>-nevskip</tt></b> &lt;int&gt; (6)</dt>
+<dd>
+Number of eigenvalues to skip when computing the entropy due to the quasi harmonic approximation. When you do a rotational and/or translational fit prior to the covariance analysis, you get 3 or 6 eigenvalues that are very close to zero, and which should not be taken into account when computing the entropy.
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

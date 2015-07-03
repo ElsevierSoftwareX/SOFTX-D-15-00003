@@ -1,0 +1,152 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx tcaf</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx tcaf</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx tcaf [-f [<.trr/.cpt/...>]] [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]]
+         [-ot [<.xvg>]] [-oa [<.xvg>]] [-o [<.xvg>]] [-of [<.xvg>]]
+         [-oc [<.xvg>]] [-ov [<.xvg>]] [-nice <int>] [-b <time>] [-e <time>]
+         [-dt <time>] [-[no]w] [-xvg <enum>] [-[no]mol] [-[no]k34]
+         [-wt <real>] [-acflen <int>] [-[no]normalize] [-P <enum>]
+         [-fitfn <enum>] [-beginfit <real>] [-endfit <real>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx tcaf</tt> computes tranverse current autocorrelations. These are used to estimate the shear viscosity, &eta;. For details see: Palmer, Phys. Rev. E 49 (1994) pp 359-366.<p> Transverse currents are calculated using the k-vectors (1,0,0) and (2,0,0) each also in the <it>y</it>- and <it>z</it>-direction, (1,1,0) and (1,-1,0) each also in the 2 other planes (these vectors are not independent) and (1,1,1) and the 3 other box diagonals (also not independent). For each k-vector the sine and cosine are used, in combination with the velocity in 2 perpendicular directions. This gives a total of 16*2*2=64 transverse currents. One autocorrelation is calculated fitted for each k-vector, which gives 16 TCAFs. Each of these TCAFs is fitted to f(t) = exp(-v)(cosh(Wv) + 1/W sinh(Wv)), v = -t/(2 &tau;), W = sqrt(1 - 4 &tau; &eta;/&rho; k^2), which gives 16 values of &tau; and &eta;. The fit weights decay exponentially with time constant w (given with <tt>-wt</tt>) as exp(-t/w), and the TCAF and fit are calculated up to time 5*w. The &eta; values should be fitted to 1 - a &eta;(k) k^2, from which one can estimate the shear viscosity at k=0.<p> When the box is cubic, one can use the option <tt>-oc</tt>, which averages the TCAFs over all k-vectors with the same length. This results in more accurate TCAFs. Both the cubic TCAFs and fits are written to <tt>-oc</tt> The cubic &eta; estimates are also written to <tt>-ov</tt>.<p> With option <tt>-mol</tt>, the transverse current is determined of molecules instead of atoms. In this case, the index group should consist of molecule numbers instead of atom numbers.<p> The k-dependent viscosities in the <tt>-ov</tt> file should be fitted to &eta;(k) = &eta;_0 (1 - a k^2) to obtain the viscosity at infinite wavelength.<p> <b>Note:</b> make sure you write coordinates and velocities often enough. The initial, non-exponential, part of the autocorrelation function is very important for obtaining a good fit.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/trr.html">trr</a>/.<a href="../online/cpt.html">cpt</a>/...&gt;] (traj.<a href="../online/trr.html">trr</a>) (Input)</dt>
+<dd>
+Full precision trajectory: <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input, Optional)</dt>
+<dd>
+Structure+mass(db): <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-ot</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (transcur.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-oa</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (tcaf_all.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (tcaf.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-of</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (tcaf_fit.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-oc</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (tcaf_cub.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-ov</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (visc_k.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-[no]mol</tt></b> (no)</dt>
+<dd>
+Calculate TCAF of molecules
+</dd>
+<dt><b><tt>-[no]k34</tt></b> (no)</dt>
+<dd>
+Also use k=(3,0,0) and k=(4,0,0)
+</dd>
+<dt><b><tt>-wt</tt></b> &lt;real&gt; (5)</dt>
+<dd>
+Exponential decay time for the TCAF fit weights
+</dd>
+<dt><b><tt>-acflen</tt></b> &lt;int&gt; (-1)</dt>
+<dd>
+Length of the ACF, default is half the number of frames
+</dd>
+<dt><b><tt>-[no]normalize</tt></b> (yes)</dt>
+<dd>
+Normalize ACF
+</dd>
+<dt><b><tt>-P</tt></b> &lt;enum&gt; (0)</dt>
+<dd>
+Order of Legendre polynomial for ACF (0 indicates none): 0, 1, 2, 3
+</dd>
+<dt><b><tt>-fitfn</tt></b> &lt;enum&gt; (none)</dt>
+<dd>
+Fit function: none, exp, aexp, exp_exp, vac, exp5, exp7, exp9, erffit
+</dd>
+<dt><b><tt>-beginfit</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Time where to begin the exponential fit of the correlation function
+</dd>
+<dt><b><tt>-endfit</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+Time where to end the exponential fit of the correlation function, -1 is until the end
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

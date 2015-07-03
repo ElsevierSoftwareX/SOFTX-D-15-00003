@@ -1,0 +1,144 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx disre</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx disre</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx disre [-s [<.tpr/.tpb/...>]] [-f [<.xtc/.trr/...>]] [-ds [<.xvg>]]
+          [-da [<.xvg>]] [-dn [<.xvg>]] [-dm [<.xvg>]] [-dr [<.xvg>]]
+          [-l [<.log>]] [-n [<.ndx>]] [-q [<.pdb>]] [-c [<.ndx>]]
+          [-x [<.xpm>]] [-nice <int>] [-b <time>] [-e <time>] [-dt <time>]
+          [-[no]w] [-xvg <enum>] [-ntop <int>] [-maxdr <real>]
+          [-nlevels <int>] [-[no]third]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx disre</tt> computes violations of distance restraints. If necessary, all protons can be added to a protein molecule using the <a href="gmx-protonate.html"><tt>gmx protonate</tt></a> program.<p> The program always computes the instantaneous violations rather than time-averaged, because this analysis is done from a trajectory file afterwards it does not make sense to use time averaging. However, the time averaged values per restraint are given in the <a href="../online/log.html">log</a> file.<p> An index file may be used to select specific restraints for printing.<p> When the optional <tt>-q</tt> flag is given a <tt>.<a href="../online/pdb.html">pdb</a></tt> file coloured by the amount of average violations.<p> When the <tt>-c</tt> option is given, an index file will be read containing the frames in your trajectory corresponding to the clusters (defined in another manner) that you want to analyze. For these clusters the program will compute average violations using the third power averaging algorithm and print them in the <a href="../online/log.html">log</a> file.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Run input file: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-ds</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (drsum.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-da</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (draver.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-dn</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (drnum.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-dm</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (drmax.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-dr</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (restr.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-l</tt></b> [&lt;.<a href="../online/log.html">log</a>&gt;] (disres.<a href="../online/log.html">log</a>) (Output)</dt>
+<dd>
+Log file
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (viol.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-q</tt></b> [&lt;.<a href="../online/pdb.html">pdb</a>&gt;] (viol.<a href="../online/pdb.html">pdb</a>) (Output, Optional)</dt>
+<dd>
+Protein data bank file
+</dd>
+<dt><b><tt>-c</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (clust.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-x</tt></b> [&lt;.<a href="../online/xpm.html">xpm</a>&gt;] (matrix.<a href="../online/xpm.html">xpm</a>) (Output, Optional)</dt>
+<dd>
+X PixMap compatible matrix file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-ntop</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Number of large violations that are stored in the <a href="../online/log.html">log</a> file every step
+</dd>
+<dt><b><tt>-maxdr</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Maximum distance violation in matrix output. If less than or equal to 0 the maximum will be determined by the data.
+</dd>
+<dt><b><tt>-nlevels</tt></b> &lt;int&gt; (20)</dt>
+<dd>
+Number of levels in the matrix output
+</dd>
+<dt><b><tt>-[no]third</tt></b> (yes)</dt>
+<dd>
+Use inverse third power averaging or linear for matrix output
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

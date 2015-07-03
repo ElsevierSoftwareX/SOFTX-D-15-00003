@@ -1,0 +1,106 @@
+.TH gmx-order 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-order - Compute the order parameter per atom for carbon tails
+
+.SH SYNOPSIS
+gmx order [-f [<.xtc/.trr/...>]] [-n [<.ndx>]] [-nr [<.ndx>]]
+          [-s [<.tpr/.tpb/...>]] [-o [<.xvg>]] [-od [<.xvg>]]
+          [-ob [<.pdb>]] [-os [<.xvg>]] [-Sg [<.xvg>]] [-Sk [<.xvg>]]
+          [-Sgsl [<.xvg>]] [-Sksl [<.xvg>]] [-nice <int>] [-b <time>]
+          [-e <time>] [-dt <time>] [-[no]w] [-xvg <enum>] [-d <enum>]
+          [-sl <int>] [-[no]szonly] [-[no]unsat] [-[no]permolecule]
+          [-[no]radial] [-[no]calcdist]
+
+.SH DESCRIPTION
+\fBgmx order\fR computes the order parameter per atom for carbon tails. For atom i the vector i\-1, i+1 is used together with an axis. The index file should contain only the groups to be used for calculations, with each group of equivalent carbons along the relevant acyl chain in its own group. There should not be any generic groups (like System, Protein) in the index file to avoid confusing the program (this is not relevant to tetrahedral order parameters however, which only work for water anyway).
+
+\fBgmx order\fR can also give all diagonal elements of the order tensor and even calculate the deuterium order parameter Scd (default). If the option \fB\-szonly\fR is given, only one order tensor component (specified by the \fB\-d\fR option) is given and the order parameter per slice is calculated as well. If \fB\-szonly\fR is not selected, all diagonal elements and the deuterium order parameter is given.
+
+The tetrahedrality order parameters can be determined around an atom. Both angle an distance order parameters are calculated. See P.\-L. Chau and A.J. Hardwick, Mol. Phys., 93, (1998), 511\-518. for more details.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.xtc/.trr/...>] (traj.xtc) (Input)"
+    Trajectory: xtc trr cpt trj gro g96 pdb tng
+
+.BI "\-n" " [<.ndx>] (index.ndx) (Input)"
+    Index file
+
+.BI "\-nr" " [<.ndx>] (index.ndx) (Input)"
+    Index file
+
+.BI "\-s" " [<.tpr/.tpb/...>] (topol.tpr) (Input)"
+    Run input file: tpr tpb tpa
+
+.BI "\-o" " [<.xvg>] (order.xvg) (Output)"
+    xvgr/xmgr file
+
+.BI "\-od" " [<.xvg>] (deuter.xvg) (Output)"
+    xvgr/xmgr file
+
+.BI "\-ob" " [<.pdb>] (eiwit.pdb) (Output)"
+    Protein data bank file
+
+.BI "\-os" " [<.xvg>] (sliced.xvg) (Output)"
+    xvgr/xmgr file
+
+.BI "\-Sg" " [<.xvg>] (sg-ang.xvg) (Output, Optional)"
+    xvgr/xmgr file
+
+.BI "\-Sk" " [<.xvg>] (sk-dist.xvg) (Output, Optional)"
+    xvgr/xmgr file
+
+.BI "\-Sgsl" " [<.xvg>] (sg-ang-slice.xvg) (Output, Optional)"
+    xvgr/xmgr file
+
+.BI "\-Sksl" " [<.xvg>] (sk-dist-slice.xvg) (Output, Optional)"
+    xvgr/xmgr file
+
+
+Other options:
+
+.BI "\-nice" " <int> (19)"
+    Set the nicelevel
+
+.BI "\-b" " <time> (0)"
+    First frame (ps) to read from trajectory
+
+.BI "\-e" " <time> (0)"
+    Last frame (ps) to read from trajectory
+
+.BI "\-dt" " <time> (0)"
+    Only use frame when t MOD dt = first time (ps)
+
+.BI "\-[no]w" "  (no)"
+    View output \fB.xvg\fR, \fB.xpm\fR, \fB.eps\fR and \fB.pdb\fR files
+
+.BI "\-xvg" " <enum> (xmgrace)"
+    xvg plot formatting: xmgrace, xmgr, none
+
+.BI "\-d" " <enum> (z)"
+    Direction of the normal on the membrane: z, x, y
+
+.BI "\-sl" " <int> (1)"
+    Calculate order parameter as function of box length, dividing the box into this number of slices.
+
+.BI "\-[no]szonly" "  (no)"
+    Only give Sz element of order tensor. (axis can be specified with \fB\-d\fR)
+
+.BI "\-[no]unsat" "  (no)"
+    Calculate order parameters for unsaturated carbons. Note that this cannot be mixed with normal order parameters.
+
+.BI "\-[no]permolecule" "  (no)"
+    Compute per\-molecule Scd order parameters
+
+.BI "\-[no]radial" "  (no)"
+    Compute a radial membrane normal
+
+.BI "\-[no]calcdist" "  (no)"
+    Compute distance from a reference
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

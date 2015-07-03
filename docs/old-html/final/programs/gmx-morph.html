@@ -1,0 +1,102 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx morph</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx morph</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx morph [-f1 [<.gro/.g96/...>]] [-f2 [<.gro/.g96/...>]]
+          [-o [<.xtc/.trr/...>]] [-or [<.xvg>]] [-n [<.ndx>]] [-nice <int>]
+          [-[no]w] [-xvg <enum>] [-ninterm <int>] [-first <real>]
+          [-last <real>] [-[no]fit]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx morph</tt> does a linear interpolation of conformations in order to create intermediates. Of course these are completely unphysical, but that you may try to justify yourself. Output is in the form of a generic trajectory. The number of intermediates can be controlled with the <tt>-ninterm</tt> flag. The first and last flag correspond to the way of interpolating: 0 corresponds to input structure 1 while 1 corresponds to input structure 2. If you specify <tt>-first</tt> &lt; 0 or <tt>-last</tt> &gt; 1 extrapolation will be on the path from input structure x_1 to x_2. In general, the coordinates of the intermediate x(i) out of N total intermediates correspond to:<p> x(i) = x_1 + (first+(i/(N-1))*(last-first))*(x_2-x_1)<p> Finally the RMSD with respect to both input structures can be computed if explicitly selected (<tt>-or</tt> option). In that case, an index file may be read to select the group from which the RMS is computed.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f1</tt></b> [&lt;.<a href="../online/gro.html">gro</a>/.<a href="../online/g96.html">g96</a>/...&gt;] (conf1.<a href="../online/gro.html">gro</a>) (Input)</dt>
+<dd>
+Structure file: <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent esp <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-f2</tt></b> [&lt;.<a href="../online/gro.html">gro</a>/.<a href="../online/g96.html">g96</a>/...&gt;] (conf2.<a href="../online/gro.html">gro</a>) (Input)</dt>
+<dd>
+Structure file: <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent esp <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (interm.<a href="../online/xtc.html">xtc</a>) (Output)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-or</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (rms-interm.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-ninterm</tt></b> &lt;int&gt; (11)</dt>
+<dd>
+Number of intermediates
+</dd>
+<dt><b><tt>-first</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Corresponds to first generated structure (0 is input x_1, see above)
+</dd>
+<dt><b><tt>-last</tt></b> &lt;real&gt; (1)</dt>
+<dd>
+Corresponds to last generated structure (1 is input x_2, see above)
+</dd>
+<dt><b><tt>-[no]fit</tt></b> (yes)</dt>
+<dd>
+Do a least squares fit of the second to the first structure before interpolating
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

@@ -1,0 +1,213 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx trjconv</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx trjconv</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx trjconv [-f [<.xtc/.trr/...>]] [-o [<.xtc/.trr/...>]]
+            [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]] [-fr [<.ndx>]]
+            [-sub [<.ndx>]] [-drop [<.xvg>]] [-nice <int>] [-b <time>]
+            [-e <time>] [-tu <enum>] [-[no]w] [-xvg <enum>] [-skip <int>]
+            [-dt <time>] [-[no]round] [-dump <time>] [-t0 <time>]
+            [-timestep <time>] [-pbc <enum>] [-ur <enum>] [-[no]center]
+            [-boxcenter <enum>] [-box <vector>] [-trans <vector>]
+            [-shift <vector>] [-fit <enum>] [-ndec <int>] [-[no]vel]
+            [-[no]force] [-trunc <time>] [-exec <string>] [-split <time>]
+            [-[no]sep] [-nzero <int>] [-dropunder <real>] [-dropover <real>]
+            [-[no]conect]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx trjconv</tt> can convert trajectory files in many ways:<br> * from one format to another<br> * select a subset of atoms<br> * change the periodicity representation<br> * keep multimeric molecules together<br> * center atoms in the box<br> * fit atoms to reference structure<br> * reduce the number of frames<br> * change the timestamps of the frames (<tt>-t0</tt> and <tt>-timestep</tt>)<br> * cut the trajectory in small subtrajectories according to information in an index file. This allows subsequent analysis of the subtrajectories that could, for example, be the result of a cluster analysis. Use option <tt>-sub</tt>. This assumes that the entries in the index file are frame numbers and dumps each group in the index file to a separate trajectory file.<br> * select frames within a certain range of a quantity given in an <tt>.<a href="../online/xvg.html">xvg</a></tt> file.<p> <a href="gmx-trjcat.html"><tt>gmx trjcat</tt></a> is better suited for concatenating multiple trajectory files. <p> The following formats are supported for input and output: <tt>.<a href="../online/xtc.html">xtc</a></tt>, <tt>.<a href="../online/trr.html">trr</a></tt>, <tt>.<a href="../online/trj.html">trj</a></tt>, <tt>.<a href="../online/gro.html">gro</a></tt>, <tt>.<a href="../online/g96.html">g96</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt>. The file formats are detected from the file extension. The precision of <tt>.<a href="../online/xtc.html">xtc</a></tt> and <tt>.<a href="../online/gro.html">gro</a></tt> output is taken from the input file for <tt>.<a href="../online/xtc.html">xtc</a></tt>, <tt>.<a href="../online/gro.html">gro</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt>, and from the <tt>-ndec</tt> option for other input formats. The precision is always taken from <tt>-ndec</tt>, when this option is set. All other formats have fixed precision. <tt>.<a href="../online/trr.html">trr</a></tt> and <tt>.<a href="../online/trj.html">trj</a></tt> output can be single or double precision, depending on the precision of the <tt>gmx trjconv</tt> binary. Note that velocities are only supported in <tt>.<a href="../online/trr.html">trr</a></tt>, <tt>.<a href="../online/trj.html">trj</a></tt>, <tt>.<a href="../online/gro.html">gro</a></tt> and <tt>.<a href="../online/g96.html">g96</a></tt> files.<p> Option <tt>-sep</tt> can be used to write every frame to a separate <tt>.<a href="../online/gro.html">gro</a>, .<a href="../online/g96.html">g96</a></tt> or <tt>.<a href="../online/pdb.html">pdb</a></tt> file. By default, all frames all written to one file. <tt>.<a href="../online/pdb.html">pdb</a></tt> files with all frames concatenated can be viewed with <tt>rasmol -nmrpdb</tt>.<p> It is possible to select part of your trajectory and write it out to a new trajectory file in order to save disk space, e.g. for leaving out the water from a trajectory of a protein in water. <b>ALWAYS</b> put the original trajectory on tape! We recommend to use the portable <tt>.<a href="../online/xtc.html">xtc</a></tt> format for your analysis to save disk space and to have portable files.<p> There are two options for fitting the trajectory to a reference either for essential dynamics analysis, etc. The first option is just plain fitting to a reference structure in the structure file. The second option is a progressive fit in which the first timeframe is fitted to the reference structure in the structure file to obtain and each subsequent timeframe is fitted to the previously fitted structure. This way a continuous trajectory is generated, which might not be the case when using the regular fit method, e.g. when your protein undergoes large conformational transitions.<p> Option <tt>-pbc</tt> sets the type of periodic boundary condition treatment:<br> <tt>* mol</tt> puts the center of mass of molecules in the box, and requires a run input file to be supplied with <tt>-s</tt>.<br> <tt>* res</tt> puts the center of mass of residues in the box.<br> <tt>* atom</tt> puts all the atoms in the box.<br> <tt>* nojump</tt> checks if atoms jump across the box and then puts them back. This has the effect that all molecules will remain whole (provided they were whole in the initial conformation). <b>Note</b> that this ensures a continuous trajectory but molecules may diffuse out of the box. The starting configuration for this procedure is taken from the structure file, if one is supplied, otherwise it is the first frame.<br> <tt>* cluster</tt> clusters all the atoms in the selected index such that they are all closest to the center of mass of the cluster, which is iteratively updated. <b>Note</b> that this will only give meaningful results if you in fact have a cluster. Luckily that can be checked afterwards using a trajectory viewer. Note also that if your molecules are broken this will not work either.<br> The separate option <tt>-clustercenter</tt> can be used to specify an approximate center for the cluster. This is useful e.g. if you have two big vesicles, and you want to maintain their relative positions.<br> <tt>* whole</tt> only makes broken molecules whole.<p> Option <tt>-ur</tt> sets the unit cell representation for options <tt>mol</tt>, <tt>res</tt> and <tt>atom</tt> of <tt>-pbc</tt>. All three options give different results for triclinic boxes and identical results for rectangular boxes. <tt>rect</tt> is the ordinary brick shape. <tt>tric</tt> is the triclinic unit cell. <tt>compact</tt> puts all atoms at the closest distance from the center of the box. This can be useful for visualizing e.g. truncated octahedra or rhombic dodecahedra. The center for options <tt>tric</tt> and <tt>compact</tt> is <tt>tric</tt> (see below), unless the option <tt>-boxcenter</tt> is set differently.<p> Option <tt>-center</tt> centers the system in the box. The user can select the group which is used to determine the geometrical center. Option <tt>-boxcenter</tt> sets the location of the center of the box for options <tt>-pbc</tt> and <tt>-center</tt>. The center options are: <tt>tric</tt>: half of the sum of the box vectors, <tt>rect</tt>: half of the box diagonal, <tt>zero</tt>: zero. Use option <tt>-pbc mol</tt> in addition to <tt>-center</tt> when you want all molecules in the box after the centering.<p> Option <tt>-box</tt> sets the size of the new box. This option only works for leading dimensions and is thus generally only useful for rectangular boxes. If you want to modify only some of the dimensions, e.g. when reading from a trajectory, you can use -1 for those dimensions that should stay the same It is not always possible to use combinations of <tt>-pbc</tt>, <tt>-fit</tt>, <tt>-ur</tt> and <tt>-center</tt> to do exactly what you want in one call to <tt>gmx trjconv</tt>. Consider using multiple calls, and check out the GROMACS website for suggestions.<p> With <tt>-dt</tt>, it is possible to reduce the number of frames in the output. This option relies on the accuracy of the times in your input trajectory, so if these are inaccurate use the <tt>-timestep</tt> option to modify the time (this can be done simultaneously). For making smooth movies, the program <a href="gmx-filter.html"><tt>gmx filter</tt></a> can reduce the number of frames while using low-pass frequency filtering, this reduces aliasing of high frequency motions.<p> Using <tt>-trunc</tt> <tt>gmx trjconv</tt> can truncate <tt>.<a href="../online/trj.html">trj</a></tt> in place, i.e. without copying the file. This is useful when a run has crashed during disk I/O (i.e. full disk), or when two contiguous trajectories must be concatenated without having double frames.<p> Option <tt>-dump</tt> can be used to extract a frame at or near one specific time from your trajectory.<p> Option <tt>-drop</tt> reads an <tt>.<a href="../online/xvg.html">xvg</a></tt> file with times and values. When options <tt>-dropunder</tt> and/or <tt>-dropover</tt> are set, frames with a value below and above the value of the respective options will not be written.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (trajout.<a href="../online/xtc.html">xtc</a>) (Output)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input, Optional)</dt>
+<dd>
+Structure+mass(db): <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-fr</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (frames.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-sub</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (cluster.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-drop</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (drop.<a href="../online/xvg.html">xvg</a>) (Input, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-tu</tt></b> &lt;enum&gt; (ps)</dt>
+<dd>
+Time unit: fs, ps, ns, us, ms, s
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-skip</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+Only write every nr-th frame
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only write frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-[no]round</tt></b> (no)</dt>
+<dd>
+Round measurements to nearest picosecond
+</dd>
+<dt><b><tt>-dump</tt></b> &lt;time&gt; (-1)</dt>
+<dd>
+Dump frame nearest specified time (ps)
+</dd>
+<dt><b><tt>-t0</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Starting time (ps) (default: don't change)
+</dd>
+<dt><b><tt>-timestep</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Change time step between input frames (ps)
+</dd>
+<dt><b><tt>-pbc</tt></b> &lt;enum&gt; (none)</dt>
+<dd>
+PBC treatment (see help text for full description): none, mol, res, atom, nojump, cluster, whole
+</dd>
+<dt><b><tt>-ur</tt></b> &lt;enum&gt; (rect)</dt>
+<dd>
+Unit-cell representation: rect, tric, compact
+</dd>
+<dt><b><tt>-[no]center</tt></b> (no)</dt>
+<dd>
+Center atoms in box
+</dd>
+<dt><b><tt>-boxcenter</tt></b> &lt;enum&gt; (tric)</dt>
+<dd>
+Center for -pbc and -center: tric, rect, zero
+</dd>
+<dt><b><tt>-box</tt></b> &lt;vector&gt; (0 0 0)</dt>
+<dd>
+Size for new cubic box (default: read from input)
+</dd>
+<dt><b><tt>-trans</tt></b> &lt;vector&gt; (0 0 0)</dt>
+<dd>
+All coordinates will be translated by trans. This can advantageously be combined with -pbc mol -ur compact.
+</dd>
+<dt><b><tt>-shift</tt></b> &lt;vector&gt; (0 0 0)</dt>
+<dd>
+All coordinates will be shifted by framenr*shift
+</dd>
+<dt><b><tt>-fit</tt></b> &lt;enum&gt; (none)</dt>
+<dd>
+Fit molecule to ref structure in the structure file: none, rot+trans, rotxy+transxy, translation, transxy, progressive
+</dd>
+<dt><b><tt>-ndec</tt></b> &lt;int&gt; (3)</dt>
+<dd>
+Precision for .<a href="../online/xtc.html">xtc</a> and .<a href="../online/gro.html">gro</a> writing in number of decimal places
+</dd>
+<dt><b><tt>-[no]vel</tt></b> (yes)</dt>
+<dd>
+Read and write velocities if possible
+</dd>
+<dt><b><tt>-[no]force</tt></b> (no)</dt>
+<dd>
+Read and write forces if possible
+</dd>
+<dt><b><tt>-trunc</tt></b> &lt;time&gt; (-1)</dt>
+<dd>
+Truncate input trajectory file after this time (ps)
+</dd>
+<dt><b><tt>-exec</tt></b> &lt;string&gt;</dt>
+<dd>
+Execute command for every output frame with the frame number as argument
+</dd>
+<dt><b><tt>-split</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Start writing new file when t MOD split = first time (ps)
+</dd>
+<dt><b><tt>-[no]sep</tt></b> (no)</dt>
+<dd>
+Write each frame to a separate .<a href="../online/gro.html">gro</a>, .<a href="../online/g96.html">g96</a> or .<a href="../online/pdb.html">pdb</a> file
+</dd>
+<dt><b><tt>-nzero</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+If the -sep flag is set, use these many digits for the file numbers and prepend zeros as needed
+</dd>
+<dt><b><tt>-dropunder</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Drop all frames below this value
+</dd>
+<dt><b><tt>-dropover</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Drop all frames above this value
+</dd>
+<dt><b><tt>-[no]conect</tt></b> (no)</dt>
+<dd>
+Add conect records when writing <tt>.<a href="../online/pdb.html">pdb</a></tt> files. Useful for visualization of non-standard molecules, e.g. coarse grained ones
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

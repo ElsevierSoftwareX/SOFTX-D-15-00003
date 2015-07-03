@@ -1,0 +1,118 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx helix</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx helix</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx helix [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]] [-f [<.xtc/.trr/...>]]
+          [-cz [<.gro/.g96/...>]] [-nice <int>] [-b <time>] [-e <time>]
+          [-dt <time>] [-[no]w] [-r0 <int>] [-[no]q] [-[no]F] [-[no]db]
+          [-[no]ev] [-ahxstart <int>] [-ahxend <int>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx helix</tt> computes all kinds of helix properties. First, the peptide is checked to find the longest helical part, as determined by hydrogen bonds and &phi;/&psi; angles. That bit is fitted to an ideal helix around the <it>z</it>-axis and centered around the origin. Then the following properties are computed:<p> <b>1.</b> Helix radius (file <tt>radius.<a href="../online/xvg.html">xvg</a></tt>). This is merely the RMS deviation in two dimensions for all C&alpha; atoms. it is calculated as sqrt((sum_i (x^2(i)+y^2(i)))/N) where N is the number of backbone atoms. For an ideal helix the radius is 0.23 nm<br> <b>2.</b> Twist (file <tt>twist.<a href="../online/xvg.html">xvg</a></tt>). The average helical angle per residue is calculated. For an &alpha;-helix it is 100 degrees, for 3-10 helices it will be smaller, and for 5-helices it will be larger.<br> <b>3.</b> Rise per residue (file <tt>rise.<a href="../online/xvg.html">xvg</a></tt>). The helical rise per residue is plotted as the difference in <it>z</it>-coordinate between C&alpha; atoms. For an ideal helix, this is 0.15 nm<br> <b>4.</b> Total helix length (file <tt>len-ahx.<a href="../online/xvg.html">xvg</a></tt>). The total length of the helix in nm. This is simply the average rise (see above) times the number of helical residues (see below).<br> <b>5.</b> Helix dipole, backbone only (file <tt>dip-ahx.<a href="../online/xvg.html">xvg</a></tt>).<br> <b>6.</b> RMS deviation from ideal helix, calculated for the C&alpha; atoms only (file <tt>rms-ahx.<a href="../online/xvg.html">xvg</a></tt>).<br> <b>7.</b> Average C&alpha; - C&alpha; dihedral angle (file <tt>phi-ahx.<a href="../online/xvg.html">xvg</a></tt>).<br> <b>8.</b> Average &phi; and &psi; angles (file <tt>phipsi.<a href="../online/xvg.html">xvg</a></tt>).<br> <b>9.</b> Ellipticity at 222 nm according to Hirst and Brooks. <p>
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Run input file: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-cz</tt></b> [&lt;.<a href="../online/gro.html">gro</a>/.<a href="../online/g96.html">g96</a>/...&gt;] (zconf.<a href="../online/gro.html">gro</a>) (Output)</dt>
+<dd>
+Structure file: <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent esp
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-r0</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+The first residue number in the sequence
+</dd>
+<dt><b><tt>-[no]q</tt></b> (no)</dt>
+<dd>
+Check at every step which part of the sequence is helical
+</dd>
+<dt><b><tt>-[no]F</tt></b> (yes)</dt>
+<dd>
+Toggle fit to a perfect helix
+</dd>
+<dt><b><tt>-[no]db</tt></b> (no)</dt>
+<dd>
+Print debug info
+</dd>
+<dt><b><tt>-[no]ev</tt></b> (no)</dt>
+<dd>
+Write a new 'trajectory' file for ED
+</dd>
+<dt><b><tt>-ahxstart</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+First residue in helix
+</dd>
+<dt><b><tt>-ahxend</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Last residue in helix
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

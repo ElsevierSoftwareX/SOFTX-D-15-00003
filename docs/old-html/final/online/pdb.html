@@ -1,0 +1,58 @@
+<HTML>
+<HEAD>
+  <TITLE>pdb file format</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>pdb file format</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Description</H3>
+
+Files with the <a href="pdb.html">.pdb</a> extension are molecular
+structure files in the protein databank file format.  The protein
+databank file format describes the positions of atoms in a molecular
+structure. Coordinates are read from the ATOM and HETATM records,
+until the file ends or an ENDMDL record is encountered.
+GROMACS programs can read and write a simlation box in the
+CRYST1 entry. 
+The pdb format can also be used as a trajectory format:
+several structures, seperated by ENDMDL, can be read from 
+or written to one file.
+
+<p>
+<h2>Example</h2>
+An pdb file should look like this
+<PRE>
+ATOM      1  H1  LYS     1      14.260   6.590  34.480  1.00  0.00
+ATOM      2  H2  LYS     1      13.760   5.000  34.340  1.00  0.00
+ATOM      3  N   LYS     1      14.090   5.850  33.800  1.00  0.00
+ATOM      4  H3  LYS     1      14.920   5.560  33.270  1.00  0.00
+...
+...
+</PRE>
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

@@ -1,0 +1,40 @@
+.TH gmx-mk_angndx 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-mk_angndx - Generate index files for 'gmx angle'
+
+.SH SYNOPSIS
+gmx mk_angndx [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]] [-nice <int>]
+             [-type <enum>] [-[no]hyd] [-hq <real>]
+
+.SH DESCRIPTION
+\fBgmx mk_angndx\fR makes an index file for calculation of angle distributions etc. It uses a run input file (\fB.tpx\fR) for the definitions of the angles, dihedrals etc.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-s" " [<.tpr/.tpb/...>] (topol.tpr) (Input)"
+    Run input file: tpr tpb tpa
+
+.BI "\-n" " [<.ndx>] (angle.ndx) (Output)"
+    Index file
+
+
+Other options:
+
+.BI "\-nice" " <int> (0)"
+    Set the nicelevel
+
+.BI "\-type" " <enum> (angle)"
+    Type of angle: angle, dihedral, improper, ryckaert\-bellemans
+
+.BI "\-[no]hyd" "  (yes)"
+    Include angles with atoms with mass  1.5
+
+.BI "\-hq" " <real> (-1)"
+    Ignore angles with atoms with mass  1.5 and magnitude of their charge less than this value
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

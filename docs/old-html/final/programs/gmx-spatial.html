@@ -1,0 +1,115 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx spatial</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx spatial</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx spatial [-s [<.tpr/.tpb/...>]] [-f [<.xtc/.trr/...>]] [-n [<.ndx>]]
+            [-nice <int>] [-b <time>] [-e <time>] [-dt <time>] [-[no]w]
+            [-[no]pbc] [-[no]div] [-ign <int>] [-bin <real>] [-nab <int>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx spatial</tt> calculates the spatial distribution function and outputs it in a form that can be read by VMD as Gaussian98 cube format. For a system of 32,000 atoms and a 50 ns trajectory, the SDF can be generated in about 30 minutes, with most of the time dedicated to the two runs through <tt>trjconv</tt> that are required to center everything properly. This also takes a whole bunch of space (3 copies of the trajectory file). Still, the pictures are pretty and very informative when the fitted selection is properly made. 3-4 atoms in a widely mobile group (like a free amino acid in solution) works well, or select the protein backbone in a stable folded structure to get the SDF of solvent and look at the time-averaged solvation shell. It is also possible using this program to generate the SDF based on some arbitrary Cartesian coordinate. To do that, simply omit the preliminary <a href="gmx-trjconv.html"><tt>gmx trjconv</tt></a> steps.
+USAGE:
+1. Use <a href="gmx-make_ndx.html"><tt>gmx make_ndx</tt></a> to create a group containing the atoms around which you want the SDF
+2. <tt>gmx trjconv -s a.<a href="../online/tpr.html">tpr</a> -f a.<a href="../online/tng.html">tng</a> -o b.<a href="../online/tng.html">tng</a> -boxcenter tric -ur compact -pbc none</tt>
+3. <tt>gmx trjconv -s a.<a href="../online/tpr.html">tpr</a> -f b.<a href="../online/tng.html">tng</a> -o c.<a href="../online/tng.html">tng</a> -fit rot+trans</tt>
+4. run <tt>gmx spatial</tt> on the <tt>c.<a href="../online/tng.html">tng</a></tt> output of step #3.
+5. Load <tt>grid.cube</tt> into VMD and view as an isosurface.
+<b>Note</b> that systems such as micelles will require <tt>gmx trjconv -pbc cluster</tt> between steps 1 and 2
+WARNINGS:<br> The SDF will be generated for a cube that contains all bins that have some non-zero occupancy. However, the preparatory <tt>-fit rot+trans</tt> option to <a href="gmx-trjconv.html"><tt>gmx trjconv</tt></a> implies that your system will be rotating and translating in space (in order that the selected group does not). Therefore the values that are returned will only be valid for some region around your central group/coordinate that has full overlap with system volume throughout the entire translated/rotated system over the course of the trajectory. It is up to the user to ensure that this is the case.
+BUGS:<br> When the allocated memory is not large enough, a segmentation fault may occur. This is usually detected and the program is halted prior to the fault while displaying a warning message suggesting the use of the <tt>-nab</tt> (Number of Additional Bins) option. However, the program does not detect all such events. If you encounter a segmentation fault, run it again with an increased <tt>-nab</tt> value.
+RISKY OPTIONS:<br> To reduce the amount of space and time required, you can output only the coords that are going to be used in the first and subsequent run through <a href="gmx-trjconv.html"><tt>gmx trjconv</tt></a>. However, be sure to set the <tt>-nab</tt> option to a sufficiently high value since memory is allocated for cube bins based on the initial coordinates and the <tt>-nab</tt> option value.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Structure+mass(db): <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent
+</dd>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-[no]pbc</tt></b> (no)</dt>
+<dd>
+Use periodic boundary conditions for computing distances
+</dd>
+<dt><b><tt>-[no]div</tt></b> (yes)</dt>
+<dd>
+Calculate and apply the divisor for bin occupancies based on atoms/minimal cube size. Set as TRUE for visualization and as FALSE (<tt>-nodiv</tt>) to get accurate counts per frame
+</dd>
+<dt><b><tt>-ign</tt></b> &lt;int&gt; (-1)</dt>
+<dd>
+Do not display this number of outer cubes (positive values may reduce boundary speckles; -1 ensures outer surface is visible)
+</dd>
+<dt><b><tt>-bin</tt></b> &lt;real&gt; (0.05)</dt>
+<dd>
+Width of the bins (nm)
+</dd>
+<dt><b><tt>-nab</tt></b> &lt;int&gt; (4)</dt>
+<dd>
+Number of additional bins to ensure proper memory allocation
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

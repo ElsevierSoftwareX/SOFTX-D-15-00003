@@ -1,0 +1,381 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx tune_pme</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx tune_pme</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx tune_pme [-p [<.out>]] [-err [<.log>]] [-so [<.tpr/.tpb/...>]]
+             [-s [<.tpr/.tpb/...>]] [-o [<.trr/.cpt/...>]] [-x [<.xtc/.tng>]]
+             [-cpi [<.cpt>]] [-cpo [<.cpt>]] [-c [<.gro/.g96/...>]]
+             [-e [<.edr>]] [-g [<.log>]] [-dhdl [<.xvg>]] [-field [<.xvg>]]
+             [-table [<.xvg>]] [-tabletf [<.xvg>]] [-tablep [<.xvg>]]
+             [-tableb [<.xvg>]] [-rerun [<.xtc/.trr/...>]] [-tpi [<.xvg>]]
+             [-tpid [<.xvg>]] [-ei [<.edi>]] [-eo [<.xvg>]]
+             [-devout [<.xvg>]] [-runav [<.xvg>]] [-px [<.xvg>]]
+             [-pf [<.xvg>]] [-ro [<.xvg>]] [-ra [<.log>]] [-rs [<.log>]]
+             [-rt [<.log>]] [-mtx [<.mtx>]] [-dn [<.ndx>]] [-swap [<.xvg>]]
+             [-bo [<.trr/.cpt/...>]] [-bx [<.xtc>]] [-bcpo [<.cpt>]]
+             [-bc [<.gro/.g96/...>]] [-be [<.edr>]] [-bg [<.log>]]
+             [-beo [<.xvg>]] [-bdhdl [<.xvg>]] [-bfield [<.xvg>]]
+             [-btpi [<.xvg>]] [-btpid [<.xvg>]] [-bdevout [<.xvg>]]
+             [-brunav [<.xvg>]] [-bpx [<.xvg>]] [-bpf [<.xvg>]]
+             [-bro [<.xvg>]] [-bra [<.log>]] [-brs [<.log>]] [-brt [<.log>]]
+             [-bmtx [<.mtx>]] [-bdn [<.ndx>]] [-bswap [<.xvg>]] [-nice <int>]
+             [-xvg <enum>] [-np <int>] [-npstring <enum>] [-ntmpi <int>]
+             [-r <int>] [-max <real>] [-min <real>] [-npme <enum>]
+             [-fix <int>] [-rmax <real>] [-rmin <real>] [-[no]scalevdw]
+             [-ntpr <int>] [-steps <int>] [-resetstep <int>] [-nsteps <int>]
+             [-[no]launch] [-[no]bench] [-[no]check] [-[no]append]
+             [-[no]cpnum]
+</pre>
+
+<H3>Description</H3>
+For a given number <tt>-np</tt> or <tt>-ntmpi</tt> of ranks, <tt>gmx tune_pme</tt> systematically times <a href="gmx-mdrun.html"><tt>gmx mdrun</tt></a> with various numbers of PME-only ranks and determines which setting is fastest. It will also test whether performance can be enhanced by shifting load from the reciprocal to the real space part of the Ewald sum. Simply pass your <tt>.<a href="../online/tpr.html">tpr</a></tt> file to <tt>gmx tune_pme</tt> together with other options for <a href="gmx-mdrun.html"><tt>gmx mdrun</tt></a> as needed.<p> Which executables are used can be set in the environment variables MPIRUN and MDRUN. If these are not present, 'mpirun' and 'mdrun' will be used as defaults. Note that for certain MPI frameworks you need to provide a machine- or hostfile. This can also be passed via the MPIRUN variable, e.g.<p> <tt>export MPIRUN="/usr/local/mpirun -machinefile hosts"</tt><p> Before doing the actual benchmark runs, <tt>gmx tune_pme</tt> will do a quick check whether mdrun works as expected with the provided parallel settings if the <tt>-check</tt> option is activated (the default). Please call <tt>gmx tune_pme</tt> with the normal options you would pass to <a href="gmx-mdrun.html"><tt>gmx mdrun</tt></a> and add <tt>-np</tt> for the number of ranks to perform the tests on, or <tt>-ntmpi</tt> for the number of threads. You can also add <tt>-r</tt> to repeat each test several times to get better statistics. <p> <tt>gmx tune_pme</tt> can test various real space / reciprocal space workloads for you. With <tt>-ntpr</tt> you control how many extra <tt>.<a href="../online/tpr.html">tpr</a></tt> files will be written with enlarged cutoffs and smaller Fourier grids respectively. Typically, the first test (number 0) will be with the settings from the input <tt>.<a href="../online/tpr.html">tpr</a></tt> file; the last test (number <tt>ntpr</tt>) will have the Coulomb cutoff specified by <tt>-rmax</tt> with a somewhat smaller PME grid at the same time. In this last test, the Fourier spacing is multiplied with <tt>rmax</tt>/rcoulomb. The remaining <tt>.<a href="../online/tpr.html">tpr</a></tt> files will have equally-spaced Coulomb radii (and Fourier spacings) between these extremes. <b>Note</b> that you can set <tt>-ntpr</tt> to 1 if you just seek the optimal number of PME-only ranks; in that case your input <tt>.<a href="../online/tpr.html">tpr</a></tt> file will remain unchanged.<p> For the benchmark runs, the default of 1000 time steps should suffice for most MD systems. The dynamic load balancing needs about 100 time steps to adapt to local load imbalances, therefore the time step counters are by default reset after 100 steps. For large systems (&gt;1M atoms), as well as for a higher accuracy of the measurements, you should set <tt>-resetstep</tt> to a higher value. From the 'DD' load imbalance entries in the md.<a href="../online/log.html">log</a> output file you can tell after how many steps the load is sufficiently balanced. Example call:<p><tt>gmx tune_pme -np 64 -s protein.<a href="../online/tpr.html">tpr</a> -launch</tt><p> After calling <a href="gmx-mdrun.html"><tt>gmx mdrun</tt></a> several times, detailed performance information is available in the output file <tt>perf.out</tt>. <b>Note</b> that during the benchmarks, a couple of temporary files are written (options <tt>-b</tt>*), these will be automatically deleted after each test.<p> If you want the simulation to be started automatically with the optimized parameters, use the command line option <tt>-launch</tt>.<p>
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-p</tt></b> [&lt;.out&gt;] (perf.out) (Output)</dt>
+<dd>
+Generic output file
+</dd>
+<dt><b><tt>-err</tt></b> [&lt;.<a href="../online/log.html">log</a>&gt;] (bencherr.<a href="../online/log.html">log</a>) (Output)</dt>
+<dd>
+Log file
+</dd>
+<dt><b><tt>-so</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (tuned.<a href="../online/tpr.html">tpr</a>) (Output)</dt>
+<dd>
+Run input file: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Run input file: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/trr.html">trr</a>/.<a href="../online/cpt.html">cpt</a>/...&gt;] (traj.<a href="../online/trr.html">trr</a>) (Output)</dt>
+<dd>
+Full precision trajectory: <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-x</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/tng.html">tng</a>&gt;] (traj_comp.<a href="../online/xtc.html">xtc</a>) (Output, Optional)</dt>
+<dd>
+Compressed trajectory (<a href="../online/tng.html">tng</a> format or portable xdr format)
+</dd>
+<dt><b><tt>-cpi</tt></b> [&lt;.<a href="../online/cpt.html">cpt</a>&gt;] (state.<a href="../online/cpt.html">cpt</a>) (Input, Optional)</dt>
+<dd>
+Checkpoint file
+</dd>
+<dt><b><tt>-cpo</tt></b> [&lt;.<a href="../online/cpt.html">cpt</a>&gt;] (state.<a href="../online/cpt.html">cpt</a>) (Output, Optional)</dt>
+<dd>
+Checkpoint file
+</dd>
+<dt><b><tt>-c</tt></b> [&lt;.<a href="../online/gro.html">gro</a>/.<a href="../online/g96.html">g96</a>/...&gt;] (confout.<a href="../online/gro.html">gro</a>) (Output)</dt>
+<dd>
+Structure file: <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent esp
+</dd>
+<dt><b><tt>-e</tt></b> [&lt;.<a href="../online/edr.html">edr</a>&gt;] (ener.<a href="../online/edr.html">edr</a>) (Output)</dt>
+<dd>
+Energy file
+</dd>
+<dt><b><tt>-g</tt></b> [&lt;.<a href="../online/log.html">log</a>&gt;] (md.<a href="../online/log.html">log</a>) (Output)</dt>
+<dd>
+Log file
+</dd>
+<dt><b><tt>-dhdl</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (dhdl.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-field</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (field.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-table</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (table.<a href="../online/xvg.html">xvg</a>) (Input, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-tabletf</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (tabletf.<a href="../online/xvg.html">xvg</a>) (Input, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-tablep</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (tablep.<a href="../online/xvg.html">xvg</a>) (Input, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-tableb</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (table.<a href="../online/xvg.html">xvg</a>) (Input, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-rerun</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (rerun.<a href="../online/xtc.html">xtc</a>) (Input, Optional)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-tpi</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (tpi.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-tpid</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (tpidist.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-ei</tt></b> [&lt;.<a href="../online/edi.html">edi</a>&gt;] (sam.<a href="../online/edi.html">edi</a>) (Input, Optional)</dt>
+<dd>
+ED sampling input
+</dd>
+<dt><b><tt>-eo</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (edsam.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-devout</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (deviatie.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-runav</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (runaver.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-px</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (pullx.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-pf</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (pullf.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-ro</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (rotation.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-ra</tt></b> [&lt;.<a href="../online/log.html">log</a>&gt;] (rotangles.<a href="../online/log.html">log</a>) (Output, Optional)</dt>
+<dd>
+Log file
+</dd>
+<dt><b><tt>-rs</tt></b> [&lt;.<a href="../online/log.html">log</a>&gt;] (rotslabs.<a href="../online/log.html">log</a>) (Output, Optional)</dt>
+<dd>
+Log file
+</dd>
+<dt><b><tt>-rt</tt></b> [&lt;.<a href="../online/log.html">log</a>&gt;] (rottorque.<a href="../online/log.html">log</a>) (Output, Optional)</dt>
+<dd>
+Log file
+</dd>
+<dt><b><tt>-mtx</tt></b> [&lt;.<a href="../online/mtx.html">mtx</a>&gt;] (nm.<a href="../online/mtx.html">mtx</a>) (Output, Optional)</dt>
+<dd>
+Hessian matrix
+</dd>
+<dt><b><tt>-dn</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (dipole.<a href="../online/ndx.html">ndx</a>) (Output, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-swap</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (swapions.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-bo</tt></b> [&lt;.<a href="../online/trr.html">trr</a>/.<a href="../online/cpt.html">cpt</a>/...&gt;] (bench.<a href="../online/trr.html">trr</a>) (Output)</dt>
+<dd>
+Full precision trajectory: <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-bx</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>&gt;] (bench.<a href="../online/xtc.html">xtc</a>) (Output)</dt>
+<dd>
+Compressed trajectory (portable xdr format): <a href="../online/xtc.html">xtc</a>
+</dd>
+<dt><b><tt>-bcpo</tt></b> [&lt;.<a href="../online/cpt.html">cpt</a>&gt;] (bench.<a href="../online/cpt.html">cpt</a>) (Output)</dt>
+<dd>
+Checkpoint file
+</dd>
+<dt><b><tt>-bc</tt></b> [&lt;.<a href="../online/gro.html">gro</a>/.<a href="../online/g96.html">g96</a>/...&gt;] (bench.<a href="../online/gro.html">gro</a>) (Output)</dt>
+<dd>
+Structure file: <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent esp
+</dd>
+<dt><b><tt>-be</tt></b> [&lt;.<a href="../online/edr.html">edr</a>&gt;] (bench.<a href="../online/edr.html">edr</a>) (Output)</dt>
+<dd>
+Energy file
+</dd>
+<dt><b><tt>-bg</tt></b> [&lt;.<a href="../online/log.html">log</a>&gt;] (bench.<a href="../online/log.html">log</a>) (Output)</dt>
+<dd>
+Log file
+</dd>
+<dt><b><tt>-beo</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (benchedo.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-bdhdl</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (benchdhdl.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-bfield</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (benchfld.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-btpi</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (benchtpi.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-btpid</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (benchtpid.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-bdevout</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (benchdev.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-brunav</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (benchrnav.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-bpx</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (benchpx.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-bpf</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (benchpf.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-bro</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (benchrot.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-bra</tt></b> [&lt;.<a href="../online/log.html">log</a>&gt;] (benchrota.<a href="../online/log.html">log</a>) (Output, Optional)</dt>
+<dd>
+Log file
+</dd>
+<dt><b><tt>-brs</tt></b> [&lt;.<a href="../online/log.html">log</a>&gt;] (benchrots.<a href="../online/log.html">log</a>) (Output, Optional)</dt>
+<dd>
+Log file
+</dd>
+<dt><b><tt>-brt</tt></b> [&lt;.<a href="../online/log.html">log</a>&gt;] (benchrott.<a href="../online/log.html">log</a>) (Output, Optional)</dt>
+<dd>
+Log file
+</dd>
+<dt><b><tt>-bmtx</tt></b> [&lt;.<a href="../online/mtx.html">mtx</a>&gt;] (benchn.<a href="../online/mtx.html">mtx</a>) (Output, Optional)</dt>
+<dd>
+Hessian matrix
+</dd>
+<dt><b><tt>-bdn</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (bench.<a href="../online/ndx.html">ndx</a>) (Output, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-bswap</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (benchswp.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-np</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+Number of ranks to run the tests on (must be &gt; 2 for separate PME ranks)
+</dd>
+<dt><b><tt>-npstring</tt></b> &lt;enum&gt; (-np)</dt>
+<dd>
+Specify the number of ranks to <tt>$MPIRUN</tt> using this string: -np, -n, none
+</dd>
+<dt><b><tt>-ntmpi</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+Number of MPI-threads to run the tests on (turns MPI & mpirun off)
+</dd>
+<dt><b><tt>-r</tt></b> &lt;int&gt; (2)</dt>
+<dd>
+Repeat each test this often
+</dd>
+<dt><b><tt>-max</tt></b> &lt;real&gt; (0.5)</dt>
+<dd>
+Max fraction of PME ranks to test with
+</dd>
+<dt><b><tt>-min</tt></b> &lt;real&gt; (0.25)</dt>
+<dd>
+Min fraction of PME ranks to test with
+</dd>
+<dt><b><tt>-npme</tt></b> &lt;enum&gt; (auto)</dt>
+<dd>
+Within -min and -max, benchmark all possible values for <tt>-npme</tt>, or just a reasonable subset. Auto neglects -min and -max and chooses reasonable values around a guess for npme derived from the .<a href="../online/tpr.html">tpr</a>: auto, all, subset
+</dd>
+<dt><b><tt>-fix</tt></b> &lt;int&gt; (-2)</dt>
+<dd>
+If &gt;= -1, do not vary the number of PME-only ranks, instead use this fixed value and only vary rcoulomb and the PME grid spacing.
+</dd>
+<dt><b><tt>-rmax</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+If &gt;0, maximal rcoulomb for -ntpr&gt;1 (rcoulomb upscaling results in fourier grid downscaling)
+</dd>
+<dt><b><tt>-rmin</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+If &gt;0, minimal rcoulomb for -ntpr&gt;1
+</dd>
+<dt><b><tt>-[no]scalevdw</tt></b> (yes)</dt>
+<dd>
+Scale rvdw along with rcoulomb
+</dd>
+<dt><b><tt>-ntpr</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Number of <tt>.<a href="../online/tpr.html">tpr</a></tt> files to benchmark. Create this many files with different rcoulomb scaling factors depending on -rmin and -rmax. If &lt; 1, automatically choose the number of <tt>.<a href="../online/tpr.html">tpr</a></tt> files to test
+</dd>
+<dt><b><tt>-steps</tt></b> &lt;int&gt; (1000)</dt>
+<dd>
+Take timings for this many steps in the benchmark runs
+</dd>
+<dt><b><tt>-resetstep</tt></b> &lt;int&gt; (100)</dt>
+<dd>
+Let dlb equilibrate this many steps before timings are taken (reset cycle counters after this many steps)
+</dd>
+<dt><b><tt>-nsteps</tt></b> &lt;int&gt; (-1)</dt>
+<dd>
+If non-negative, perform this many steps in the real run (overwrites nsteps from <tt>.<a href="../online/tpr.html">tpr</a></tt>, add <tt>.<a href="../online/cpt.html">cpt</a></tt> steps)
+</dd>
+<dt><b><tt>-[no]launch</tt></b> (no)</dt>
+<dd>
+Launch the real simulation after optimization
+</dd>
+<dt><b><tt>-[no]bench</tt></b> (yes)</dt>
+<dd>
+Run the benchmarks or just create the input <tt>.<a href="../online/tpr.html">tpr</a></tt> files?
+</dd>
+<dt><b><tt>-[no]check</tt></b> (yes)</dt>
+<dd>
+Before the benchmark runs, check whether mdrun works in parallel
+</dd>
+<dt><b><tt>-[no]append</tt></b> (yes)</dt>
+<dd>
+Append to previous output files when continuing from checkpoint instead of adding the simulation part number to all file names (for launch only)
+</dd>
+<dt><b><tt>-[no]cpnum</tt></b> (no)</dt>
+<dd>
+Keep and number checkpoint files (launch only)
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

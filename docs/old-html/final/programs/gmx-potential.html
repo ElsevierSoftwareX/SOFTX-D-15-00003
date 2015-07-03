@@ -1,0 +1,139 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx potential</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx potential</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx potential [-f [<.xtc/.trr/...>]] [-n [<.ndx>]] [-s [<.tpr/.tpb/...>]]
+             [-o [<.xvg>]] [-oc [<.xvg>]] [-of [<.xvg>]] [-nice <int>]
+             [-b <time>] [-e <time>] [-dt <time>] [-[no]w] [-xvg <enum>]
+             [-d <string>] [-sl <int>] [-cb <int>] [-ce <int>] [-tz <real>]
+             [-[no]spherical] [-ng <int>] [-[no]correct]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx potential</tt> computes the electrostatical potential across the box. The potential is calculated by first summing the charges per slice and then integrating twice of this charge distribution. Periodic boundaries are not taken into account. Reference of potential is taken to be the left side of the box. It is also possible to calculate the potential in spherical coordinates as function of r by calculating a charge distribution in spherical slices and twice integrating them. epsilon_r is taken as 1, but 2 is more appropriate in many cases.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Run input file: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (potential.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-oc</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (charge.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-of</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (field.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-d</tt></b> &lt;string&gt; (Z)</dt>
+<dd>
+Take the normal on the membrane in direction X, Y or Z.
+</dd>
+<dt><b><tt>-sl</tt></b> &lt;int&gt; (10)</dt>
+<dd>
+Calculate potential as function of boxlength, dividing the box in this number of slices.
+</dd>
+<dt><b><tt>-cb</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Discard this number of  first slices of box for integration
+</dd>
+<dt><b><tt>-ce</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Discard this number of last slices of box for integration
+</dd>
+<dt><b><tt>-tz</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Translate all coordinates by this distance in the direction of the box
+</dd>
+<dt><b><tt>-[no]spherical</tt></b> (no)</dt>
+<dd>
+Calculate spherical thingie
+</dd>
+<dt><b><tt>-ng</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+Number of groups to consider
+</dd>
+<dt><b><tt>-[no]correct</tt></b> (no)</dt>
+<dd>
+Assume net zero charge of groups to improve accuracy
+</dd>
+</dl>
+
+<H3>Known Issues</H3>
+<ul>
+<li>Discarding slices for integration should not be necessary.
+</ul>
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

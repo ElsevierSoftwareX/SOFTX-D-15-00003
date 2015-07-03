@@ -1,0 +1,76 @@
+.TH gmx-genconf 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-genconf - Multiply a conformation in 'random' orientations
+
+.SH SYNOPSIS
+gmx genconf [-f [<.gro/.g96/...>]] [-o [<.gro/.g96/...>]]
+            [-trj [<.xtc/.trr/...>]] [-nice <int>] [-nbox <vector>]
+            [-dist <vector>] [-seed <int>] [-[no]rot] [-[no]shuffle]
+            [-[no]sort] [-block <int>] [-nmolat <int>]
+            [-maxrot <vector>] [-[no]renumber]
+
+.SH DESCRIPTION
+\fBgmx genconf\fR multiplies a given coordinate file by simply stacking them on top of each other, like a small child playing with wooden blocks. The program makes a grid of \fIuser\-defined\fR proportions (\fB\-nbox\fR), and interspaces the grid point with an extra space \fB\-dist\fR.
+
+When option \fB\-rot\fR is used the program does not check for overlap between molecules on grid points. It is recommended to make the box in the input file at least as big as the coordinates + van der Waals radius.
+
+If the optional trajectory file is given, conformations are not generated, but read from this file and translated appropriately to build the grid.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.gro/.g96/...>] (conf.gro) (Input)"
+    Structure file: gro g96 pdb brk ent esp tpr tpb tpa
+
+.BI "\-o" " [<.gro/.g96/...>] (out.gro) (Output)"
+    Structure file: gro g96 pdb brk ent esp
+
+.BI "\-trj" " [<.xtc/.trr/...>] (traj.xtc) (Input, Optional)"
+    Trajectory: xtc trr cpt trj gro g96 pdb tng
+
+
+Other options:
+
+.BI "\-nice" " <int> (0)"
+    Set the nicelevel
+
+.BI "\-nbox" " <vector> (1 1 1)"
+    Number of boxes
+
+.BI "\-dist" " <vector> (0 0 0)"
+    Distance between boxes
+
+.BI "\-seed" " <int> (0)"
+    Random generator seed, if 0 generated from the time
+
+.BI "\-[no]rot" "  (no)"
+    Randomly rotate conformations
+
+.BI "\-[no]shuffle" "  (no)"
+    Random shuffling of molecules
+
+.BI "\-[no]sort" "  (no)"
+    Sort molecules on X coord
+
+.BI "\-block" " <int> (1)"
+    Divide the box in blocks on this number of cpus
+
+.BI "\-nmolat" " <int> (3)"
+    Number of atoms per molecule, assumed to start from 0. If you set this wrong, it will screw up your system!
+
+.BI "\-maxrot" " <vector> (180 180 180)"
+    Maximum random rotation
+
+.BI "\-[no]renumber" "  (yes)"
+    Renumber residues
+
+
+.SH KNOWN ISSUES
+
+
+\- The program should allow for random displacement of lattice points.
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

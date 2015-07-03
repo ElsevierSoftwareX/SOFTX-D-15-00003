@@ -1,0 +1,101 @@
+.TH gmx-covar 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-covar - Calculate and diagonalize the covariance matrix
+
+.SH SYNOPSIS
+gmx covar [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]]
+          [-n [<.ndx>]] [-o [<.xvg>]] [-v [<.trr/.cpt/...>]]
+          [-av [<.gro/.g96/...>]] [-l [<.log>]] [-ascii [<.dat>]]
+          [-xpm [<.xpm>]] [-xpma [<.xpm>]] [-nice <int>] [-b <time>]
+          [-e <time>] [-dt <time>] [-tu <enum>] [-xvg <enum>]
+          [-[no]fit] [-[no]ref] [-[no]mwa] [-last <int>] [-[no]pbc]
+
+.SH DESCRIPTION
+\fBgmx covar\fR calculates and diagonalizes the (mass\-weighted) covariance matrix. All structures are fitted to the structure in the structure file. When this is not a run input file periodicity will not be taken into account. When the fit and analysis groups are identical and the analysis is non mass\-weighted, the fit will also be non mass\-weighted.
+
+The eigenvectors are written to a trajectory file (\fB\-v\fR). When the same atoms are used for the fit and the covariance analysis, the reference structure for the fit is written first with t=\-1. The average (or reference when \fB\-ref\fR is used) structure is written with t=0, the eigenvectors are written as frames with the eigenvector number as timestamp.
+
+The eigenvectors can be analyzed with \fBgmx anaeig\fR.
+
+Option \fB\-ascii\fR writes the whole covariance matrix to an ASCII file. The order of the elements is: x1x1, x1y1, x1z1, x1x2, ...
+
+Option \fB\-xpm\fR writes the whole covariance matrix to an \fB.xpm\fR file.
+
+Option \fB\-xpma\fR writes the atomic covariance matrix to an \fB.xpm\fR file, i.e. for each atom pair the sum of the xx, yy and zz covariances is written.
+
+Note that the diagonalization of a matrix requires memory and time that will increase at least as fast as than the square of the number of atoms involved. It is easy to run out of memory, in which case this tool will probably exit with a 'Segmentation fault'. You should consider carefully whether a reduced set of atoms will meet your needs for lower costs.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.xtc/.trr/...>] (traj.xtc) (Input)"
+    Trajectory: xtc trr cpt trj gro g96 pdb tng
+
+.BI "\-s" " [<.tpr/.tpb/...>] (topol.tpr) (Input)"
+    Structure+mass(db): tpr tpb tpa gro g96 pdb brk ent
+
+.BI "\-n" " [<.ndx>] (index.ndx) (Input, Optional)"
+    Index file
+
+.BI "\-o" " [<.xvg>] (eigenval.xvg) (Output)"
+    xvgr/xmgr file
+
+.BI "\-v" " [<.trr/.cpt/...>] (eigenvec.trr) (Output)"
+    Full precision trajectory: trr cpt trj tng
+
+.BI "\-av" " [<.gro/.g96/...>] (average.pdb) (Output)"
+    Structure file: gro g96 pdb brk ent esp
+
+.BI "\-l" " [<.log>] (covar.log) (Output)"
+    Log file
+
+.BI "\-ascii" " [<.dat>] (covar.dat) (Output, Optional)"
+    Generic data file
+
+.BI "\-xpm" " [<.xpm>] (covar.xpm) (Output, Optional)"
+    X PixMap compatible matrix file
+
+.BI "\-xpma" " [<.xpm>] (covara.xpm) (Output, Optional)"
+    X PixMap compatible matrix file
+
+
+Other options:
+
+.BI "\-nice" " <int> (19)"
+    Set the nicelevel
+
+.BI "\-b" " <time> (0)"
+    First frame (ps) to read from trajectory
+
+.BI "\-e" " <time> (0)"
+    Last frame (ps) to read from trajectory
+
+.BI "\-dt" " <time> (0)"
+    Only use frame when t MOD dt = first time (ps)
+
+.BI "\-tu" " <enum> (ps)"
+    Time unit: fs, ps, ns, us, ms, s
+
+.BI "\-xvg" " <enum> (xmgrace)"
+    xvg plot formatting: xmgrace, xmgr, none
+
+.BI "\-[no]fit" "  (yes)"
+    Fit to a reference structure
+
+.BI "\-[no]ref" "  (no)"
+    Use the deviation from the conformation in the structure file instead of from the average
+
+.BI "\-[no]mwa" "  (no)"
+    Mass\-weighted covariance analysis
+
+.BI "\-last" " <int> (-1)"
+    Last eigenvector to write away (\-1 is till the last)
+
+.BI "\-[no]pbc" "  (yes)"
+    Apply corrections for periodic boundary conditions
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

@@ -1,0 +1,123 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx hydorder</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx hydorder</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx hydorder [-f [<.xtc/.trr/...>]] [-n [<.ndx>]] [-s [<.tpr/.tpb/...>]]
+             [-o [<.xpm> [...]]] [-or [<.out> [...]]] [-Spect [<.out> [...]]]
+             [-nice <int>] [-b <time>] [-e <time>] [-dt <time>] [-[no]w]
+             [-d <enum>] [-bw <real>] [-sgang1 <real>] [-sgang2 <real>]
+             [-tblock <int>] [-nlevel <int>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx hydorder</tt> computes the tetrahedrality order parameters around a given atom. Both angle an distance order parameters are calculated. See P.-L. Chau and A.J. Hardwick, Mol. Phys., 93, (1998), 511-518. for more details.<p><tt>gmx hydorder</tt> calculates the order parameter in a 3d-mesh in the box, and with 2 phases in the box gives the user the option to define a 2D interface in time separating the faces by specifying parameters <tt>-sgang1</tt> and <tt>-sgang2</tt> (it is important to select these judiciously).
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Run input file: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/xpm.html">xpm</a>&gt; [...]] (intf.<a href="../online/xpm.html">xpm</a>) (Output)</dt>
+<dd>
+X PixMap compatible matrix file
+</dd>
+<dt><b><tt>-or</tt></b> [&lt;.out&gt; [...]] (raw.out) (Output, Optional)</dt>
+<dd>
+Generic output file
+</dd>
+<dt><b><tt>-Spect</tt></b> [&lt;.out&gt; [...]] (intfspect.out) (Output, Optional)</dt>
+<dd>
+Generic output file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-d</tt></b> &lt;enum&gt; (z)</dt>
+<dd>
+Direction of the normal on the membrane: z, x, y
+</dd>
+<dt><b><tt>-bw</tt></b> &lt;real&gt; (1)</dt>
+<dd>
+Binwidth of box mesh
+</dd>
+<dt><b><tt>-sgang1</tt></b> &lt;real&gt; (1)</dt>
+<dd>
+tetrahedral angle parameter in Phase 1 (bulk)
+</dd>
+<dt><b><tt>-sgang2</tt></b> &lt;real&gt; (1)</dt>
+<dd>
+tetrahedral angle parameter in Phase 2 (bulk)
+</dd>
+<dt><b><tt>-tblock</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+Number of frames in one time-block average
+</dd>
+<dt><b><tt>-nlevel</tt></b> &lt;int&gt; (100)</dt>
+<dd>
+Number of Height levels in 2D - XPixMaps
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

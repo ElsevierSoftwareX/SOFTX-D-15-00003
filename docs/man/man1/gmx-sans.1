@@ -1,0 +1,110 @@
+.TH gmx-sans 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-sans - Compute small angle neutron scattering spectra
+
+.SH SYNOPSIS
+gmx sans [-s [<.tpr/.tpb/...>]] [-f [<.xtc/.trr/...>]] [-n [<.ndx>]]
+         [-d [<.dat>]] [-pr [<.xvg>]] [-sq [<.xvg>]]
+         [-prframe [<.xvg>]] [-sqframe [<.xvg>]] [-nice <int>]
+         [-b <time>] [-e <time>] [-dt <time>] [-tu <enum>]
+         [-xvg <enum>] [-mode <enum>] [-mcover <real>] [-[no]pbc]
+         [-startq <real>] [-endq <real>] [-qstep <real>]
+         [-seed <int>]
+
+.SH DESCRIPTION
+\fBgmx sans\fR computes SANS spectra using Debye formula. It currently uses topology file (since it need to assigne element for each atom).
+
+Parameters:
+
+\fB\-pr\fR Computes normalized g(r) function averaged over trajectory
+
+\fB\-prframe\fR Computes normalized g(r) function for each frame
+
+\fB\-sq\fR Computes SANS intensity curve averaged over trajectory
+
+\fB\-sqframe\fR Computes SANS intensity curve for each frame
+
+\fB\-startq\fR Starting q value in nm
+
+\fB\-endq\fR Ending q value in nm
+
+\fB\-qstep\fR Stepping in q space
+
+Note: When using Debye direct method computational cost increases as 1/2 * N * (N \- 1) where N is atom number in group of interest.
+
+WARNING: If sq or pr specified this tool can produce large number of files! Up to two times larger than number of frames!
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-s" " [<.tpr/.tpb/...>] (topol.tpr) (Input)"
+    Run input file: tpr tpb tpa
+
+.BI "\-f" " [<.xtc/.trr/...>] (traj.xtc) (Input)"
+    Trajectory: xtc trr cpt trj gro g96 pdb tng
+
+.BI "\-n" " [<.ndx>] (index.ndx) (Input, Optional)"
+    Index file
+
+.BI "\-d" " [<.dat>] (nsfactor.dat) (Input, Optional)"
+    Generic data file
+
+.BI "\-pr" " [<.xvg>] (pr.xvg) (Output)"
+    xvgr/xmgr file
+
+.BI "\-sq" " [<.xvg>] (sq.xvg) (Output)"
+    xvgr/xmgr file
+
+.BI "\-prframe" " [<.xvg>] (prframe.xvg) (Output, Optional)"
+    xvgr/xmgr file
+
+.BI "\-sqframe" " [<.xvg>] (sqframe.xvg) (Output, Optional)"
+    xvgr/xmgr file
+
+
+Other options:
+
+.BI "\-nice" " <int> (19)"
+    Set the nicelevel
+
+.BI "\-b" " <time> (0)"
+    First frame (ps) to read from trajectory
+
+.BI "\-e" " <time> (0)"
+    Last frame (ps) to read from trajectory
+
+.BI "\-dt" " <time> (0)"
+    Only use frame when t MOD dt = first time (ps)
+
+.BI "\-tu" " <enum> (ps)"
+    Time unit: fs, ps, ns, us, ms, s
+
+.BI "\-xvg" " <enum> (xmgrace)"
+    xvg plot formatting: xmgrace, xmgr, none
+
+.BI "\-mode" " <enum> (direct)"
+    Mode for sans spectra calculation: direct, mc
+
+.BI "\-mcover" " <real> (-1)"
+    Monte\-Carlo coverage should be \-1(default) or (0,1]
+
+.BI "\-[no]pbc" "  (yes)"
+    Use periodic boundary conditions for computing distances
+
+.BI "\-startq" " <real> (0)"
+    Starting q (1/nm)
+
+.BI "\-endq" " <real> (2)"
+    Ending q (1/nm)
+
+.BI "\-qstep" " <real> (0.01)"
+    Stepping in q (1/nm)
+
+.BI "\-seed" " <int> (0)"
+    Random seed for Monte\-Carlo
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

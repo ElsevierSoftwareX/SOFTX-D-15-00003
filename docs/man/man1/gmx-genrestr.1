@@ -1,0 +1,70 @@
+.TH gmx-genrestr 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-genrestr - Generate position restraints or distance restraints for index groups
+
+.SH SYNOPSIS
+gmx genrestr [-f [<.gro/.g96/...>]] [-n [<.ndx>]] [-o [<.itp>]]
+             [-of [<.ndx>]] [-nice <int>] [-fc <vector>]
+             [-freeze <real>] [-[no]disre] [-disre_dist <real>]
+             [-disre_frac <real>] [-disre_up2 <real>]
+             [-cutoff <real>] [-[no]constr]
+
+.SH DESCRIPTION
+\fBgmx genrestr\fR produces an include file for a topology containing a list of atom numbers and three force constants for the \fIx\fR\-, \fIy\fR\-, and \fIz\fR\-direction based on the contents of the \fB\-f\fR file. A single isotropic force constant may be given on the command line instead of three components.
+
+WARNING: Position restraints are interactions within molecules, therefore they must be included within the correct \fB[ moleculetype ]\fR block in the topology. The atom indices within the \fB[ position_restraints ]\fR block must be within the range of the atom indices for that molecule type. Since the atom numbers in every moleculetype in the topology start at 1 and the numbers in the input file for \fBgmx genrestr\fR number consecutively from 1, \fBgmx genrestr\fR will only produce a useful file for the first molecule. You may wish to edit the resulting index file to remove the lines for later atoms, or construct a suitable index group to provide as input to \fBgmx genrestr\fR.
+
+The \fB\-of\fR option produces an index file that can be used for freezing atoms. In this case, the input file must be a \fB.pdb\fR file.
+
+With the \fB\-disre\fR option, half a matrix of distance restraints is generated instead of position restraints. With this matrix, that one typically would apply to Calpha atoms in a protein, one can maintain the overall conformation of a protein without tieing it to a specific position (as with position restraints).
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.gro/.g96/...>] (conf.gro) (Input)"
+    Structure file: gro g96 pdb brk ent esp tpr tpb tpa
+
+.BI "\-n" " [<.ndx>] (index.ndx) (Input, Optional)"
+    Index file
+
+.BI "\-o" " [<.itp>] (posre.itp) (Output)"
+    Include file for topology
+
+.BI "\-of" " [<.ndx>] (freeze.ndx) (Output, Optional)"
+    Index file
+
+
+Other options:
+
+.BI "\-nice" " <int> (0)"
+    Set the nicelevel
+
+.BI "\-fc" " <vector> (1000 1000 1000)"
+    Force constants (kJ/mol nm2)
+
+.BI "\-freeze" " <real> (0)"
+    If the \fB\-of\fR option or this one is given an index file will be written containing atom numbers of all atoms that have a B\-factor less than the level given here
+
+.BI "\-[no]disre" "  (no)"
+    Generate a distance restraint matrix for all the atoms in index
+
+.BI "\-disre_dist" " <real> (0.1)"
+    Distance range around the actual distance for generating distance restraints
+
+.BI "\-disre_frac" " <real> (0)"
+    Fraction of distance to be used as interval rather than a fixed distance. If the fraction of the distance that you specify here is less than the distance given in the previous option, that one is used instead.
+
+.BI "\-disre_up2" " <real> (1)"
+    Distance between upper bound for distance restraints, and the distance at which the force becomes constant (see manual)
+
+.BI "\-cutoff" " <real> (-1)"
+    Only generate distance restraints for atoms pairs within cutoff (nm)
+
+.BI "\-[no]constr" "  (no)"
+    Generate a constraint matrix rather than distance restraints. Constraints of type 2 will be generated that do generate exclusions.
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

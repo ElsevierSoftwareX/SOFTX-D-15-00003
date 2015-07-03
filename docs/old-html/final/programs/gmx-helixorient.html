@@ -1,0 +1,128 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx helixorient</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx helixorient</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx helixorient [-s [<.tpr/.tpb/...>]] [-f [<.xtc/.trr/...>]] [-n [<.ndx>]]
+             [-oaxis [<.dat>]] [-ocenter [<.dat>]] [-orise [<.xvg>]]
+             [-oradius [<.xvg>]] [-otwist [<.xvg>]] [-obending [<.xvg>]]
+             [-otilt [<.xvg>]] [-orot [<.xvg>]] [-nice <int>] [-b <time>]
+             [-e <time>] [-dt <time>] [-xvg <enum>] [-[no]sidechain]
+             [-[no]incremental]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx helixorient</tt> calculates the coordinates and direction of the average axis inside an alpha helix, and the direction/vectors of both the C&alpha; and (optionally) a sidechain atom relative to the axis.<p> As input, you need to specify an index group with C&alpha; atoms corresponding to an &alpha;-helix of continuous residues. Sidechain directions require a second index group of the same size, containing the heavy atom in each residue that should represent the sidechain.<p> <b>Note</b> that this program does not do any fitting of structures.<p> We need four C&alpha; coordinates to define the local direction of the helix axis.<p> The tilt/rotation is calculated from Euler rotations, where we define the helix axis as the local <it>x</it>-axis, the residues/C&alpha; vector as <it>y</it>, and the <it>z</it>-axis from their cross product. We use the Euler Y-Z-X rotation, meaning we first tilt the helix axis (1) around and (2) orthogonal to the residues vector, and finally apply the (3) rotation around it. For debugging or other purposes, we also write out the actual Euler rotation angles as <tt>theta[1-3].<a href="../online/xvg.html">xvg</a></tt>
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Run input file: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-oaxis</tt></b> [&lt;.<a href="../online/dat.html">dat</a>&gt;] (helixaxis.<a href="../online/dat.html">dat</a>) (Output)</dt>
+<dd>
+Generic data file
+</dd>
+<dt><b><tt>-ocenter</tt></b> [&lt;.<a href="../online/dat.html">dat</a>&gt;] (center.<a href="../online/dat.html">dat</a>) (Output)</dt>
+<dd>
+Generic data file
+</dd>
+<dt><b><tt>-orise</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (rise.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-oradius</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (radius.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-otwist</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (twist.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-obending</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (bending.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-otilt</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (tilt.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-orot</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (rotation.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-[no]sidechain</tt></b> (no)</dt>
+<dd>
+Calculate sidechain directions relative to helix axis too.
+</dd>
+<dt><b><tt>-[no]incremental</tt></b> (no)</dt>
+<dd>
+Calculate incremental rather than total rotation/tilt.
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

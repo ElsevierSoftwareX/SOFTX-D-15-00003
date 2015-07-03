@@ -1,0 +1,46 @@
+.TH gmx-make_ndx 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-make_ndx - Make index files
+
+.SH SYNOPSIS
+gmx make_ndx [-f [<.gro/.g96/...>]] [-n [<.ndx> [...]]]
+             [-o [<.ndx>]] [-nice <int>] [-natoms <int>] [-[no]twin]
+
+.SH DESCRIPTION
+Index groups are necessary for almost every GROMACS program. All these programs can generate default index groups. You ONLY have to use \fBgmx make_ndx\fR when you need SPECIAL index groups. There is a default index group for the whole system, 9 default index groups for proteins, and a default index group is generated for every other residue name.
+
+When no index file is supplied, also \fBgmx make_ndx\fR will generate the default groups. With the index editor you can select on atom, residue and chain names and numbers. When a run input file is supplied you can also select on atom type. You can use NOT, AND and OR, you can split groups into chains, residues or atoms. You can delete and rename groups.
+
+The atom numbering in the editor and the index file starts at 1.
+
+The \fB\-twin\fR switch duplicates all index groups with an offset of \fB\-natoms\fR, which is useful for Computational Electrophysiology double\-layer membrane setups.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.gro/.g96/...>] (conf.gro) (Input, Optional)"
+    Structure file: gro g96 pdb brk ent esp tpr tpb tpa
+
+.BI "\-n" " [<.ndx> [...]] (index.ndx) (Input, Optional)"
+    Index file
+
+.BI "\-o" " [<.ndx>] (index.ndx) (Output)"
+    Index file
+
+
+Other options:
+
+.BI "\-nice" " <int> (0)"
+    Set the nicelevel
+
+.BI "\-natoms" " <int> (0)"
+    set number of atoms (default: read from coordinate or index file)
+
+.BI "\-[no]twin" "  (no)"
+    Duplicate all index groups with an offset of \-natoms
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

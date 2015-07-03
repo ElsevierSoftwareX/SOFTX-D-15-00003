@@ -1,0 +1,136 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx grompp</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx grompp</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx grompp [-f [<.mdp>]] [-po [<.mdp>]] [-c [<.gro/.g96/...>]]
+           [-r [<.gro/.g96/...>]] [-rb [<.gro/.g96/...>]] [-n [<.ndx>]]
+           [-p [<.top>]] [-pp [<.top>]] [-o [<.tpr/.tpb/...>]]
+           [-t [<.trr/.cpt/...>]] [-e [<.edr>]] [-imd [<.gro>]]
+           [-ref [<.trr/.cpt/...>]] [-nice <int>] [-[no]v] [-time <real>]
+           [-[no]rmvsbds] [-maxwarn <int>] [-[no]zero] [-[no]renum]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx grompp</tt> (the gromacs preprocessor) reads a molecular topology file, checks the validity of the file, expands the topology from a molecular description to an atomic description. The topology file contains information about molecule types and the number of molecules, the preprocessor copies each molecule as needed. There is no limitation on the number of molecule types. Bonds and bond-angles can be converted into constraints, separately for hydrogens and heavy atoms. Then a coordinate file is read and velocities can be generated from a Maxwellian distribution if requested. <tt>gmx grompp</tt> also reads parameters for <a href="gmx-mdrun.html"><tt>gmx mdrun</tt></a> (eg. number of MD steps, time step, cut-off), and others such as NEMD parameters, which are corrected so that the net acceleration is zero. Eventually a binary file is produced that can serve as the sole input file for the MD program.<p> <tt>gmx grompp</tt> uses the atom names from the topology file. The atom names in the coordinate file (option <tt>-c</tt>) are only read to generate warnings when they do not match the atom names in the topology. Note that the atom names are irrelevant for the simulation as only the atom types are used for generating interaction parameters.<p> <tt>gmx grompp</tt> uses a built-in preprocessor to resolve includes, macros, etc. The preprocessor supports the following keywords:<p> #ifdef VARIABLE<br> #ifndef VARIABLE<br> #else<br> #endif<br> #define VARIABLE<br> #undef VARIABLE<br>#include "filename"<br> #include &lt;filename&gt;<p> The functioning of these statements in your topology may be modulated by using the following two flags in your <tt>.<a href="../online/mdp.html">mdp</a></tt> file:<p> <tt>define = -DVARIABLE1 -DVARIABLE2<br> include = -I/home/john/doe</tt><br> For further information a C-programming textbook may help you out. Specifying the <tt>-pp</tt> flag will get the pre-processed topology file written out so that you can verify its contents.<p> When using position restraints a file with restraint coordinates can be supplied with <tt>-r</tt>, otherwise restraining will be done with respect to the conformation from the <tt>-c</tt> option. For free energy calculation the the coordinates for the B topology can be supplied with <tt>-rb</tt>, otherwise they will be equal to those of the A topology.<p> Starting coordinates can be read from trajectory with <tt>-t</tt>. The last frame with coordinates and velocities will be read, unless the <tt>-time</tt> option is used. Only if this information is absent will the coordinates in the <tt>-c</tt> file be used. Note that these velocities will not be used when <tt>gen_vel = yes</tt> in your <tt>.<a href="../online/mdp.html">mdp</a></tt> file. An energy file can be supplied with <tt>-e</tt> to read Nose-Hoover and/or Parrinello-Rahman coupling variables.<p> <tt>gmx grompp</tt> can be used to restart simulations (preserving continuity) by supplying just a checkpoint file with <tt>-t</tt>. However, for simply changing the number of run steps to extend a run, using <a href="gmx-convert-tpr.html"><tt>gmx convert-tpr</tt></a> is more convenient than <tt>gmx grompp</tt>. You then supply the old checkpoint file directly to <a href="gmx-mdrun.html"><tt>gmx mdrun</tt></a> with <tt>-cpi</tt>. If you wish to change the ensemble or things like output frequency, then supplying the checkpoint file to <tt>gmx grompp</tt> with <tt>-t</tt> along with a new <tt>.<a href="../online/mdp.html">mdp</a></tt> file with <tt>-f</tt> is the recommended procedure.<p> By default, all bonded interactions which have constant energy due to virtual site constructions will be removed. If this constant energy is not zero, this will result in a shift in the total energy. All bonded interactions can be kept by turning off <tt>-rmvsbds</tt>. Additionally, all constraints for distances which will be constant anyway because of virtual site constructions will be removed. If any constraints remain which involve virtual sites, a fatal error will result.<p>To verify your run input file, please take note of all warnings on the screen, and correct where necessary. Do also look at the contents of the <tt>mdout.<a href="../online/mdp.html">mdp</a></tt> file; this contains comment lines, as well as the input that <tt>gmx grompp</tt> has read. If in doubt, you can start <tt>gmx grompp</tt> with the <tt>-debug</tt> option which will give you more information in a file called <tt>grompp.<a href="../online/log.html">log</a></tt> (along with real debug info). You can see the contents of the run input file with the <a href="gmx-dump.html"><tt>gmx dump</tt></a> program. <a href="gmx-check.html"><tt>gmx check</tt></a> can be used to compare the contents of two run input files.<p>The <tt>-maxwarn</tt> option can be used to override warnings printed by <tt>gmx grompp</tt> that otherwise halt output. In some cases, warnings are harmless, but usually they are not. The user is advised to carefully interpret the output messages before attempting to bypass them with this option.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/mdp.html">mdp</a>&gt;] (grompp.<a href="../online/mdp.html">mdp</a>) (Input)</dt>
+<dd>
+grompp input file with MD parameters
+</dd>
+<dt><b><tt>-po</tt></b> [&lt;.<a href="../online/mdp.html">mdp</a>&gt;] (mdout.<a href="../online/mdp.html">mdp</a>) (Output)</dt>
+<dd>
+grompp input file with MD parameters
+</dd>
+<dt><b><tt>-c</tt></b> [&lt;.<a href="../online/gro.html">gro</a>/.<a href="../online/g96.html">g96</a>/...&gt;] (conf.<a href="../online/gro.html">gro</a>) (Input)</dt>
+<dd>
+Structure file: <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent esp <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-r</tt></b> [&lt;.<a href="../online/gro.html">gro</a>/.<a href="../online/g96.html">g96</a>/...&gt;] (conf.<a href="../online/gro.html">gro</a>) (Input, Optional)</dt>
+<dd>
+Structure file: <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent esp <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-rb</tt></b> [&lt;.<a href="../online/gro.html">gro</a>/.<a href="../online/g96.html">g96</a>/...&gt;] (conf.<a href="../online/gro.html">gro</a>) (Input, Optional)</dt>
+<dd>
+Structure file: <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent esp <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-p</tt></b> [&lt;.<a href="../online/top.html">top</a>&gt;] (topol.<a href="../online/top.html">top</a>) (Input)</dt>
+<dd>
+Topology file
+</dd>
+<dt><b><tt>-pp</tt></b> [&lt;.<a href="../online/top.html">top</a>&gt;] (processed.<a href="../online/top.html">top</a>) (Output, Optional)</dt>
+<dd>
+Topology file
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Output)</dt>
+<dd>
+Run input file: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-t</tt></b> [&lt;.<a href="../online/trr.html">trr</a>/.<a href="../online/cpt.html">cpt</a>/...&gt;] (traj.<a href="../online/trr.html">trr</a>) (Input, Optional)</dt>
+<dd>
+Full precision trajectory: <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-e</tt></b> [&lt;.<a href="../online/edr.html">edr</a>&gt;] (ener.<a href="../online/edr.html">edr</a>) (Input, Optional)</dt>
+<dd>
+Energy file
+</dd>
+<dt><b><tt>-imd</tt></b> [&lt;.<a href="../online/gro.html">gro</a>&gt;] (imdgroup.<a href="../online/gro.html">gro</a>) (Output, Optional)</dt>
+<dd>
+Coordinate file in Gromos-87 format
+</dd>
+<dt><b><tt>-ref</tt></b> [&lt;.<a href="../online/trr.html">trr</a>/.<a href="../online/cpt.html">cpt</a>/...&gt;] (rotref.<a href="../online/trr.html">trr</a>) (Input/Output, Optional)</dt>
+<dd>
+Full precision trajectory: <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/tng.html">tng</a>
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-[no]v</tt></b> (no)</dt>
+<dd>
+Be loud and noisy
+</dd>
+<dt><b><tt>-time</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+Take frame at or first after this time.
+</dd>
+<dt><b><tt>-[no]rmvsbds</tt></b> (yes)</dt>
+<dd>
+Remove constant bonded interactions with virtual sites
+</dd>
+<dt><b><tt>-maxwarn</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Number of allowed warnings during input processing. Not for normal use and may generate unstable systems
+</dd>
+<dt><b><tt>-[no]zero</tt></b> (no)</dt>
+<dd>
+Set parameters for bonded interactions without defaults to zero instead of generating an error
+</dd>
+<dt><b><tt>-[no]renum</tt></b> (yes)</dt>
+<dd>
+Renumber atomtypes and minimize number of atomtypes
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

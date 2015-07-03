@@ -1,0 +1,118 @@
+.TH gmx-grompp 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-grompp - Make a run input file
+
+.SH SYNOPSIS
+gmx grompp [-f [<.mdp>]] [-po [<.mdp>]] [-c [<.gro/.g96/...>]]
+           [-r [<.gro/.g96/...>]] [-rb [<.gro/.g96/...>]]
+           [-n [<.ndx>]] [-p [<.top>]] [-pp [<.top>]]
+           [-o [<.tpr/.tpb/...>]] [-t [<.trr/.cpt/...>]]
+           [-e [<.edr>]] [-imd [<.gro>]] [-ref [<.trr/.cpt/...>]]
+           [-nice <int>] [-[no]v] [-time <real>] [-[no]rmvsbds]
+           [-maxwarn <int>] [-[no]zero] [-[no]renum]
+
+.SH DESCRIPTION
+\fBgmx grompp\fR (the gromacs preprocessor) reads a molecular topology file, checks the validity of the file, expands the topology from a molecular description to an atomic description. The topology file contains information about molecule types and the number of molecules, the preprocessor copies each molecule as needed. There is no limitation on the number of molecule types. Bonds and bond\-angles can be converted into constraints, separately for hydrogens and heavy atoms. Then a coordinate file is read and velocities can be generated from a Maxwellian distribution if requested. \fBgmx grompp\fR also reads parameters for \fBgmx mdrun\fR (eg. number of MD steps, time step, cut\-off), and others such as NEMD parameters, which are corrected so that the net acceleration is zero. Eventually a binary file is produced that can serve as the sole input file for the MD program.
+
+\fBgmx grompp\fR uses the atom names from the topology file. The atom names in the coordinate file (option \fB\-c\fR) are only read to generate warnings when they do not match the atom names in the topology. Note that the atom names are irrelevant for the simulation as only the atom types are used for generating interaction parameters.
+
+\fBgmx grompp\fR uses a built\-in preprocessor to resolve includes, macros, etc. The preprocessor supports the following keywords:
+
+ifdef VARIABLE
+ifndef VARIABLE
+else
+endif
+define VARIABLE
+undef VARIABLE
+include "filename"
+include filename
+
+The functioning of these statements in your topology may be modulated by using the following two flags in your \fB.mdp\fR file:
+
+\fBdefine = \-DVARIABLE1 \-DVARIABLE2
+include = \-I/home/john/doe\fR
+For further information a C\-programming textbook may help you out. Specifying the \fB\-pp\fR flag will get the pre\-processed topology file written out so that you can verify its contents.
+
+When using position restraints a file with restraint coordinates can be supplied with \fB\-r\fR, otherwise restraining will be done with respect to the conformation from the \fB\-c\fR option. For free energy calculation the the coordinates for the B topology can be supplied with \fB\-rb\fR, otherwise they will be equal to those of the A topology.
+
+Starting coordinates can be read from trajectory with \fB\-t\fR. The last frame with coordinates and velocities will be read, unless the \fB\-time\fR option is used. Only if this information is absent will the coordinates in the \fB\-c\fR file be used. Note that these velocities will not be used when \fBgen_vel = yes\fR in your \fB.mdp\fR file. An energy file can be supplied with \fB\-e\fR to read Nose\-Hoover and/or Parrinello\-Rahman coupling variables.
+
+\fBgmx grompp\fR can be used to restart simulations (preserving continuity) by supplying just a checkpoint file with \fB\-t\fR. However, for simply changing the number of run steps to extend a run, using \fBgmx convert\\-tpr\fR is more convenient than \fBgmx grompp\fR. You then supply the old checkpoint file directly to \fBgmx mdrun\fR with \fB\-cpi\fR. If you wish to change the ensemble or things like output frequency, then supplying the checkpoint file to \fBgmx grompp\fR with \fB\-t\fR along with a new \fB.mdp\fR file with \fB\-f\fR is the recommended procedure.
+
+By default, all bonded interactions which have constant energy due to virtual site constructions will be removed. If this constant energy is not zero, this will result in a shift in the total energy. All bonded interactions can be kept by turning off \fB\-rmvsbds\fR. Additionally, all constraints for distances which will be constant anyway because of virtual site constructions will be removed. If any constraints remain which involve virtual sites, a fatal error will result.
+
+To verify your run input file, please take note of all warnings on the screen, and correct where necessary. Do also look at the contents of the \fBmdout.mdp\fR file; this contains comment lines, as well as the input that \fBgmx grompp\fR has read. If in doubt, you can start \fBgmx grompp\fR with the \fB\-debug\fR option which will give you more information in a file called \fBgrompp.log\fR (along with real debug info). You can see the contents of the run input file with the \fBgmx dump\fR program. \fBgmx check\fR can be used to compare the contents of two run input files.
+
+The \fB\-maxwarn\fR option can be used to override warnings printed by \fBgmx grompp\fR that otherwise halt output. In some cases, warnings are harmless, but usually they are not. The user is advised to carefully interpret the output messages before attempting to bypass them with this option.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.mdp>] (grompp.mdp) (Input)"
+    grompp input file with MD parameters
+
+.BI "\-po" " [<.mdp>] (mdout.mdp) (Output)"
+    grompp input file with MD parameters
+
+.BI "\-c" " [<.gro/.g96/...>] (conf.gro) (Input)"
+    Structure file: gro g96 pdb brk ent esp tpr tpb tpa
+
+.BI "\-r" " [<.gro/.g96/...>] (conf.gro) (Input, Optional)"
+    Structure file: gro g96 pdb brk ent esp tpr tpb tpa
+
+.BI "\-rb" " [<.gro/.g96/...>] (conf.gro) (Input, Optional)"
+    Structure file: gro g96 pdb brk ent esp tpr tpb tpa
+
+.BI "\-n" " [<.ndx>] (index.ndx) (Input, Optional)"
+    Index file
+
+.BI "\-p" " [<.top>] (topol.top) (Input)"
+    Topology file
+
+.BI "\-pp" " [<.top>] (processed.top) (Output, Optional)"
+    Topology file
+
+.BI "\-o" " [<.tpr/.tpb/...>] (topol.tpr) (Output)"
+    Run input file: tpr tpb tpa
+
+.BI "\-t" " [<.trr/.cpt/...>] (traj.trr) (Input, Optional)"
+    Full precision trajectory: trr cpt trj tng
+
+.BI "\-e" " [<.edr>] (ener.edr) (Input, Optional)"
+    Energy file
+
+.BI "\-imd" " [<.gro>] (imdgroup.gro) (Output, Optional)"
+    Coordinate file in Gromos\-87 format
+
+.BI "\-ref" " [<.trr/.cpt/...>] (rotref.trr) (Input/Output, Optional)"
+    Full precision trajectory: trr cpt trj tng
+
+
+Other options:
+
+.BI "\-nice" " <int> (0)"
+    Set the nicelevel
+
+.BI "\-[no]v" "  (no)"
+    Be loud and noisy
+
+.BI "\-time" " <real> (-1)"
+    Take frame at or first after this time.
+
+.BI "\-[no]rmvsbds" "  (yes)"
+    Remove constant bonded interactions with virtual sites
+
+.BI "\-maxwarn" " <int> (0)"
+    Number of allowed warnings during input processing. Not for normal use and may generate unstable systems
+
+.BI "\-[no]zero" "  (no)"
+    Set parameters for bonded interactions without defaults to zero instead of generating an error
+
+.BI "\-[no]renum" "  (yes)"
+    Renumber atomtypes and minimize number of atomtypes
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

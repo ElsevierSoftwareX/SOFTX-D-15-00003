@@ -1,0 +1,81 @@
+.TH gmx-insert-molecules 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-insert-molecules - Insert molecules into existing vacancies
+
+.SH SYNOPSIS
+gmx insert-molecules [-f [<.gro/.g96/...>]] [-ci [<.gro/.g96/...>]]
+             [-ip [<.dat>]] [-o [<.gro/.g96/...>]] [-nice <int>]
+             [-box <vector>] [-nmol <int>] [-try <int>] [-seed <int>]
+             [-radius <real>] [-scale <real>] [-dr <vector>]
+             [-rot <enum>] [-[no]allpair]
+
+.SH DESCRIPTION
+\fBgmx insert\-molecules\fR inserts \fB\-nmol\fR copies of the system specified in the \fB\-ci\fR input file. The insertions take place either into vacant space in the solute conformation given with \fB\-f\fR, or into an empty box given by \fB\-box\fR. Specifying both \fB\-f\fR and \fB\-box\fR behaves like \fB\-f\fR, but places a new box around the solute before insertions. Any velocities present are discarded.
+
+By default, the insertion positions are random (with initial seed specified by \fB\-seed\fR). The program iterates until \fB\-nmol\fR molecules have been inserted in the box. Molecules are not inserted where the distance between any existing atom and any atom of the inserted molecule is less than the sum based on the van der Waals radii of both atoms. A database (\fBvdwradii.dat\fR) of van der Waals radii is read by the program, and the resulting radii scaled by \fB\-scale\fR. If radii are not found in the database, thoseatoms are assigned the (pre\-scaled) distance \fB\-radius\fR.
+
+A total of \fB\-nmol\fR * \fB\-try\fR insertion attempts are made before giving up. Increase \fB\-try\fR if you have several small holes to fill. Option \fB\-rot\fR specifies whether the insertion molecules are randomly oriented before insertion attempts.
+
+Alternatively, the molecules can be inserted only at positions defined in positions.dat (\fB\-ip\fR). That file should have 3 columns (x,y,z), that give the displacements compared to the input molecule position (\fB\-ci\fR). Hence, if that file should contain the absolute positions, the molecule must be centered on (0,0,0) before using \fBgmx insert\-molecules\fR (e.g. from \fBgmx editconf\fR \fB\-center\fR). Comments in that file starting with  are ignored. Option \fB\-dr\fR defines the maximally allowed displacements during insertial trials. \fB\-try\fR and \fB\-rot\fR work as in the default mode (see above).
+
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.gro/.g96/...>] (protein.gro) (Input, Optional)"
+    Structure file: gro g96 pdb brk ent esp tpr tpb tpa
+
+.BI "\-ci" " [<.gro/.g96/...>] (insert.gro) (Input)"
+    Structure file: gro g96 pdb brk ent esp tpr tpb tpa
+
+.BI "\-ip" " [<.dat>] (positions.dat) (Input, Optional)"
+    Generic data file
+
+.BI "\-o" " [<.gro/.g96/...>] (out.gro) (Output)"
+    Structure file: gro g96 pdb brk ent esp
+
+
+Other options:
+
+.BI "\-nice" " <int> (19)"
+    Set the nicelevel
+
+.BI "\-box" " <vector> (0 0 0)"
+    Box size (in nm)
+
+.BI "\-nmol" " <int> (0)"
+    Number of extra molecules to insert
+
+.BI "\-try" " <int> (10)"
+    Try inserting \fB\-nmol\fR times \fB\-try\fR times
+
+.BI "\-seed" " <int> (1997)"
+    Random generator seed
+
+.BI "\-radius" " <real> (0.105)"
+    Default van der Waals distance
+
+.BI "\-scale" " <real> (0.57)"
+    Scale factor to multiply Van der Waals radii from the database in share/gromacs/top/vdwradii.dat. The default value of 0.57 yields density close to 1000 g/l for proteins in water.
+
+.BI "\-dr" " <vector> (0 0 0)"
+    Allowed displacement in x/y/z from positions in \fB\-ip\fR file
+
+.BI "\-rot" " <enum> (xyz)"
+    rotate inserted molecules randomly: xyz, z, none
+
+.BI "\-[no]allpair" "  (no)"
+    Avoid momory leaks during neighbor searching with option \-ci. May be slow for large systems.
+
+
+.SH KNOWN ISSUES
+
+
+\- Molecules must be whole in the initial configurations.
+
+\- Many repeated neighbor searchings with \-ci blows up the allocated memory. Option \-allpair avoids this using all\-to\-all distance checks (slow for large systems)
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

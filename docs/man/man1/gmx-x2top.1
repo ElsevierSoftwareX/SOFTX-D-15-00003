@@ -1,0 +1,102 @@
+.TH gmx-x2top 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-x2top - Generate a primitive topology from coordinates
+
+.SH SYNOPSIS
+gmx x2top [-f [<.gro/.g96/...>]] [-o [<.top>]] [-r [<.rtp>]]
+          [-nice <int>] [-ff <string>] [-[no]v] [-nexcl <int>]
+          [-[no]H14] [-[no]alldih] [-[no]remdih] [-[no]pairs]
+          [-name <string>] [-[no]pbc] [-[no]pdbq] [-[no]param]
+          [-[no]round] [-kb <real>] [-kt <real>] [-kp <real>]
+
+.SH DESCRIPTION
+\fBgmx x2top\fR generates a primitive topology from a coordinate file. The program assumes all hydrogens are present when defining the hybridization from the atom name and the number of bonds. The program can also make an \fB.rtp\fR entry, which you can then add to the \fB.rtp\fR database.
+
+When \fB\-param\fR is set, equilibrium distances and angles and force constants will be printed in the topology for all interactions. The equilibrium distances and angles are taken from the input coordinates, the force constant are set with command line options. The force fields somewhat supported currently are:
+
+G53a5  GROMOS96 53a5 Forcefield (official distribution)
+
+oplsaa OPLS\-AA/L all\-atom force field (2001 aminoacid dihedrals)
+
+The corresponding data files can be found in the library directory with name \fBatomname2type.n2t\fR. Check Chapter 5 of the manual for more information about file formats. By default, the force field selection is interactive, but you can use the \fB\-ff\fR option to specify one of the short names above on the command line instead. In that case \fBgmx x2top\fR just looks for the corresponding file.
+
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.gro/.g96/...>] (conf.gro) (Input)"
+    Structure file: gro g96 pdb brk ent esp tpr tpb tpa
+
+.BI "\-o" " [<.top>] (out.top) (Output, Optional)"
+    Topology file
+
+.BI "\-r" " [<.rtp>] (out.rtp) (Output, Optional)"
+    Residue Type file used by pdb2gmx
+
+
+Other options:
+
+.BI "\-nice" " <int> (0)"
+    Set the nicelevel
+
+.BI "\-ff" " <string> (oplsaa)"
+    Force field for your simulation. Type "select" for interactive selection.
+
+.BI "\-[no]v" "  (no)"
+    Generate verbose output in the top file.
+
+.BI "\-nexcl" " <int> (3)"
+    Number of exclusions
+
+.BI "\-[no]H14" "  (yes)"
+    Use 3rd neighbour interactions for hydrogen atoms
+
+.BI "\-[no]alldih" "  (no)"
+    Generate all proper dihedrals
+
+.BI "\-[no]remdih" "  (no)"
+    Remove dihedrals on the same bond as an improper
+
+.BI "\-[no]pairs" "  (yes)"
+    Output 1\-4 interactions (pairs) in topology file
+
+.BI "\-name" " <string> (ICE)"
+    Name of your molecule
+
+.BI "\-[no]pbc" "  (yes)"
+    Use periodic boundary conditions.
+
+.BI "\-[no]pdbq" "  (no)"
+    Use the B\-factor supplied in a \fB.pdb\fR file for the atomic charges
+
+.BI "\-[no]param" "  (yes)"
+    Print parameters in the output
+
+.BI "\-[no]round" "  (yes)"
+    Round off measured values
+
+.BI "\-kb" " <real> (400000)"
+    Bonded force constant (kJ/mol/nm2)
+
+.BI "\-kt" " <real> (400)"
+    Angle force constant (kJ/mol/rad2)
+
+.BI "\-kp" " <real> (5)"
+    Dihedral angle force constant (kJ/mol/rad2)
+
+
+.SH KNOWN ISSUES
+
+
+\- The atom type selection is primitive. Virtually no chemical knowledge is used
+
+\- Periodic boundary conditions screw up the bonding
+
+\- No improper dihedrals are generated
+
+\- The atoms to atomtype translation table is incomplete (\fBatomname2type.n2t\fR file in the data directory). Please extend it and send the results back to the GROMACS crew.
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

@@ -1,0 +1,118 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx genion</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx genion</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx genion [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]] [-o [<.gro/.g96/...>]]
+           [-p [<.top>]] [-nice <int>] [-np <int>] [-pname <string>]
+           [-pq <int>] [-nn <int>] [-nname <string>] [-nq <int>]
+           [-rmin <real>] [-seed <int>] [-conc <real>] [-[no]neutral]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx genion</tt> randomly replaces solvent molecules with monoatomic ions. The group of solvent molecules should be continuous and all molecules should have the same number of atoms. The user should add the ion molecules to the topology file or use the <tt>-p</tt> option to automatically modify the topology.<p> The ion molecule type, residue and atom names in all force fields are the capitalized element names without sign. This molecule name should be given with <tt>-pname</tt> or <tt>-nname</tt>, and the <tt>[molecules]</tt> section of your topology updated accordingly, either by hand or with <tt>-p</tt>. Do not use an atom name instead! <p>Ions which can have multiple charge states get the multiplicity added, without sign, for the uncommon states only.<p> For larger ions, e.g. sulfate we recommended using <a href="gmx-insert-molecules.html"><tt>gmx insert-molecules</tt></a>.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Run input file: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/gro.html">gro</a>/.<a href="../online/g96.html">g96</a>/...&gt;] (out.<a href="../online/gro.html">gro</a>) (Output)</dt>
+<dd>
+Structure file: <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent esp
+</dd>
+<dt><b><tt>-p</tt></b> [&lt;.<a href="../online/top.html">top</a>&gt;] (topol.<a href="../online/top.html">top</a>) (Input/Output, Optional)</dt>
+<dd>
+Topology file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-np</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Number of positive ions
+</dd>
+<dt><b><tt>-pname</tt></b> &lt;string&gt; (NA)</dt>
+<dd>
+Name of the positive ion
+</dd>
+<dt><b><tt>-pq</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+Charge of the positive ion
+</dd>
+<dt><b><tt>-nn</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Number of negative ions
+</dd>
+<dt><b><tt>-nname</tt></b> &lt;string&gt; (CL)</dt>
+<dd>
+Name of the negative ion
+</dd>
+<dt><b><tt>-nq</tt></b> &lt;int&gt; (-1)</dt>
+<dd>
+Charge of the negative ion
+</dd>
+<dt><b><tt>-rmin</tt></b> &lt;real&gt; (0.6)</dt>
+<dd>
+Minimum distance between ions
+</dd>
+<dt><b><tt>-seed</tt></b> &lt;int&gt; (1993)</dt>
+<dd>
+Seed for random number generator
+</dd>
+<dt><b><tt>-conc</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Specify salt concentration (mol/liter). This will add sufficient ions to reach up to the specified concentration as computed from the volume of the cell in the input <tt>.<a href="../online/tpr.html">tpr</a></tt> file. Overrides the <tt>-np</tt> and <tt>-nn</tt> options.
+</dd>
+<dt><b><tt>-[no]neutral</tt></b> (no)</dt>
+<dd>
+This option will add enough ions to neutralize the system. These ions are added on <a href="../online/top.html">top</a> of those specified with <tt>-np</tt>/<tt>-nn</tt> or <tt>-conc</tt>.
+</dd>
+</dl>
+
+<H3>Known Issues</H3>
+<ul>
+<li>If you specify a salt concentration existing ions are not taken into account. In effect you therefore specify the amount of salt to be added.
+</ul>
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

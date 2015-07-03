@@ -1,0 +1,116 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx insert-molecules</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx insert-molecules</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx insert-molecules [-f [<.gro/.g96/...>]] [-ci [<.gro/.g96/...>]]
+             [-ip [<.dat>]] [-o [<.gro/.g96/...>]] [-nice <int>]
+             [-box <vector>] [-nmol <int>] [-try <int>] [-seed <int>]
+             [-radius <real>] [-scale <real>] [-dr <vector>] [-rot <enum>]
+             [-[no]allpair]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx insert-molecules</tt> inserts <tt>-nmol</tt> copies of the system specified in the <tt>-ci</tt> input file. The insertions take place either into vacant space in the solute conformation given with <tt>-f</tt>, or into an empty box given by <tt>-box</tt>. Specifying both <tt>-f</tt> and <tt>-box</tt> behaves like <tt>-f</tt>, but places a new box around the solute before insertions. Any velocities present are discarded.<p> By default, the insertion positions are random (with initial seed specified by <tt>-seed</tt>). The program iterates until <tt>-nmol</tt> molecules have been inserted in the box. Molecules are not inserted where the distance between any existing atom and any atom of the inserted molecule is less than the sum based on the van der Waals radii of both atoms. A database (<tt>vdwradii.<a href="../online/dat.html">dat</a></tt>) of van der Waals radii is read by the program, and the resulting radii scaled by <tt>-scale</tt>. If radii are not found in the database, thoseatoms are assigned the (pre-scaled) distance <tt>-radius</tt>.<p> A total of <tt>-nmol</tt> * <tt>-try</tt> insertion attempts are made before giving up. Increase <tt>-try</tt> if you have several small holes to fill. Option <tt>-rot</tt> specifies whether the insertion molecules are randomly oriented before insertion attempts.<p> Alternatively, the molecules can be inserted only at positions defined in positions.<a href="../online/dat.html">dat</a> (<tt>-ip</tt>). That file should have 3 columns (x,y,z), that give the displacements compared to the input molecule position (<tt>-ci</tt>). Hence, if that file should contain the absolute positions, the molecule must be centered on (0,0,0) before using <tt>gmx insert-molecules</tt> (e.g. from <a href="gmx-editconf.html"><tt>gmx editconf</tt></a> <tt>-center</tt>). Comments in that file starting with # are ignored. Option <tt>-dr</tt> defines the maximally allowed displacements during insertial trials. <tt>-try</tt> and <tt>-rot</tt> work as in the default mode (see above). <p>
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/gro.html">gro</a>/.<a href="../online/g96.html">g96</a>/...&gt;] (protein.<a href="../online/gro.html">gro</a>) (Input, Optional)</dt>
+<dd>
+Structure file: <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent esp <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-ci</tt></b> [&lt;.<a href="../online/gro.html">gro</a>/.<a href="../online/g96.html">g96</a>/...&gt;] (insert.<a href="../online/gro.html">gro</a>) (Input)</dt>
+<dd>
+Structure file: <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent esp <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-ip</tt></b> [&lt;.<a href="../online/dat.html">dat</a>&gt;] (positions.<a href="../online/dat.html">dat</a>) (Input, Optional)</dt>
+<dd>
+Generic data file
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/gro.html">gro</a>/.<a href="../online/g96.html">g96</a>/...&gt;] (out.<a href="../online/gro.html">gro</a>) (Output)</dt>
+<dd>
+Structure file: <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent esp
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-box</tt></b> &lt;vector&gt; (0 0 0)</dt>
+<dd>
+Box size (in nm)
+</dd>
+<dt><b><tt>-nmol</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Number of extra molecules to insert
+</dd>
+<dt><b><tt>-try</tt></b> &lt;int&gt; (10)</dt>
+<dd>
+Try inserting <tt>-nmol</tt> times <tt>-try</tt> times
+</dd>
+<dt><b><tt>-seed</tt></b> &lt;int&gt; (1997)</dt>
+<dd>
+Random generator seed
+</dd>
+<dt><b><tt>-radius</tt></b> &lt;real&gt; (0.105)</dt>
+<dd>
+Default van der Waals distance
+</dd>
+<dt><b><tt>-scale</tt></b> &lt;real&gt; (0.57)</dt>
+<dd>
+Scale factor to multiply Van der Waals radii from the database in share/gromacs/<a href="../online/top.html">top</a>/vdwradii.<a href="../online/dat.html">dat</a>. The default value of 0.57 yields density close to 1000 g/l for proteins in water.
+</dd>
+<dt><b><tt>-dr</tt></b> &lt;vector&gt; (0 0 0)</dt>
+<dd>
+Allowed displacement in x/y/z from positions in <tt>-ip</tt> file
+</dd>
+<dt><b><tt>-rot</tt></b> &lt;enum&gt; (xyz)</dt>
+<dd>
+rotate inserted molecules randomly: xyz, z, none
+</dd>
+<dt><b><tt>-[no]allpair</tt></b> (no)</dt>
+<dd>
+Avoid momory leaks during neighbor searching with option -ci. May be slow for large systems.
+</dd>
+</dl>
+
+<H3>Known Issues</H3>
+<ul>
+<li>Molecules must be whole in the initial configurations.
+<li>Many repeated neighbor searchings with -ci blows up the allocated memory. Option -allpair avoids this using all-to-all distance checks (slow for large systems)
+</ul>
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

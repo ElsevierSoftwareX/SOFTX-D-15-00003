@@ -1,0 +1,237 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx hbond</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx hbond</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx hbond [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]]
+          [-num [<.xvg>]] [-g [<.log>]] [-ac [<.xvg>]] [-dist [<.xvg>]]
+          [-ang [<.xvg>]] [-hx [<.xvg>]] [-hbn [<.ndx>]] [-hbm [<.xpm>]]
+          [-don [<.xvg>]] [-dan [<.xvg>]] [-life [<.xvg>]]
+          [-nhbdist [<.xvg>]] [-nice <int>] [-b <time>] [-e <time>]
+          [-dt <time>] [-tu <enum>] [-xvg <enum>] [-a <real>] [-r <real>]
+          [-[no]da] [-r2 <real>] [-abin <real>] [-rbin <real>] [-[no]nitacc]
+          [-[no]contact] [-shell <real>] [-fitstart <real>] [-fitend <real>]
+          [-temp <real>] [-smooth <real>] [-dump <int>] [-max_hb <real>]
+          [-[no]merge] [-acflen <int>] [-[no]normalize] [-P <enum>]
+          [-fitfn <enum>] [-beginfit <real>] [-endfit <real>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx hbond</tt> computes and analyzes hydrogen bonds. Hydrogen bonds are determined based on cutoffs for the angle Hydrogen - Donor - Acceptor (zero is extended) and the distance Donor - Acceptor (or Hydrogen - Acceptor using <tt>-noda</tt>). OH and NH groups are regarded as donors, O is an acceptor always, N is an acceptor by default, but this can be switched using <tt>-nitacc</tt>. Dummy hydrogen atoms are assumed to be connected to the first preceding non-hydrogen atom.<p> You need to specify two groups for analysis, which must be either identical or non-overlapping. All hydrogen bonds between the two groups are analyzed.<p> If you set <tt>-shell</tt>, you will be asked for an additional index group which should contain exactly one atom. In this case, only hydrogen bonds between atoms within the shell distance from the one atom are considered.<p> With option -ac, rate constants for hydrogen bonding can be derived with the model of Luzar and Chandler (Nature 394, 1996; J. Chem. Phys. 113:23, 2000) or that of Markovitz and Agmon (J. Chem. Phys 129, 2008). If contact kinetics are analyzed by using the -contact option, then n(t) can be defined as either all pairs that are not within contact distance r at time t (corresponding to leaving the -r2 option at the default value 0) or all pairs that are within distance r2 (corresponding to setting a second cut-off value with option -r2). See mentioned literature for more details and definitions.<p> <tt> [ selected ]<br>      20    21    24<br>      25    26    29<br>       1     3     6<br> </tt><br> Note that the triplets need not be on separate lines. Each atom triplet specifies a hydrogen bond to be analyzed, note also that no check is made for the types of atoms.<p> <b>Output:</b><br> <tt>-num</tt>:  number of hydrogen bonds as a function of time.<br> <tt>-ac</tt>:   average over all autocorrelations of the existence functions (either 0 or 1) of all hydrogen bonds.<br> <tt>-dist</tt>: distance distribution of all hydrogen bonds.<br> <tt>-ang</tt>:  angle distribution of all hydrogen bonds.<br> <tt>-hx</tt>:   the number of n-n+i hydrogen bonds as a function of time where n and n+i stand for residue numbers and i ranges from 0 to 6. This includes the n-n+3, n-n+4 and n-n+5 hydrogen bonds associated with helices in proteins.<br> <tt>-hbn</tt>:  all selected groups, donors, hydrogens and acceptors for selected groups, all hydrogen bonded atoms from all groups and all solvent atoms involved in insertion.<br> <tt>-hbm</tt>:  existence matrix for all hydrogen bonds over all frames, this also contains information on solvent insertion into hydrogen bonds. Ordering is identical to that in <tt>-hbn</tt> index file.<br> <tt>-dan</tt>: write out the number of donors and acceptors analyzed for each timeframe. This is especially useful when using <tt>-shell</tt>.<br> <tt>-nhbdist</tt>: compute the number of HBonds per hydrogen in order to compare results to Raman Spectroscopy. <p> Note: options <tt>-ac</tt>, <tt>-life</tt>, <tt>-hbn</tt> and <tt>-hbm</tt> require an amount of memory proportional to the total numbers of donors times the total number of acceptors in the selected group(s).
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Run input file: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-num</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (hbnum.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-g</tt></b> [&lt;.<a href="../online/log.html">log</a>&gt;] (hbond.<a href="../online/log.html">log</a>) (Output, Optional)</dt>
+<dd>
+Log file
+</dd>
+<dt><b><tt>-ac</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (hbac.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-dist</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (hbdist.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-ang</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (hbang.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-hx</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (hbhelix.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-hbn</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (hbond.<a href="../online/ndx.html">ndx</a>) (Output, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-hbm</tt></b> [&lt;.<a href="../online/xpm.html">xpm</a>&gt;] (hbmap.<a href="../online/xpm.html">xpm</a>) (Output, Optional)</dt>
+<dd>
+X PixMap compatible matrix file
+</dd>
+<dt><b><tt>-don</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (donor.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-dan</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (danum.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-life</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (hblife.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-nhbdist</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (nhbdist.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-tu</tt></b> &lt;enum&gt; (ps)</dt>
+<dd>
+Time unit: fs, ps, ns, us, ms, s
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-a</tt></b> &lt;real&gt; (30)</dt>
+<dd>
+Cutoff angle (degrees, Hydrogen - Donor - Acceptor)
+</dd>
+<dt><b><tt>-r</tt></b> &lt;real&gt; (0.35)</dt>
+<dd>
+Cutoff radius (nm, X - Acceptor, see next option)
+</dd>
+<dt><b><tt>-[no]da</tt></b> (yes)</dt>
+<dd>
+Use distance Donor-Acceptor (if TRUE) or Hydrogen-Acceptor (FALSE)
+</dd>
+<dt><b><tt>-r2</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Second cutoff radius. Mainly useful with <tt>-contact</tt> and <tt>-ac</tt>
+</dd>
+<dt><b><tt>-abin</tt></b> &lt;real&gt; (1)</dt>
+<dd>
+Binwidth angle distribution (degrees)
+</dd>
+<dt><b><tt>-rbin</tt></b> &lt;real&gt; (0.005)</dt>
+<dd>
+Binwidth distance distribution (nm)
+</dd>
+<dt><b><tt>-[no]nitacc</tt></b> (yes)</dt>
+<dd>
+Regard nitrogen atoms as acceptors
+</dd>
+<dt><b><tt>-[no]contact</tt></b> (no)</dt>
+<dd>
+Do not look for hydrogen bonds, but merely for contacts within the cut-off distance
+</dd>
+<dt><b><tt>-shell</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+when &gt; 0, only calculate hydrogen bonds within # nm shell around one particle
+</dd>
+<dt><b><tt>-fitstart</tt></b> &lt;real&gt; (1)</dt>
+<dd>
+Time (ps) from which to start fitting the correlation functions in order to obtain the forward and backward rate constants for HB breaking and formation. With <tt>-gemfit</tt> we suggest <tt>-fitstart 0</tt>
+</dd>
+<dt><b><tt>-fitend</tt></b> &lt;real&gt; (60)</dt>
+<dd>
+Time (ps) to which to stop fitting the correlation functions in order to obtain the forward and backward rate constants for HB breaking and formation (only with <tt>-gemfit</tt>)
+</dd>
+<dt><b><tt>-temp</tt></b> &lt;real&gt; (298.15)</dt>
+<dd>
+Temperature (K) for computing the Gibbs energy corresponding to HB breaking and reforming
+</dd>
+<dt><b><tt>-smooth</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+If &gt;= 0, the tail of the ACF will be smoothed by fitting it to an exponential function: y = A exp(-x/&tau;)
+</dd>
+<dt><b><tt>-dump</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Dump the first N hydrogen bond ACFs in a single <tt>.<a href="../online/xvg.html">xvg</a></tt> file for debugging
+</dd>
+<dt><b><tt>-max_hb</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Theoretical maximum number of hydrogen bonds used for normalizing HB autocorrelation function. Can be useful in case the program estimates it wrongly
+</dd>
+<dt><b><tt>-[no]merge</tt></b> (yes)</dt>
+<dd>
+H-bonds between the same donor and acceptor, but with different hydrogen are treated as a single H-bond. Mainly important for the ACF.
+</dd>
+<dt><b><tt>-acflen</tt></b> &lt;int&gt; (-1)</dt>
+<dd>
+Length of the ACF, default is half the number of frames
+</dd>
+<dt><b><tt>-[no]normalize</tt></b> (yes)</dt>
+<dd>
+Normalize ACF
+</dd>
+<dt><b><tt>-P</tt></b> &lt;enum&gt; (0)</dt>
+<dd>
+Order of Legendre polynomial for ACF (0 indicates none): 0, 1, 2, 3
+</dd>
+<dt><b><tt>-fitfn</tt></b> &lt;enum&gt; (none)</dt>
+<dd>
+Fit function: none, exp, aexp, exp_exp, vac, exp5, exp7, exp9, erffit
+</dd>
+<dt><b><tt>-beginfit</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Time where to begin the exponential fit of the correlation function
+</dd>
+<dt><b><tt>-endfit</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+Time where to end the exponential fit of the correlation function, -1 is until the end
+</dd>
+</dl>
+
+<H3>Known Issues</H3>
+<ul>
+<li>The option <tt>-sel</tt> that used to work on selected hbonds is out of order, and therefore not available for the time being.
+</ul>
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

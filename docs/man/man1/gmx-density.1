@@ -1,0 +1,105 @@
+.TH gmx-density 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-density - Calculate the density of the system
+
+.SH SYNOPSIS
+gmx density [-f [<.xtc/.trr/...>]] [-n [<.ndx>]]
+            [-s [<.tpr/.tpb/...>]] [-ei [<.dat>]] [-o [<.xvg>]]
+            [-nice <int>] [-b <time>] [-e <time>] [-dt <time>]
+            [-[no]w] [-xvg <enum>] [-d <string>] [-sl <int>]
+            [-dens <enum>] [-ng <int>] [-[no]center] [-[no]symm]
+            [-[no]relative]
+
+.SH DESCRIPTION
+\fBgmx density\fR computes partial densities across the box, using an index file.
+
+For the total density of NPT simulations, use \fBgmx energy\fR instead.
+
+Option \fB\-center\fR performs the histogram binning relative to the center of an arbitrary group, in absolute box coordinates. If you are calculating profiles along the Z axis box dimension bZ, output would be from \-bZ/2 to bZ/2 if you center based on the entire system. Note that this behaviour has changed in Gromacs 5.0; earlier versions merely performed a static binning in (0,bZ) and shifted the output. Now we compute the center for each frame and bin in (\-bZ/2,bZ/2).
+
+Option \fB\-symm\fR symmetrizes the output around the center. This will automatically turn on \fB\-center\fR too. Option \fB\-relative\fR performs the binning in relative instead of absolute box coordinates, and scales the final output with the average box dimension along the output axis. This can be used in combination with \fB\-center\fR.
+
+Densities are in kg/m3, and number densities or electron densities can also be calculated. For electron densities, a file describing the number of electrons for each type of atom should be provided using \fB\-ei\fR. It should look like:
+\fB2\fR
+\fBatomname = nrelectrons\fR
+\fBatomname = nrelectrons\fR
+The first line contains the number of lines to read from the file. There should be one line for each unique atom name in your system. The number of electrons for each atom is modified by its atomic partial charge.
+
+IMPORTANT CONSIDERATIONS FOR BILAYERS
+
+One of the most common usage scenarios is to calculate the density of various groups across a lipid bilayer, typically with the z axis being the normal direction. For short simulations, small systems, and fixed box sizes this will work fine, but for the more general case lipid bilayers can be complicated. The first problem that while both proteins and lipids have low volume compressibility, lipids have quite high area compressiblity. This means the shape of the box (thickness and area/lipid) will fluctuate substantially even for a fully relaxed system. Since Gromacs places the box between the origin and positive coordinates, this in turn means that a bilayer centered in the box will move a bit up/down due to these fluctuations, and smear out your profile. The easiest way to fix this (if you want pressure coupling) is to use the \fB\-center\fR option that calculates the density profile with respect to the center of the box. Note that you can still center on the bilayer part even if you have a complex non\-symmetric system with a bilayer and, say, membrane proteins \- then our output will simply have more values on one side of the (center) origin reference.
+
+Even the centered calculation will lead to some smearing out the output profiles, as lipids themselves are compressed and expanded. In most cases you probably want this (since it corresponds to macroscopic experiments), but if you want to look at molecular details you can use the \fB\-relative\fR option to attempt to remove even more of the effects of volume fluctuations.
+
+Finally, large bilayers that are not subject to a surface tension will exhibit undulatory fluctuations, where there are 'waves' forming in the system. This is a fundamental property of the biological system, and if you are comparing against experiments you likely want to include the undulation smearing effect.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.xtc/.trr/...>] (traj.xtc) (Input)"
+    Trajectory: xtc trr cpt trj gro g96 pdb tng
+
+.BI "\-n" " [<.ndx>] (index.ndx) (Input, Optional)"
+    Index file
+
+.BI "\-s" " [<.tpr/.tpb/...>] (topol.tpr) (Input)"
+    Run input file: tpr tpb tpa
+
+.BI "\-ei" " [<.dat>] (electrons.dat) (Input, Optional)"
+    Generic data file
+
+.BI "\-o" " [<.xvg>] (density.xvg) (Output)"
+    xvgr/xmgr file
+
+
+Other options:
+
+.BI "\-nice" " <int> (19)"
+    Set the nicelevel
+
+.BI "\-b" " <time> (0)"
+    First frame (ps) to read from trajectory
+
+.BI "\-e" " <time> (0)"
+    Last frame (ps) to read from trajectory
+
+.BI "\-dt" " <time> (0)"
+    Only use frame when t MOD dt = first time (ps)
+
+.BI "\-[no]w" "  (no)"
+    View output \fB.xvg\fR, \fB.xpm\fR, \fB.eps\fR and \fB.pdb\fR files
+
+.BI "\-xvg" " <enum> (xmgrace)"
+    xvg plot formatting: xmgrace, xmgr, none
+
+.BI "\-d" " <string> (Z)"
+    Take the normal on the membrane in direction X, Y or Z.
+
+.BI "\-sl" " <int> (50)"
+    Divide the box in this number of slices.
+
+.BI "\-dens" " <enum> (mass)"
+    Density: mass, number, charge, electron
+
+.BI "\-ng" " <int> (1)"
+    Number of groups of which to compute densities.
+
+.BI "\-[no]center" "  (no)"
+    Perform the binning relative to the center of the (changing) box. Useful for bilayers.
+
+.BI "\-[no]symm" "  (no)"
+    Symmetrize the density along the axis, with respect to the center. Useful for bilayers.
+
+.BI "\-[no]relative" "  (no)"
+    Use relative coordinates for changing boxes and scale output by average dimensions.
+
+
+.SH KNOWN ISSUES
+
+
+\- When calculating electron densities, atomnames are used instead of types. This is bad.
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

@@ -1,0 +1,118 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx nmeig</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx nmeig</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx nmeig [-f [<.mtx>]] [-s [<.tpr/.tpb/...>]] [-of [<.xvg>]] [-ol [<.xvg>]]
+          [-os [<.xvg>]] [-qc [<.xvg>]] [-v [<.trr/.cpt/...>]] [-nice <int>]
+          [-xvg <enum>] [-[no]m] [-first <int>] [-last <int>]
+          [-maxspec <int>] [-T <real>] [-[no]constr] [-width <real>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx nmeig</tt> calculates the eigenvectors/values of a (Hessian) matrix, which can be calculated with <a href="gmx-mdrun.html"><tt>gmx mdrun</tt></a>. The eigenvectors are written to a trajectory file (<tt>-v</tt>). The structure is written first with t=0. The eigenvectors are written as frames with the eigenvector number as timestamp. The eigenvectors can be analyzed with <a href="gmx-anaeig.html"><tt>gmx anaeig</tt></a>. An ensemble of structures can be generated from the eigenvectors with <a href="gmx-nmens.html"><tt>gmx nmens</tt></a>. When mass weighting is used, the generated eigenvectors will be scaled back to plain Cartesian coordinates before generating the output. In this case, they will no longer be exactly orthogonal in the standard Cartesian norm, but in the mass-weighted norm they would be.<p> This program can be optionally used to compute quantum corrections to heat capacity and enthalpy by providing an extra file argument <tt>-qcorr</tt>. See the GROMACS manual, Chapter 1, for details. The result includes subtracting a harmonic degree of freedom at the given temperature. The total correction is printed on the terminal screen. The recommended way of getting the corrections out is:<p> <tt>gmx nmeig -s topol.<a href="../online/tpr.html">tpr</a> -f nm.<a href="../online/mtx.html">mtx</a> -first 7 -last 10000 -T 300 -qc [-constr]</tt><p> The <tt>-constr</tt> option should be used when bond constraints were used during the simulation <b>for all the covalent bonds</b>. If this is not the case, you need to analyze the <tt>quant_corr.<a href="../online/xvg.html">xvg</a></tt> file yourself.<p> To make things more flexible, the program can also take virtual sites into account when computing quantum corrections. When selecting <tt>-constr</tt> and <tt>-qc</tt>, the <tt>-begin</tt> and <tt>-end</tt> options will be set automatically as well. Again, if you think you know it better, please check the <tt>eigenfreq.<a href="../online/xvg.html">xvg</a></tt> output.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/mtx.html">mtx</a>&gt;] (hessian.<a href="../online/mtx.html">mtx</a>) (Input)</dt>
+<dd>
+Hessian matrix
+</dd>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Run input file: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-of</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (eigenfreq.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-ol</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (eigenval.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-os</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (spectrum.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-qc</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (quant_corr.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-v</tt></b> [&lt;.<a href="../online/trr.html">trr</a>/.<a href="../online/cpt.html">cpt</a>/...&gt;] (eigenvec.<a href="../online/trr.html">trr</a>) (Output)</dt>
+<dd>
+Full precision trajectory: <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/tng.html">tng</a>
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-[no]m</tt></b> (yes)</dt>
+<dd>
+Divide elements of Hessian by product of sqrt(mass) of involved atoms prior to diagonalization. This should be used for 'Normal Modes' analysis
+</dd>
+<dt><b><tt>-first</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+First eigenvector to write away
+</dd>
+<dt><b><tt>-last</tt></b> &lt;int&gt; (50)</dt>
+<dd>
+Last eigenvector to write away
+</dd>
+<dt><b><tt>-maxspec</tt></b> &lt;int&gt; (4000)</dt>
+<dd>
+Highest frequency (1/cm) to consider in the spectrum
+</dd>
+<dt><b><tt>-T</tt></b> &lt;real&gt; (298.15)</dt>
+<dd>
+Temperature for computing quantum heat capacity and enthalpy when using normal mode calculations to correct classical simulations
+</dd>
+<dt><b><tt>-[no]constr</tt></b> (no)</dt>
+<dd>
+If constraints were used in the simulation but not in the normal mode analysis (this is the recommended way of doing it) you will need to set this for computing the quantum corrections.
+</dd>
+<dt><b><tt>-width</tt></b> &lt;real&gt; (1)</dt>
+<dd>
+Width (sigma) of the gaussian peaks (1/cm) when generating a spectrum
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

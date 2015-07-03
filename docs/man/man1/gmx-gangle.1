@@ -1,0 +1,100 @@
+.TH gmx-gangle 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-gangle - Calculate angles
+
+.SH SYNOPSIS
+gmx gangle [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]]
+           [-n [<.ndx>]] [-oav [<.xvg>]] [-oall [<.xvg>]]
+           [-oh [<.xvg>]] [-b <time>] [-e <time>] [-dt <time>]
+           [-tu <enum>] [-xvg <enum>] [-[no]rmpbc] [-[no]pbc]
+           [-sf <file>] [-selrpos <enum>] [-g1 <enum>] [-g2 <enum>]
+           [-binw <real>] [-group1 <selection>] [-group2 <selection>]
+
+.SH DESCRIPTION
+\fBgmx gangle\fR computes different types of angles between vectors. It supports both vectors defined by two positions and normals of planes defined by three positions. The z axis or the local normal of a sphere can also be used as one of the vectors. There are also convenience options 'angle' and 'dihedral' for calculating bond angles and dihedrals defined by three/four positions.
+
+The type of the angle is specified with \fB\-g1\fR and \fB\-g2\fR. If \fB\-g1\fR is \fBangle\fR or \fBdihedral\fR, \fB\-g2\fR should not be specified. In this case, \fB\-group1\fR should specify one or more selections, and each should contain triplets or quartets of positions that define the angles to be calculated.
+
+If \fB\-g1\fR is \fBvector\fR or \fBplane\fR, \fB\-group1\fR should specify selections that contain either pairs (\fBvector\fR) or triplets (\fBplane\fR) of positions. For vectors, the positions set the endpoints of the vector, and for planes, the three positions are used to calculate the normal of the plane. In both cases, \fB\-g2\fR specifies the other vector to use (see below).
+
+With \fB\-g2 vector\fR or \fB\-g2 plane\fR, \fB\-group2\fR should specify another set of vectors. \fB\-group1\fR and \fB\-group2\fR should specify the same number of selections. It is also allowed to only have a single selection for one of the options, in which case the same selection is used with each selection in the other group. Similarly, for each selection in \fB\-group1\fR, the corresponding selection in \fB\-group2\fR should specify the same number of vectors or a single vector. In the latter case, the angle is calculated between that single vector and each vector from the other selection.
+
+With \fB\-g2 sphnorm\fR, each selection in \fB\-group2\fR should specify a single position that is the center of the sphere. The second vector is calculated as the vector from the center to the midpoint of the positions specified by \fB\-group1\fR.
+
+With \fB\-g2 z\fR, \fB\-group2\fR is not necessary, and angles between the first vectors and the positive Z axis are calculated.
+
+With \fB\-g2 t0\fR, \fB\-group2\fR is not necessary, and angles are calculated from the vectors as they are in the first frame.
+
+There are three options for output: \fB\-oav\fR writes an xvg file with the time and the average angle for each frame. \fB\-oall\fR writes all the individual angles. \fB\-oh\fR writes a histogram of the angles. The bin width can be set with \fB\-binw\fR. For \fB\-oav\fR and \fB\-oh\fR, separate average/histogram is computed for each selection in \fB\-group1\fR.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.xtc/.trr/...>] (traj.xtc) (Input, Optional)"
+    Input trajectory or single configuration: xtc trr cpt trj gro g96 pdb tng
+
+.BI "\-s" " [<.tpr/.tpb/...>] (topol.tpr) (Input, Optional)"
+    Input structure: tpr tpb tpa gro g96 pdb brk ent
+
+.BI "\-n" " [<.ndx>] (index.ndx) (Input, Optional)"
+    Extra index groups
+
+.BI "\-oav" " [<.xvg>] (angaver.xvg) (Output, Optional)"
+    Average angles as a function of time
+
+.BI "\-oall" " [<.xvg>] (angles.xvg) (Output, Optional)"
+    All angles as a function of time
+
+.BI "\-oh" " [<.xvg>] (anghist.xvg) (Output, Optional)"
+    Histogram of the angles
+
+
+Other options:
+
+.BI "\-b" " <time> (0)"
+    First frame (ps) to read from trajectory
+
+.BI "\-e" " <time> (0)"
+    Last frame (ps) to read from trajectory
+
+.BI "\-dt" " <time> (0)"
+    Only use frame if t MOD dt == first time (ps)
+
+.BI "\-tu" " <enum> (ps)"
+    Unit for time values: fs, ps, ns, us, ms, s
+
+.BI "\-xvg" " <enum> (xmgrace)"
+    Plot formatting: none, xmgrace, xmgr
+
+.BI "\-[no]rmpbc" "  (yes)"
+    Make molecules whole for each frame
+
+.BI "\-[no]pbc" "  (yes)"
+    Use periodic boundary conditions for distance calculation
+
+.BI "\-sf" " <file>"
+    Provide selections from files
+
+.BI "\-selrpos" " <enum> (atom)"
+    Selection reference positions: atom, res_com, res_cog, mol_com, mol_cog, whole_res_com, whole_res_cog, whole_mol_com, whole_mol_cog, part_res_com, part_res_cog, part_mol_com, part_mol_cog, dyn_res_com, dyn_res_cog, dyn_mol_com, dyn_mol_cog
+
+.BI "\-g1" " <enum> (angle)"
+    Type of analysis/first vector group: angle, dihedral, vector, plane
+
+.BI "\-g2" " <enum> (none)"
+    Type of second vector group: none, vector, plane, t0, z, sphnorm
+
+.BI "\-binw" " <real> (1)"
+    Binwidth for \-oh in degrees
+
+.BI "\-group1" " <selection>"
+    First analysis/vector selection
+
+.BI "\-group2" " <selection>"
+    Second analysis/vector selection
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

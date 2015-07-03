@@ -1,0 +1,156 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx order</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx order</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx order [-f [<.xtc/.trr/...>]] [-n [<.ndx>]] [-nr [<.ndx>]]
+          [-s [<.tpr/.tpb/...>]] [-o [<.xvg>]] [-od [<.xvg>]] [-ob [<.pdb>]]
+          [-os [<.xvg>]] [-Sg [<.xvg>]] [-Sk [<.xvg>]] [-Sgsl [<.xvg>]]
+          [-Sksl [<.xvg>]] [-nice <int>] [-b <time>] [-e <time>] [-dt <time>]
+          [-[no]w] [-xvg <enum>] [-d <enum>] [-sl <int>] [-[no]szonly]
+          [-[no]unsat] [-[no]permolecule] [-[no]radial] [-[no]calcdist]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx order</tt> computes the order parameter per atom for carbon tails. For atom i the vector i-1, i+1 is used together with an axis. The index file should contain only the groups to be used for calculations, with each group of equivalent carbons along the relevant acyl chain in its own group. There should not be any generic groups (like System, Protein) in the index file to avoid confusing the program (this is not relevant to tetrahedral order parameters however, which only work for water anyway).<p> <tt>gmx order</tt> can also give all diagonal elements of the order tensor and even calculate the deuterium order parameter Scd (default). If the option <tt>-szonly</tt> is given, only one order tensor component (specified by the <tt>-d</tt> option) is given and the order parameter per slice is calculated as well. If <tt>-szonly</tt> is not selected, all diagonal elements and the deuterium order parameter is given.<p>The tetrahedrality order parameters can be determined around an atom. Both angle an distance order parameters are calculated. See P.-L. Chau and A.J. Hardwick, Mol. Phys., 93, (1998), 511-518. for more details.<br>
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-nr</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Run input file: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (order.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-od</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (deuter.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-ob</tt></b> [&lt;.<a href="../online/pdb.html">pdb</a>&gt;] (eiwit.<a href="../online/pdb.html">pdb</a>) (Output)</dt>
+<dd>
+Protein data bank file
+</dd>
+<dt><b><tt>-os</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (sliced.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-Sg</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (sg-ang.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-Sk</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (sk-dist.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-Sgsl</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (sg-ang-slice.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-Sksl</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (sk-dist-slice.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-d</tt></b> &lt;enum&gt; (z)</dt>
+<dd>
+Direction of the normal on the membrane: z, x, y
+</dd>
+<dt><b><tt>-sl</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+Calculate order parameter as function of box length, dividing the box into this number of slices.
+</dd>
+<dt><b><tt>-[no]szonly</tt></b> (no)</dt>
+<dd>
+Only give Sz element of order tensor. (axis can be specified with <tt>-d</tt>)
+</dd>
+<dt><b><tt>-[no]unsat</tt></b> (no)</dt>
+<dd>
+Calculate order parameters for unsaturated carbons. Note that this cannot be mixed with normal order parameters.
+</dd>
+<dt><b><tt>-[no]permolecule</tt></b> (no)</dt>
+<dd>
+Compute per-molecule Scd order parameters
+</dd>
+<dt><b><tt>-[no]radial</tt></b> (no)</dt>
+<dd>
+Compute a radial membrane normal
+</dd>
+<dt><b><tt>-[no]calcdist</tt></b> (no)</dt>
+<dd>
+Compute distance from a reference
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

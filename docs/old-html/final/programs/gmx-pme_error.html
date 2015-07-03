@@ -1,0 +1,89 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx pme_error</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx pme_error</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx pme_error [-s [<.tpr/.tpb/...>]] [-o [<.out>]] [-so [<.tpr/.tpb/...>]]
+             [-nice <int>] [-beta <real>] [-[no]tune] [-self <real>]
+             [-seed <int>] [-[no]v]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx pme_error</tt> estimates the error of the electrostatic forces if using the sPME algorithm. The flag <tt>-tune</tt> will determine the splitting parameter such that the error is equally distributed over the real and reciprocal space part. The part of the error that stems from self interaction of the particles is computationally demanding. However, a good a approximation is to just use a fraction of the particles for this term which can be indicated by the flag <tt>-self</tt>.<p>
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Run input file: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.out&gt;] (error.out) (Output)</dt>
+<dd>
+Generic output file
+</dd>
+<dt><b><tt>-so</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (tuned.<a href="../online/tpr.html">tpr</a>) (Output, Optional)</dt>
+<dd>
+Run input file: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-beta</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+If positive, overwrite ewald_beta from <tt>.<a href="../online/tpr.html">tpr</a></tt> file with this value
+</dd>
+<dt><b><tt>-[no]tune</tt></b> (no)</dt>
+<dd>
+Tune the splitting parameter such that the error is equally distributed between real and reciprocal space
+</dd>
+<dt><b><tt>-self</tt></b> &lt;real&gt; (1)</dt>
+<dd>
+If between 0.0 and 1.0, determine self interaction error from just this fraction of the charged particles
+</dd>
+<dt><b><tt>-seed</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Random number seed used for Monte Carlo algorithm when <tt>-self</tt> is set to a value between 0.0 and 1.0
+</dd>
+<dt><b><tt>-[no]v</tt></b> (no)</dt>
+<dd>
+Be loud and noisy
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

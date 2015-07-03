@@ -1,0 +1,92 @@
+.TH gmx-distance 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-distance - Calculate distances between pairs of positions
+
+.SH SYNOPSIS
+gmx distance [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]]
+             [-n [<.ndx>]] [-oav [<.xvg>]] [-oall [<.xvg>]]
+             [-oxyz [<.xvg>]] [-oh [<.xvg>]] [-oallstat [<.xvg>]]
+             [-b <time>] [-e <time>] [-dt <time>] [-tu <enum>]
+             [-xvg <enum>] [-[no]rmpbc] [-[no]pbc] [-sf <file>]
+             [-selrpos <enum>] [-select <selection>] [-len <real>]
+             [-tol <real>] [-binw <real>]
+
+.SH DESCRIPTION
+\fBgmx distance\fR calculates distances between pairs of positions as a function of time. Each selection specifies an independent set of distances to calculate. Each selection should consist of pairs of positions, and the distances are computed between positions 1\-2, 3\-4, etc.
+
+\fB\-oav\fR writes the average distance as a function of time for each selection. \fB\-oall\fR writes all the individual distances. \fB\-oxyz\fR does the same, but the x, y, and z components of the distance are written instead of the norm. \fB\-oh\fR writes a histogram of the distances for each selection. The location of the histogram is set with \fB\-len\fR and \fB\-tol\fR. Bin width is set with \fB\-binw\fR. \fB\-oallstat\fR writes out the average and standard deviation for each individual distance, calculated over the frames.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.xtc/.trr/...>] (traj.xtc) (Input, Optional)"
+    Input trajectory or single configuration: xtc trr cpt trj gro g96 pdb tng
+
+.BI "\-s" " [<.tpr/.tpb/...>] (topol.tpr) (Input, Optional)"
+    Input structure: tpr tpb tpa gro g96 pdb brk ent
+
+.BI "\-n" " [<.ndx>] (index.ndx) (Input, Optional)"
+    Extra index groups
+
+.BI "\-oav" " [<.xvg>] (distave.xvg) (Output, Optional)"
+    Average distances as function of time
+
+.BI "\-oall" " [<.xvg>] (dist.xvg) (Output, Optional)"
+    All distances as function of time
+
+.BI "\-oxyz" " [<.xvg>] (distxyz.xvg) (Output, Optional)"
+    Distance components as function of time
+
+.BI "\-oh" " [<.xvg>] (disthist.xvg) (Output, Optional)"
+    Histogram of the distances
+
+.BI "\-oallstat" " [<.xvg>] (diststat.xvg) (Output, Optional)"
+    Statistics for individual distances
+
+
+Other options:
+
+.BI "\-b" " <time> (0)"
+    First frame (ps) to read from trajectory
+
+.BI "\-e" " <time> (0)"
+    Last frame (ps) to read from trajectory
+
+.BI "\-dt" " <time> (0)"
+    Only use frame if t MOD dt == first time (ps)
+
+.BI "\-tu" " <enum> (ps)"
+    Unit for time values: fs, ps, ns, us, ms, s
+
+.BI "\-xvg" " <enum> (xmgrace)"
+    Plot formatting: none, xmgrace, xmgr
+
+.BI "\-[no]rmpbc" "  (yes)"
+    Make molecules whole for each frame
+
+.BI "\-[no]pbc" "  (yes)"
+    Use periodic boundary conditions for distance calculation
+
+.BI "\-sf" " <file>"
+    Provide selections from files
+
+.BI "\-selrpos" " <enum> (atom)"
+    Selection reference positions: atom, res_com, res_cog, mol_com, mol_cog, whole_res_com, whole_res_cog, whole_mol_com, whole_mol_cog, part_res_com, part_res_cog, part_mol_com, part_mol_cog, dyn_res_com, dyn_res_cog, dyn_mol_com, dyn_mol_cog
+
+.BI "\-select" " <selection>"
+    Position pairs to calculate distances for
+
+.BI "\-len" " <real> (0.1)"
+    Mean distance for histogramming
+
+.BI "\-tol" " <real> (1)"
+    Width of full distribution as fraction of \fB\-len\fR
+
+.BI "\-binw" " <real> (0.001)"
+    Bin width for histogramming
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

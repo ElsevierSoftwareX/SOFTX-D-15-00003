@@ -1,0 +1,44 @@
+cmake_minimum_required(VERSION 2.8)
+
+project(template)
+
+# Cmake modules/macros are in a subdirectory to keep this file cleaner
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
+endif(NOT CMAKE_BUILD_TYPE)
+
+option(GMX_DOUBLE "Use double precision" OFF)
+
+########################################################################
+# Fix stupid flags on MSVC
+########################################################################
+IF(CMAKE_GENERATOR MATCHES "Visual Studio")
+    STRING(REPLACE /MD /MT CMAKE_C_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
+    SET(CMAKE_C_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE} CACHE STRING "" FORCE)
+    STRING(REPLACE /MD /MT CMAKE_C_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
+    SET(CMAKE_C_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG} CACHE STRING "" FORCE)
+ENDIF(CMAKE_GENERATOR MATCHES "Visual Studio")
+
+########################################################################
+# Basic system tests (standard libraries, headers, functions, types)   #
+########################################################################
+
+if (GMX_DOUBLE)
+  set(LIBGROMACS "libgromacs_d")
+else(GMX_DOUBLE)
+  set(LIBGROMACS "libgromacs")
+endif(GMX_DOUBLE)
+
+FIND_PACKAGE(GROMACS COMPONENTS ${LIBGROMACS} REQUIRED)
+message("GROMACS version ${GROMACS_VERSION_STRING} found")
+if ("${GROMACS_VERSION_STRING}" VERSION_LESS "5.0")
+  message(FATAL_ERROR "This template works with GROMACS 5.0 (and possibly later versions)")
+endif()
+
+add_definitions( ${GROMACS_DEFINITIONS} )
+include_directories( ${GROMACS_INCLUDE_DIRS} )
+
+add_executable(template template.cpp)
+target_link_libraries(template ${GROMACS_LIBRARIES})

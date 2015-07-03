@@ -1,0 +1,137 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx x2top</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx x2top</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx x2top [-f [<.gro/.g96/...>]] [-o [<.top>]] [-r [<.rtp>]] [-nice <int>]
+          [-ff <string>] [-[no]v] [-nexcl <int>] [-[no]H14] [-[no]alldih]
+          [-[no]remdih] [-[no]pairs] [-name <string>] [-[no]pbc] [-[no]pdbq]
+          [-[no]param] [-[no]round] [-kb <real>] [-kt <real>] [-kp <real>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx x2top</tt> generates a primitive topology from a coordinate file. The program assumes all hydrogens are present when defining the hybridization from the atom name and the number of bonds. The program can also make an <tt>.<a href="../online/rtp.html">rtp</a></tt> entry, which you can then add to the <tt>.<a href="../online/rtp.html">rtp</a></tt> database.<p> When <tt>-param</tt> is set, equilibrium distances and angles and force constants will be printed in the topology for all interactions. The equilibrium distances and angles are taken from the input coordinates, the force constant are set with command line options. The force fields somewhat supported currently are:<p> G53a5  GROMOS96 53a5 Forcefield (official distribution)<p> oplsaa OPLS-AA/L all-atom force field (2001 aminoacid dihedrals)<p> The corresponding data files can be found in the library directory with name <tt>atomname2type.n2t</tt>. Check Chapter 5 of the manual for more information about file formats. By default, the force field selection is interactive, but you can use the <tt>-ff</tt> option to specify one of the short names above on the command line instead. In that case <tt>gmx x2top</tt> just looks for the corresponding file.<p>
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/gro.html">gro</a>/.<a href="../online/g96.html">g96</a>/...&gt;] (conf.<a href="../online/gro.html">gro</a>) (Input)</dt>
+<dd>
+Structure file: <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent esp <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/top.html">top</a>&gt;] (out.<a href="../online/top.html">top</a>) (Output, Optional)</dt>
+<dd>
+Topology file
+</dd>
+<dt><b><tt>-r</tt></b> [&lt;.<a href="../online/rtp.html">rtp</a>&gt;] (out.<a href="../online/rtp.html">rtp</a>) (Output, Optional)</dt>
+<dd>
+Residue Type file used by pdb2gmx
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-ff</tt></b> &lt;string&gt; (oplsaa)</dt>
+<dd>
+Force field for your simulation. Type "select" for interactive selection.
+</dd>
+<dt><b><tt>-[no]v</tt></b> (no)</dt>
+<dd>
+Generate verbose output in the <a href="../online/top.html">top</a> file.
+</dd>
+<dt><b><tt>-nexcl</tt></b> &lt;int&gt; (3)</dt>
+<dd>
+Number of exclusions
+</dd>
+<dt><b><tt>-[no]H14</tt></b> (yes)</dt>
+<dd>
+Use 3rd neighbour interactions for hydrogen atoms
+</dd>
+<dt><b><tt>-[no]alldih</tt></b> (no)</dt>
+<dd>
+Generate all proper dihedrals
+</dd>
+<dt><b><tt>-[no]remdih</tt></b> (no)</dt>
+<dd>
+Remove dihedrals on the same bond as an improper
+</dd>
+<dt><b><tt>-[no]pairs</tt></b> (yes)</dt>
+<dd>
+Output 1-4 interactions (pairs) in topology file
+</dd>
+<dt><b><tt>-name</tt></b> &lt;string&gt; (ICE)</dt>
+<dd>
+Name of your molecule
+</dd>
+<dt><b><tt>-[no]pbc</tt></b> (yes)</dt>
+<dd>
+Use periodic boundary conditions.
+</dd>
+<dt><b><tt>-[no]pdbq</tt></b> (no)</dt>
+<dd>
+Use the B-factor supplied in a <tt>.<a href="../online/pdb.html">pdb</a></tt> file for the atomic charges
+</dd>
+<dt><b><tt>-[no]param</tt></b> (yes)</dt>
+<dd>
+Print parameters in the output
+</dd>
+<dt><b><tt>-[no]round</tt></b> (yes)</dt>
+<dd>
+Round off measured values
+</dd>
+<dt><b><tt>-kb</tt></b> &lt;real&gt; (400000)</dt>
+<dd>
+Bonded force constant (kJ/mol/nm^2)
+</dd>
+<dt><b><tt>-kt</tt></b> &lt;real&gt; (400)</dt>
+<dd>
+Angle force constant (kJ/mol/rad^2)
+</dd>
+<dt><b><tt>-kp</tt></b> &lt;real&gt; (5)</dt>
+<dd>
+Dihedral angle force constant (kJ/mol/rad^2)
+</dd>
+</dl>
+
+<H3>Known Issues</H3>
+<ul>
+<li>The atom type selection is primitive. Virtually no chemical knowledge is used
+<li>Periodic boundary conditions screw up the bonding
+<li>No improper dihedrals are generated
+<li>The atoms to atomtype translation table is incomplete (<tt>atomname2type.n2t</tt> file in the data directory). Please extend it and send the results back to the GROMACS crew.
+</ul>
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

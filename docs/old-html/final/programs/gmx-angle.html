@@ -1,0 +1,169 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx angle</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx angle</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx angle [-f [<.xtc/.trr/...>]] [-n [<.ndx>]] [-od [<.xvg>]] [-ov [<.xvg>]]
+          [-of [<.xvg>]] [-ot [<.xvg>]] [-oh [<.xvg>]] [-oc [<.xvg>]]
+          [-or [<.trr>]] [-nice <int>] [-b <time>] [-e <time>] [-dt <time>]
+          [-[no]w] [-xvg <enum>] [-type <enum>] [-[no]all] [-binwidth <real>]
+          [-[no]periodic] [-[no]chandler] [-[no]avercorr] [-acflen <int>]
+          [-[no]normalize] [-P <enum>] [-fitfn <enum>] [-beginfit <real>]
+          [-endfit <real>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx angle</tt> computes the angle distribution for a number of angles or dihedrals.<p> With option <tt>-ov</tt>, you can plot the average angle of a group of angles as a function of time. With the <tt>-all</tt> option, the first graph is the average and the rest are the individual angles.<p> With the <tt>-of</tt> option, <tt>gmx angle</tt> also calculates the fraction of trans dihedrals (only for dihedrals) as function of time, but this is probably only fun for a select few.<p> With option <tt>-oc</tt>, a dihedral correlation function is calculated.<p> It should be noted that the index file must contain atom triplets for angles or atom quadruplets for dihedrals. If this is not the case, the program will crash.<p> With option <tt>-or</tt>, a trajectory file is dumped containing cos and sin of selected dihedral angles, which subsequently can be used as input for a principal components analysis using <a href="gmx-covar.html"><tt>gmx covar</tt></a>.<p> Option <tt>-ot</tt> plots when transitions occur between dihedral rotamers of multiplicity 3 and <tt>-oh</tt> records a histogram of the times between such transitions, assuming the input trajectory frames are equally spaced in time.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (angle.<a href="../online/ndx.html">ndx</a>) (Input)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-od</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (angdist.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-ov</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (angaver.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-of</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (dihfrac.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-ot</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (dihtrans.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-oh</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (trhisto.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-oc</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (dihcorr.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-or</tt></b> [&lt;.<a href="../online/trr.html">trr</a>&gt;] (traj.<a href="../online/trr.html">trr</a>) (Output, Optional)</dt>
+<dd>
+Trajectory in portable xdr format
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-type</tt></b> &lt;enum&gt; (angle)</dt>
+<dd>
+Type of angle to analyse: angle, dihedral, improper, ryckaert-bellemans
+</dd>
+<dt><b><tt>-[no]all</tt></b> (no)</dt>
+<dd>
+Plot all angles separately in the averages file, in the order of appearance in the index file.
+</dd>
+<dt><b><tt>-binwidth</tt></b> &lt;real&gt; (1)</dt>
+<dd>
+binwidth (degrees) for calculating the distribution
+</dd>
+<dt><b><tt>-[no]periodic</tt></b> (yes)</dt>
+<dd>
+Print dihedral angles modulo 360 degrees
+</dd>
+<dt><b><tt>-[no]chandler</tt></b> (no)</dt>
+<dd>
+Use Chandler correlation function (N[trans] = 1, N[gauche] = 0) rather than cosine correlation function. Trans is defined as phi &lt; -60 or phi &gt; 60.
+</dd>
+<dt><b><tt>-[no]avercorr</tt></b> (no)</dt>
+<dd>
+Average the correlation functions for the individual angles/dihedrals
+</dd>
+<dt><b><tt>-acflen</tt></b> &lt;int&gt; (-1)</dt>
+<dd>
+Length of the ACF, default is half the number of frames
+</dd>
+<dt><b><tt>-[no]normalize</tt></b> (yes)</dt>
+<dd>
+Normalize ACF
+</dd>
+<dt><b><tt>-P</tt></b> &lt;enum&gt; (0)</dt>
+<dd>
+Order of Legendre polynomial for ACF (0 indicates none): 0, 1, 2, 3
+</dd>
+<dt><b><tt>-fitfn</tt></b> &lt;enum&gt; (none)</dt>
+<dd>
+Fit function: none, exp, aexp, exp_exp, vac, exp5, exp7, exp9, erffit
+</dd>
+<dt><b><tt>-beginfit</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+Time where to begin the exponential fit of the correlation function
+</dd>
+<dt><b><tt>-endfit</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+Time where to end the exponential fit of the correlation function, -1 is until the end
+</dd>
+</dl>
+
+<H3>Known Issues</H3>
+<ul>
+<li>Counting transitions only works for dihedrals with multiplicity 3
+</ul>
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

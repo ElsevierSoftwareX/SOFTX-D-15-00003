@@ -1,0 +1,165 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx enemat</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx enemat</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx enemat [-f [<.edr>]] [-groups [<.dat>]] [-eref [<.dat>]]
+           [-emat [<.xpm>]] [-etot [<.xvg>]] [-nice <int>] [-b <time>]
+           [-e <time>] [-dt <time>] [-[no]w] [-xvg <enum>] [-[no]sum]
+           [-skip <int>] [-[no]mean] [-nlevels <int>] [-max <real>]
+           [-min <real>] [-[no]coulsr] [-[no]coullr] [-[no]coul14]
+           [-[no]ljsr] [-[no]ljlr] [-[no]lj14] [-[no]bhamsr] [-[no]bhamlr]
+           [-[no]free] [-temp <real>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx enemat</tt> extracts an energy matrix from the energy file (<tt>-f</tt>). With <tt>-groups</tt> a file must be supplied with on each line a group of atoms to be used. For these groups matrix of interaction energies will be extracted from the energy file by looking for energy groups with names corresponding to pairs of groups of atoms, e.g. if your <tt>-groups</tt> file contains:<br> <tt>2</tt><br> <tt>Protein</tt><br> <tt>SOL</tt><br> then energy groups with names like 'Coul-SR:Protein-SOL' and 'LJ:Protein-SOL' are expected in the energy file (although <tt>gmx enemat</tt> is most useful if many groups are analyzed simultaneously). Matrices for different energy types are written out separately, as controlled by the <tt>-[no]coul</tt>, <tt>-[no]coulr</tt>, <tt>-[no]coul14</tt>, <tt>-[no]lj</tt>, <tt>-[no]lj14</tt>, <tt>-[no]bham</tt> and <tt>-[no]free</tt> options. Finally, the total interaction energy energy per group can be calculated (<tt>-etot</tt>).<p> An approximation of the free energy can be calculated using: E_free = E_0 + kT <a href="../online/log.html">log</a>(&lt;exp((E-E_0)/kT)&gt;), where '&lt;&gt;' stands for time-average. A file with reference free energies can be supplied to calculate the free energy difference with some reference state. Group names (e.g. residue names) in the reference file should correspond to the group names as used in the <tt>-groups</tt> file, but a appended number (e.g. residue number) in the <tt>-groups</tt> will be ignored in the comparison.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/edr.html">edr</a>&gt;] (ener.<a href="../online/edr.html">edr</a>) (Input, Optional)</dt>
+<dd>
+Energy file
+</dd>
+<dt><b><tt>-groups</tt></b> [&lt;.<a href="../online/dat.html">dat</a>&gt;] (groups.<a href="../online/dat.html">dat</a>) (Input)</dt>
+<dd>
+Generic data file
+</dd>
+<dt><b><tt>-eref</tt></b> [&lt;.<a href="../online/dat.html">dat</a>&gt;] (eref.<a href="../online/dat.html">dat</a>) (Input, Optional)</dt>
+<dd>
+Generic data file
+</dd>
+<dt><b><tt>-emat</tt></b> [&lt;.<a href="../online/xpm.html">xpm</a>&gt;] (emat.<a href="../online/xpm.html">xpm</a>) (Output)</dt>
+<dd>
+X PixMap compatible matrix file
+</dd>
+<dt><b><tt>-etot</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (energy.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-[no]sum</tt></b> (no)</dt>
+<dd>
+Sum the energy terms selected rather than display them all
+</dd>
+<dt><b><tt>-skip</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Skip number of frames between data points
+</dd>
+<dt><b><tt>-[no]mean</tt></b> (yes)</dt>
+<dd>
+with <tt>-groups</tt> extracts matrix of mean energies instead of matrix for each timestep
+</dd>
+<dt><b><tt>-nlevels</tt></b> &lt;int&gt; (20)</dt>
+<dd>
+number of levels for matrix colors
+</dd>
+<dt><b><tt>-max</tt></b> &lt;real&gt; (1e+20)</dt>
+<dd>
+max value for energies
+</dd>
+<dt><b><tt>-min</tt></b> &lt;real&gt; (-1e+20)</dt>
+<dd>
+min value for energies
+</dd>
+<dt><b><tt>-[no]coulsr</tt></b> (yes)</dt>
+<dd>
+extract Coulomb SR energies
+</dd>
+<dt><b><tt>-[no]coullr</tt></b> (no)</dt>
+<dd>
+extract Coulomb LR energies
+</dd>
+<dt><b><tt>-[no]coul14</tt></b> (no)</dt>
+<dd>
+extract Coulomb 1-4 energies
+</dd>
+<dt><b><tt>-[no]ljsr</tt></b> (yes)</dt>
+<dd>
+extract Lennard-Jones SR energies
+</dd>
+<dt><b><tt>-[no]ljlr</tt></b> (no)</dt>
+<dd>
+extract Lennard-Jones LR energies
+</dd>
+<dt><b><tt>-[no]lj14</tt></b> (no)</dt>
+<dd>
+extract Lennard-Jones 1-4 energies
+</dd>
+<dt><b><tt>-[no]bhamsr</tt></b> (no)</dt>
+<dd>
+extract Buckingham SR energies
+</dd>
+<dt><b><tt>-[no]bhamlr</tt></b> (no)</dt>
+<dd>
+extract Buckingham LR energies
+</dd>
+<dt><b><tt>-[no]free</tt></b> (yes)</dt>
+<dd>
+calculate free energy
+</dd>
+<dt><b><tt>-temp</tt></b> &lt;real&gt; (300)</dt>
+<dd>
+reference temperature for free energy calculation
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

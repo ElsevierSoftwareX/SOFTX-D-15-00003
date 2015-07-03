@@ -1,0 +1,186 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx rms</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx rms</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx rms [-s [<.tpr/.tpb/...>]] [-f [<.xtc/.trr/...>]]
+        [-f2 [<.xtc/.trr/...>]] [-n [<.ndx>]] [-o [<.xvg>]] [-mir [<.xvg>]]
+        [-a [<.xvg>]] [-dist [<.xvg>]] [-m [<.xpm>]] [-bin [<.dat>]]
+        [-bm [<.xpm>]] [-nice <int>] [-b <time>] [-e <time>] [-dt <time>]
+        [-tu <enum>] [-[no]w] [-xvg <enum>] [-what <enum>] [-[no]pbc]
+        [-fit <enum>] [-prev <int>] [-[no]split] [-skip <int>] [-skip2 <int>]
+        [-max <real>] [-min <real>] [-bmax <real>] [-bmin <real>] [-[no]mw]
+        [-nlevels <int>] [-ng <int>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx rms</tt> compares two structures by computing the root mean square deviation (RMSD), the size-independent &rho; similarity parameter (<tt>rho</tt>) or the scaled &rho; (<tt>rhosc</tt>), see Maiorov & Crippen, Proteins <b>22</b>, 273 (1995). This is selected by <tt>-what</tt>.<p>Each structure from a trajectory (<tt>-f</tt>) is compared to a reference structure. The reference structure is taken from the structure file (<tt>-s</tt>).<p> With option <tt>-mir</tt> also a comparison with the mirror image of the reference structure is calculated. This is useful as a reference for 'significant' values, see Maiorov & Crippen, Proteins <b>22</b>, 273 (1995).<p> Option <tt>-prev</tt> produces the comparison with a previous frame the specified number of frames ago.<p> Option <tt>-m</tt> produces a matrix in <tt>.<a href="../online/xpm.html">xpm</a></tt> format of comparison values of each structure in the trajectory with respect to each other structure. This file can be visualized with for instance <tt>xv</tt> and can be converted to postscript with <a href="gmx-xpm2ps.html"><tt>gmx xpm2ps</tt></a>.<p> Option <tt>-fit</tt> controls the least-squares fitting of the structures on <a href="../online/top.html">top</a> of each other: complete fit (rotation and translation), translation only, or no fitting at all.<p> Option <tt>-mw</tt> controls whether mass weighting is done or not. If you select the option (default) and supply a valid <tt>.<a href="../online/tpr.html">tpr</a></tt> file masses will be taken from there, otherwise the masses will be deduced from the <tt>atommass.<a href="../online/dat.html">dat</a></tt> file in <tt>GMXLIB</tt>. This is fine for proteins, but not necessarily for other molecules. A default mass of 12.011 amu (carbon) is assigned to unknown atoms. You can check whether this happend by turning on the <tt>-debug</tt> flag and inspecting the <a href="../online/log.html">log</a> file.<p> With <tt>-f2</tt>, the 'other structures' are taken from a second trajectory, this generates a comparison matrix of one trajectory versus the other.<p> Option <tt>-bin</tt> does a binary dump of the comparison matrix.<p> Option <tt>-bm</tt> produces a matrix of average bond angle deviations analogously to the <tt>-m</tt> option. Only bonds between atoms in the comparison group are considered.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Structure+mass(db): <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent
+</dd>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-f2</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input, Optional)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (rmsd.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-mir</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (rmsdmir.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-a</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (avgrp.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-dist</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (rmsd-dist.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-m</tt></b> [&lt;.<a href="../online/xpm.html">xpm</a>&gt;] (rmsd.<a href="../online/xpm.html">xpm</a>) (Output, Optional)</dt>
+<dd>
+X PixMap compatible matrix file
+</dd>
+<dt><b><tt>-bin</tt></b> [&lt;.<a href="../online/dat.html">dat</a>&gt;] (rmsd.<a href="../online/dat.html">dat</a>) (Output, Optional)</dt>
+<dd>
+Generic data file
+</dd>
+<dt><b><tt>-bm</tt></b> [&lt;.<a href="../online/xpm.html">xpm</a>&gt;] (bond.<a href="../online/xpm.html">xpm</a>) (Output, Optional)</dt>
+<dd>
+X PixMap compatible matrix file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-tu</tt></b> &lt;enum&gt; (ps)</dt>
+<dd>
+Time unit: fs, ps, ns, us, ms, s
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-what</tt></b> &lt;enum&gt; (rmsd)</dt>
+<dd>
+Structural difference measure: rmsd, rho, rhosc
+</dd>
+<dt><b><tt>-[no]pbc</tt></b> (yes)</dt>
+<dd>
+PBC check
+</dd>
+<dt><b><tt>-fit</tt></b> &lt;enum&gt; (rot+trans)</dt>
+<dd>
+Fit to reference structure: rot+trans, translation, none
+</dd>
+<dt><b><tt>-prev</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Compare with previous frame
+</dd>
+<dt><b><tt>-[no]split</tt></b> (no)</dt>
+<dd>
+Split graph where time is zero
+</dd>
+<dt><b><tt>-skip</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+Only write every nr-th frame to matrix
+</dd>
+<dt><b><tt>-skip2</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+Only write every nr-th frame to matrix
+</dd>
+<dt><b><tt>-max</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+Maximum level in comparison matrix
+</dd>
+<dt><b><tt>-min</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+Minimum level in comparison matrix
+</dd>
+<dt><b><tt>-bmax</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+Maximum level in bond angle matrix
+</dd>
+<dt><b><tt>-bmin</tt></b> &lt;real&gt; (-1)</dt>
+<dd>
+Minimum level in bond angle matrix
+</dd>
+<dt><b><tt>-[no]mw</tt></b> (yes)</dt>
+<dd>
+Use mass weighting for superposition
+</dd>
+<dt><b><tt>-nlevels</tt></b> &lt;int&gt; (80)</dt>
+<dd>
+Number of levels in the matrices
+</dd>
+<dt><b><tt>-ng</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+Number of groups to compute RMS between
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

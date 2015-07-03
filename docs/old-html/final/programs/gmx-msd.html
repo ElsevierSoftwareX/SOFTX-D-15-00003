@@ -1,0 +1,144 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx msd</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx msd</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx msd [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]] [-n [<.ndx>]]
+        [-o [<.xvg>]] [-mol [<.xvg>]] [-pdb [<.pdb>]] [-nice <int>]
+        [-b <time>] [-e <time>] [-tu <enum>] [-[no]w] [-xvg <enum>]
+        [-type <enum>] [-lateral <enum>] [-[no]ten] [-ngroup <int>] [-[no]mw]
+        [-[no]rmcomm] [-tpdb <time>] [-trestart <time>] [-beginfit <time>]
+        [-endfit <time>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx msd</tt> computes the mean square displacement (MSD) of atoms from a set of initial positions. This provides an easy way to compute the diffusion constant using the Einstein relation. The time between the reference points for the MSD calculation is set with <tt>-trestart</tt>. The diffusion constant is calculated by least squares fitting a straight line (D*t + c) through the MSD(t) from <tt>-beginfit</tt> to <tt>-endfit</tt> (note that t is time from the reference positions, not simulation time). An error estimate given, which is the difference of the diffusion coefficients obtained from fits over the two halves of the fit interval.<p> There are three, mutually exclusive, options to determine different types of mean square displacement: <tt>-type</tt>, <tt>-lateral</tt> and <tt>-ten</tt>. Option <tt>-ten</tt> writes the full MSD tensor for each group, the order in the output is: trace xx yy zz yx zx zy.<p> If <tt>-mol</tt> is set, <tt>gmx msd</tt> plots the MSD for individual molecules (including making molecules whole across periodic boundaries): for each individual molecule a diffusion constant is computed for its center of mass. The chosen index group will be split into molecules.<p> The default way to calculate a MSD is by using mass-weighted averages. This can be turned off with <tt>-nomw</tt>.<p> With the option <tt>-rmcomm</tt>, the center of mass motion of a specific group can be removed. For trajectories produced with GROMACS this is usually not necessary, as <a href="gmx-mdrun.html"><tt>gmx mdrun</tt></a> usually already removes the center of mass motion. When you use this option be sure that the whole system is stored in the trajectory file.<p> The diffusion coefficient is determined by linear regression of the MSD, where, unlike for the normal output of D, the times are weighted according to the number of reference points, i.e. short times have a higher weight. Also when <tt>-beginfit</tt>=-1,fitting starts at 10% and when <tt>-endfit</tt>=-1, fitting goes to 90%. Using this option one also gets an accurate error estimate based on the statistics between individual molecules. Note that this diffusion coefficient and error estimate are only accurate when the MSD is completely linear between <tt>-beginfit</tt> and <tt>-endfit</tt>.<p> Option <tt>-pdb</tt> writes a <tt>.<a href="../online/pdb.html">pdb</a></tt> file with the coordinates of the frame at time <tt>-tpdb</tt> with in the B-factor field the square root of the diffusion coefficient of the molecule. This option implies option <tt>-mol</tt>.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Structure+mass(db): <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> brk ent
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (msd.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-mol</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (diff_mol.<a href="../online/xvg.html">xvg</a>) (Output, Optional)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+<dt><b><tt>-pdb</tt></b> [&lt;.<a href="../online/pdb.html">pdb</a>&gt;] (diff_mol.<a href="../online/pdb.html">pdb</a>) (Output, Optional)</dt>
+<dd>
+Protein data bank file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-tu</tt></b> &lt;enum&gt; (ps)</dt>
+<dd>
+Time unit: fs, ps, ns, us, ms, s
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-type</tt></b> &lt;enum&gt; (no)</dt>
+<dd>
+Compute diffusion coefficient in one direction: no, x, y, z
+</dd>
+<dt><b><tt>-lateral</tt></b> &lt;enum&gt; (no)</dt>
+<dd>
+Calculate the lateral diffusion in a plane perpendicular to: no, x, y, z
+</dd>
+<dt><b><tt>-[no]ten</tt></b> (no)</dt>
+<dd>
+Calculate the full tensor
+</dd>
+<dt><b><tt>-ngroup</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+Number of groups to calculate MSD for
+</dd>
+<dt><b><tt>-[no]mw</tt></b> (yes)</dt>
+<dd>
+Mass weighted MSD
+</dd>
+<dt><b><tt>-[no]rmcomm</tt></b> (no)</dt>
+<dd>
+Remove center of mass motion
+</dd>
+<dt><b><tt>-tpdb</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+The frame to use for option <tt>-pdb</tt> (ps)
+</dd>
+<dt><b><tt>-trestart</tt></b> &lt;time&gt; (10)</dt>
+<dd>
+Time between restarting points in trajectory (ps)
+</dd>
+<dt><b><tt>-beginfit</tt></b> &lt;time&gt; (-1)</dt>
+<dd>
+Start time for fitting the MSD (ps), -1 is 10%
+</dd>
+<dt><b><tt>-endfit</tt></b> &lt;time&gt; (-1)</dt>
+<dd>
+End time for fitting the MSD (ps), -1 is 90%
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

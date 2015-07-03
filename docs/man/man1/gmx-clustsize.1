@@ -1,0 +1,112 @@
+.TH gmx-clustsize 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-clustsize - Calculate size distributions of atomic clusters
+
+.SH SYNOPSIS
+gmx clustsize [-f [<.xtc/.trr/...>]] [-s [<.tpr>]] [-n [<.ndx>]]
+             [-o [<.xpm>]] [-ow [<.xpm>]] [-nc [<.xvg>]]
+             [-mc [<.xvg>]] [-ac [<.xvg>]] [-hc [<.xvg>]]
+             [-temp [<.xvg>]] [-mcn [<.ndx>]] [-nice <int>]
+             [-b <time>] [-e <time>] [-dt <time>] [-tu <enum>]
+             [-[no]w] [-xvg <enum>] [-cut <real>] [-[no]mol]
+             [-[no]pbc] [-nskip <int>] [-nlevels <int>] [-ndf <int>]
+             [-rgblo <vector>] [-rgbhi <vector>]
+
+.SH DESCRIPTION
+\fBgmx clustsize\fR computes the size distributions of molecular/atomic clusters in the gas phase. The output is given in the form of an \fB.xpm\fR file. The total number of clusters is written to an \fB.xvg\fR file.
+
+When the \fB\-mol\fR option is given clusters will be made out of molecules rather than atoms, which allows clustering of large molecules. In this case an index file would still contain atom numbers or your calculation will die with a SEGV.
+
+When velocities are present in your trajectory, the temperature of the largest cluster will be printed in a separate \fB.xvg\fR file assuming that the particles are free to move. If you are using constraints, please correct the temperature. For instance water simulated with SHAKE or SETTLE will yield a temperature that is 1.5 times too low. You can compensate for this with the \fB\-ndf\fR option. Remember to take the removal of center of mass motion into account.
+
+The \fB\-mc\fR option will produce an index file containing the atom numbers of the largest cluster.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.xtc/.trr/...>] (traj.xtc) (Input)"
+    Trajectory: xtc trr cpt trj gro g96 pdb tng
+
+.BI "\-s" " [<.tpr>] (topol.tpr) (Input, Optional)"
+    Portable xdr run input file
+
+.BI "\-n" " [<.ndx>] (index.ndx) (Input, Optional)"
+    Index file
+
+.BI "\-o" " [<.xpm>] (csize.xpm) (Output)"
+    X PixMap compatible matrix file
+
+.BI "\-ow" " [<.xpm>] (csizew.xpm) (Output)"
+    X PixMap compatible matrix file
+
+.BI "\-nc" " [<.xvg>] (nclust.xvg) (Output)"
+    xvgr/xmgr file
+
+.BI "\-mc" " [<.xvg>] (maxclust.xvg) (Output)"
+    xvgr/xmgr file
+
+.BI "\-ac" " [<.xvg>] (avclust.xvg) (Output)"
+    xvgr/xmgr file
+
+.BI "\-hc" " [<.xvg>] (histo-clust.xvg) (Output)"
+    xvgr/xmgr file
+
+.BI "\-temp" " [<.xvg>] (temp.xvg) (Output, Optional)"
+    xvgr/xmgr file
+
+.BI "\-mcn" " [<.ndx>] (maxclust.ndx) (Output, Optional)"
+    Index file
+
+
+Other options:
+
+.BI "\-nice" " <int> (19)"
+    Set the nicelevel
+
+.BI "\-b" " <time> (0)"
+    First frame (ps) to read from trajectory
+
+.BI "\-e" " <time> (0)"
+    Last frame (ps) to read from trajectory
+
+.BI "\-dt" " <time> (0)"
+    Only use frame when t MOD dt = first time (ps)
+
+.BI "\-tu" " <enum> (ps)"
+    Time unit: fs, ps, ns, us, ms, s
+
+.BI "\-[no]w" "  (no)"
+    View output \fB.xvg\fR, \fB.xpm\fR, \fB.eps\fR and \fB.pdb\fR files
+
+.BI "\-xvg" " <enum> (xmgrace)"
+    xvg plot formatting: xmgrace, xmgr, none
+
+.BI "\-cut" " <real> (0.35)"
+    Largest distance (nm) to be considered in a cluster
+
+.BI "\-[no]mol" "  (no)"
+    Cluster molecules rather than atoms (needs \fB.tpr\fR file)
+
+.BI "\-[no]pbc" "  (yes)"
+    Use periodic boundary conditions
+
+.BI "\-nskip" " <int> (0)"
+    Number of frames to skip between writing
+
+.BI "\-nlevels" " <int> (20)"
+    Number of levels of grey in \fB.xpm\fR output
+
+.BI "\-ndf" " <int> (-1)"
+    Number of degrees of freedom of the entire system for temperature calculation. If not set, the number of atoms times three is used.
+
+.BI "\-rgblo" " <vector> (1 1 0)"
+    RGB values for the color of the lowest occupied cluster size
+
+.BI "\-rgbhi" " <vector> (0 0 1)"
+    RGB values for the color of the highest occupied cluster size
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

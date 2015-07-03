@@ -1,0 +1,131 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx density</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx density</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx density [-f [<.xtc/.trr/...>]] [-n [<.ndx>]] [-s [<.tpr/.tpb/...>]]
+            [-ei [<.dat>]] [-o [<.xvg>]] [-nice <int>] [-b <time>]
+            [-e <time>] [-dt <time>] [-[no]w] [-xvg <enum>] [-d <string>]
+            [-sl <int>] [-dens <enum>] [-ng <int>] [-[no]center] [-[no]symm]
+            [-[no]relative]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx density</tt> computes partial densities across the box, using an index file.<p> For the total density of NPT simulations, use <a href="gmx-energy.html"><tt>gmx energy</tt></a> instead. <p> Option <tt>-center</tt> performs the histogram binning relative to the center of an arbitrary group, in absolute box coordinates. If you are calculating profiles along the Z axis box dimension bZ, output would be from -bZ/2 to bZ/2 if you center based on the entire system. Note that this behaviour has changed in Gromacs 5.0; earlier versions merely performed a static binning in (0,bZ) and shifted the output. Now we compute the center for each frame and bin in (-bZ/2,bZ/2).<p> Option <tt>-symm</tt> symmetrizes the output around the center. This will automatically turn on <tt>-center</tt> too. Option <tt>-relative</tt> performs the binning in relative instead of absolute box coordinates, and scales the final output with the average box dimension along the output axis. This can be used in combination with <tt>-center</tt>.<p> Densities are in kg/m^3, and number densities or electron densities can also be calculated. For electron densities, a file describing the number of electrons for each type of atom should be provided using <tt>-ei</tt>. It should look like:<br>    <tt>2</tt><br>    <tt>atomname = nrelectrons</tt><br>    <tt>atomname = nrelectrons</tt><br> The first line contains the number of lines to read from the file. There should be one line for each unique atom name in your system. The number of electrons for each atom is modified by its atomic partial charge.<p> IMPORTANT CONSIDERATIONS FOR BILAYERS<p> One of the most common usage scenarios is to calculate the density of various groups across a lipid bilayer, typically with the z axis being the normal direction. For short simulations, small systems, and fixed box sizes this will work fine, but for the more general case lipid bilayers can be complicated. The first problem that while both proteins and lipids have low volume compressibility, lipids have quite high area compressiblity. This means the shape of the box (thickness and area/lipid) will fluctuate substantially even for a fully relaxed system. Since Gromacs places the box between the origin and positive coordinates, this in turn means that a bilayer centered in the box will move a bit up/down due to these fluctuations, and smear out your profile. The easiest way to fix this (if you want pressure coupling) is to use the <tt>-center</tt> option that calculates the density profile with respect to the center of the box. Note that you can still center on the bilayer part even if you have a complex non-symmetric system with a bilayer and, say, membrane proteins - then our output will simply have more values on one side of the (center) origin reference.<p> Even the centered calculation will lead to some smearing out the output profiles, as lipids themselves are compressed and expanded. In most cases you probably want this (since it corresponds to macroscopic experiments), but if you want to look at molecular details you can use the <tt>-relative</tt> option to attempt to remove even more of the effects of volume fluctuations.<p> Finally, large bilayers that are not subject to a surface tension will exhibit undulatory fluctuations, where there are 'waves' forming in the system. This is a fundamental property of the biological system, and if you are comparing against experiments you likely want to include the undulation smearing effect.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-f</tt></b> [&lt;.<a href="../online/xtc.html">xtc</a>/.<a href="../online/trr.html">trr</a>/...&gt;] (traj.<a href="../online/xtc.html">xtc</a>) (Input)</dt>
+<dd>
+Trajectory: <a href="../online/xtc.html">xtc</a> <a href="../online/trr.html">trr</a> <a href="../online/cpt.html">cpt</a> <a href="../online/trj.html">trj</a> <a href="../online/gro.html">gro</a> <a href="../online/g96.html">g96</a> <a href="../online/pdb.html">pdb</a> <a href="../online/tng.html">tng</a>
+</dd>
+<dt><b><tt>-n</tt></b> [&lt;.<a href="../online/ndx.html">ndx</a>&gt;] (index.<a href="../online/ndx.html">ndx</a>) (Input, Optional)</dt>
+<dd>
+Index file
+</dd>
+<dt><b><tt>-s</tt></b> [&lt;.<a href="../online/tpr.html">tpr</a>/.<a href="../online/tpb.html">tpb</a>/...&gt;] (topol.<a href="../online/tpr.html">tpr</a>) (Input)</dt>
+<dd>
+Run input file: <a href="../online/tpr.html">tpr</a> <a href="../online/tpb.html">tpb</a> <a href="../online/tpa.html">tpa</a>
+</dd>
+<dt><b><tt>-ei</tt></b> [&lt;.<a href="../online/dat.html">dat</a>&gt;] (electrons.<a href="../online/dat.html">dat</a>) (Input, Optional)</dt>
+<dd>
+Generic data file
+</dd>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (density.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (19)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-b</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+First frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-e</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Last frame (ps) to read from trajectory
+</dd>
+<dt><b><tt>-dt</tt></b> &lt;time&gt; (0)</dt>
+<dd>
+Only use frame when t MOD dt = first time (ps)
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-d</tt></b> &lt;string&gt; (Z)</dt>
+<dd>
+Take the normal on the membrane in direction X, Y or Z.
+</dd>
+<dt><b><tt>-sl</tt></b> &lt;int&gt; (50)</dt>
+<dd>
+Divide the box in this number of slices.
+</dd>
+<dt><b><tt>-dens</tt></b> &lt;enum&gt; (mass)</dt>
+<dd>
+Density: mass, number, charge, electron
+</dd>
+<dt><b><tt>-ng</tt></b> &lt;int&gt; (1)</dt>
+<dd>
+Number of groups of which to compute densities.
+</dd>
+<dt><b><tt>-[no]center</tt></b> (no)</dt>
+<dd>
+Perform the binning relative to the center of the (changing) box. Useful for bilayers.
+</dd>
+<dt><b><tt>-[no]symm</tt></b> (no)</dt>
+<dd>
+Symmetrize the density along the axis, with respect to the center. Useful for bilayers.
+</dd>
+<dt><b><tt>-[no]relative</tt></b> (no)</dt>
+<dd>
+Use relative coordinates for changing boxes and scale output by average dimensions.
+</dd>
+</dl>
+
+<H3>Known Issues</H3>
+<ul>
+<li>When calculating electron densities, atomnames are used instead of types. This is bad.
+</ul>
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>

@@ -1,0 +1,96 @@
+.TH gmx-rmsdist 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-rmsdist - Calculate atom pair distances averaged with power -2, -3 or -6
+
+.SH SYNOPSIS
+gmx rmsdist [-f [<.xtc/.trr/...>]] [-s [<.tpr/.tpb/...>]]
+            [-n [<.ndx>]] [-equiv [<.dat>]] [-o [<.xvg>]]
+            [-rms [<.xpm>]] [-scl [<.xpm>]] [-mean [<.xpm>]]
+            [-nmr3 [<.xpm>]] [-nmr6 [<.xpm>]] [-noe [<.dat>]]
+            [-nice <int>] [-b <time>] [-e <time>] [-dt <time>]
+            [-[no]w] [-xvg <enum>] [-nlevels <int>] [-max <real>]
+            [-[no]sumh] [-[no]pbc]
+
+.SH DESCRIPTION
+\fBgmx rmsdist\fR computes the root mean square deviation of atom distances, which has the advantage that no fit is needed like in standard RMS deviation as computed by \fBgmx rms\fR. The reference structure is taken from the structure file. The RMSD at time t is calculated as the RMS of the differences in distance between atom\-pairs in the reference structure and the structure at time t.
+
+\fBgmx rmsdist\fR can also produce matrices of the rms distances, rms distances scaled with the mean distance and the mean distances and matrices with NMR averaged distances (1/r3 and 1/r6 averaging). Finally, lists of atom pairs with 1/r3 and 1/r6 averaged distance below the maximum distance (\fB\-max\fR, which will default to 0.6 in this case) can be generated, by default averaging over equivalent hydrogens (all triplets of hydrogens named *[123]). Additionally a list of equivalent atoms can be supplied (\fB\-equiv\fR), each line containing a set of equivalent atoms specified as residue number and name and atom name; e.g.:
+
+\fBHB* 3 SER  HB1 3 SER  HB2\fR
+
+Residue and atom names must exactly match those in the structure file, including case. Specifying non\-sequential atoms is undefined.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f" " [<.xtc/.trr/...>] (traj.xtc) (Input)"
+    Trajectory: xtc trr cpt trj gro g96 pdb tng
+
+.BI "\-s" " [<.tpr/.tpb/...>] (topol.tpr) (Input)"
+    Structure+mass(db): tpr tpb tpa gro g96 pdb brk ent
+
+.BI "\-n" " [<.ndx>] (index.ndx) (Input, Optional)"
+    Index file
+
+.BI "\-equiv" " [<.dat>] (equiv.dat) (Input, Optional)"
+    Generic data file
+
+.BI "\-o" " [<.xvg>] (distrmsd.xvg) (Output)"
+    xvgr/xmgr file
+
+.BI "\-rms" " [<.xpm>] (rmsdist.xpm) (Output, Optional)"
+    X PixMap compatible matrix file
+
+.BI "\-scl" " [<.xpm>] (rmsscale.xpm) (Output, Optional)"
+    X PixMap compatible matrix file
+
+.BI "\-mean" " [<.xpm>] (rmsmean.xpm) (Output, Optional)"
+    X PixMap compatible matrix file
+
+.BI "\-nmr3" " [<.xpm>] (nmr3.xpm) (Output, Optional)"
+    X PixMap compatible matrix file
+
+.BI "\-nmr6" " [<.xpm>] (nmr6.xpm) (Output, Optional)"
+    X PixMap compatible matrix file
+
+.BI "\-noe" " [<.dat>] (noe.dat) (Output, Optional)"
+    Generic data file
+
+
+Other options:
+
+.BI "\-nice" " <int> (19)"
+    Set the nicelevel
+
+.BI "\-b" " <time> (0)"
+    First frame (ps) to read from trajectory
+
+.BI "\-e" " <time> (0)"
+    Last frame (ps) to read from trajectory
+
+.BI "\-dt" " <time> (0)"
+    Only use frame when t MOD dt = first time (ps)
+
+.BI "\-[no]w" "  (no)"
+    View output \fB.xvg\fR, \fB.xpm\fR, \fB.eps\fR and \fB.pdb\fR files
+
+.BI "\-xvg" " <enum> (xmgrace)"
+    xvg plot formatting: xmgrace, xmgr, none
+
+.BI "\-nlevels" " <int> (40)"
+    Discretize RMS in this number of levels
+
+.BI "\-max" " <real> (-1)"
+    Maximum level in matrices
+
+.BI "\-[no]sumh" "  (yes)"
+    Average distance over equivalent hydrogens
+
+.BI "\-[no]pbc" "  (yes)"
+    Use periodic boundary conditions when computing distances
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

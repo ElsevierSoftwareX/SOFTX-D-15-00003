@@ -1,0 +1,72 @@
+.TH gmx-confrms 1 "" "VERSION 5.0.5" "GROMACS Manual"
+.SH NAME
+gmx-confrms - Fit two structures and calculates the RMSD
+
+.SH SYNOPSIS
+gmx confrms [-f1 [<.tpr/.tpb/...>]] [-f2 [<.gro/.g96/...>]]
+            [-o [<.gro/.g96/...>]] [-n1 [<.ndx>]] [-n2 [<.ndx>]]
+            [-no [<.ndx>]] [-nice <int>] [-[no]w] [-[no]one]
+            [-[no]mw] [-[no]pbc] [-[no]fit] [-[no]name] [-[no]label]
+            [-[no]bfac]
+
+.SH DESCRIPTION
+\fBgmx confrms\fR computes the root mean square deviation (RMSD) of two structures after least\-squares fitting the second structure on the first one. The two structures do NOT need to have the same number of atoms, only the two index groups used for the fit need to be identical. With \fB\-name\fR only matching atom names from the selected groups will be used for the fit and RMSD calculation. This can be useful when comparing mutants of a protein.
+
+The superimposed structures are written to file. In a \fB.pdb\fR file the two structures will be written as separate models (use \fBrasmol \-nmrpdb\fR). Also in a \fB.pdb\fR file, B\-factors calculated from the atomic MSD values can be written with \fB\-bfac\fR.
+
+.SH OPTIONS
+Options to specify input and output files:
+
+.BI "\-f1" " [<.tpr/.tpb/...>] (conf1.gro) (Input)"
+    Structure+mass(db): tpr tpb tpa gro g96 pdb brk ent
+
+.BI "\-f2" " [<.gro/.g96/...>] (conf2.gro) (Input)"
+    Structure file: gro g96 pdb brk ent esp tpr tpb tpa
+
+.BI "\-o" " [<.gro/.g96/...>] (fit.pdb) (Output)"
+    Structure file: gro g96 pdb brk ent esp
+
+.BI "\-n1" " [<.ndx>] (fit1.ndx) (Input, Optional)"
+    Index file
+
+.BI "\-n2" " [<.ndx>] (fit2.ndx) (Input, Optional)"
+    Index file
+
+.BI "\-no" " [<.ndx>] (match.ndx) (Output, Optional)"
+    Index file
+
+
+Other options:
+
+.BI "\-nice" " <int> (19)"
+    Set the nicelevel
+
+.BI "\-[no]w" "  (no)"
+    View output \fB.xvg\fR, \fB.xpm\fR, \fB.eps\fR and \fB.pdb\fR files
+
+.BI "\-[no]one" "  (no)"
+    Only write the fitted structure to file
+
+.BI "\-[no]mw" "  (yes)"
+    Mass\-weighted fitting and RMSD
+
+.BI "\-[no]pbc" "  (no)"
+    Try to make molecules whole again
+
+.BI "\-[no]fit" "  (yes)"
+    Do least squares superposition of the target structure to the reference
+
+.BI "\-[no]name" "  (no)"
+    Only compare matching atom names
+
+.BI "\-[no]label" "  (no)"
+    Added chain labels A for first and B for second structure
+
+.BI "\-[no]bfac" "  (no)"
+    Output B\-factors from atomic MSD values
+
+
+.SH SEE ALSO
+.BR gromacs(7)
+
+More information about \fBGROMACS\fR is available at <\fIhttp://www.gromacs.org/\fR>.

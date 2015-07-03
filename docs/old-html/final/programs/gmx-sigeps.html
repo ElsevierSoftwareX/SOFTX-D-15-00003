@@ -1,0 +1,113 @@
+<HTML>
+<HEAD>
+  <TITLE>gmx sigeps</TITLE>
+  <LINK rel=stylesheet href="../online/style.css" type="text/css">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#990000" alink="#FF0000">
+  <TABLE WIDTH="98%%">
+    <TR>
+      <TD WIDTH="116" ROWSPAN="2">
+        <A HREF="http://www.gromacs.org/"><IMG SRC="../images/gmxlogo_small.jpg" BORDER=0></A>
+      </TD>
+      <TD ALIGN="LEFT" VALIGN="CENTER" COLSPAN="2">
+        <H2>gmx sigeps</H2>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <FONT SIZE="-1"><A HREF="../online.html">Main Table of Contents</A></FONT>
+      </TD>
+      <TD ALIGN="RIGHT" VALIGN="BOTTOM">
+        <B>VERSION 5.0.5</B>
+      </TD>
+  </TR>
+</TABLE>
+  <HR>
+
+<H3>Synopsis</H3>
+<pre>
+gmx sigeps [-o [<.xvg>]] [-nice <int>] [-[no]w] [-xvg <enum>] [-c6 <real>]
+           [-cn <real>] [-pow <int>] [-sig <real>] [-eps <real>] [-A <real>]
+           [-B <real>] [-C <real>] [-qi <real>] [-qj <real>] [-sigfac <real>]
+</pre>
+
+<H3>Description</H3>
+<tt>gmx sigeps</tt> is a simple utility that converts C6/C12 or C6/Cn combinations to &sigma; and &epsilon;, or vice versa. It can also plot the potential in  file. In addition, it makes an approximation of a Buckingham potential to a Lennard-Jones potential.
+
+<H3>Options</H3>
+Options to specify input and output files:<p>
+<dl>
+<dt><b><tt>-o</tt></b> [&lt;.<a href="../online/xvg.html">xvg</a>&gt;] (potje.<a href="../online/xvg.html">xvg</a>) (Output)</dt>
+<dd>
+xvgr/xmgr file
+</dd>
+</dl>
+
+Other options:<p>
+<dl>
+<dt><b><tt>-nice</tt></b> &lt;int&gt; (0)</dt>
+<dd>
+Set the nicelevel
+</dd>
+<dt><b><tt>-[no]w</tt></b> (no)</dt>
+<dd>
+View output <tt>.<a href="../online/xvg.html">xvg</a></tt>, <tt>.<a href="../online/xpm.html">xpm</a></tt>, <tt>.<a href="../online/eps.html">eps</a></tt> and <tt>.<a href="../online/pdb.html">pdb</a></tt> files
+</dd>
+<dt><b><tt>-xvg</tt></b> &lt;enum&gt; (xmgrace)</dt>
+<dd>
+<a href="../online/xvg.html">xvg</a> plot formatting: xmgrace, xmgr, none
+</dd>
+<dt><b><tt>-c6</tt></b> &lt;real&gt; (0.001)</dt>
+<dd>
+C6
+</dd>
+<dt><b><tt>-cn</tt></b> &lt;real&gt; (1e-06)</dt>
+<dd>
+Constant for repulsion
+</dd>
+<dt><b><tt>-pow</tt></b> &lt;int&gt; (12)</dt>
+<dd>
+Power of the repulsion term
+</dd>
+<dt><b><tt>-sig</tt></b> &lt;real&gt; (0.3)</dt>
+<dd>
+&sigma;
+</dd>
+<dt><b><tt>-eps</tt></b> &lt;real&gt; (1)</dt>
+<dd>
+&epsilon;
+</dd>
+<dt><b><tt>-A</tt></b> &lt;real&gt; (100000)</dt>
+<dd>
+Buckingham A
+</dd>
+<dt><b><tt>-B</tt></b> &lt;real&gt; (32)</dt>
+<dd>
+Buckingham B
+</dd>
+<dt><b><tt>-C</tt></b> &lt;real&gt; (0.001)</dt>
+<dd>
+Buckingham C
+</dd>
+<dt><b><tt>-qi</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+qi
+</dd>
+<dt><b><tt>-qj</tt></b> &lt;real&gt; (0)</dt>
+<dd>
+qj
+</dd>
+<dt><b><tt>-sigfac</tt></b> &lt;real&gt; (0.7)</dt>
+<dd>
+Factor in front of &sigma; for starting the plot
+</dd>
+</dl>
+
+
+<P>
+<HR>
+<DIV ALIGN=RIGHT><FONT SIZE="-1">
+<A HREF="http://www.gromacs.org">http://www.gromacs.org</A><BR>
+</FONT></DIV>
+</BODY>
+</HTML>
